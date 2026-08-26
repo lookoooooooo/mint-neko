@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mint Neko 🌲🐱</title>
+    <title>Mint Neko </title>
     <style>
         :root {
             --bg-color: #2b1d16;
@@ -34,7 +34,10 @@
         .account-box { position: absolute; right: 20px; top: 12px; display: flex; align-items: center; background: rgba(0,0,0,0.1); padding: 5px 10px; border-radius: 25px; }
         .avatar-slot { width: 40px; height: 40px; border-radius: 50%; background: #ccc; overflow: hidden; border: 2px solid var(--mint-primary); cursor: pointer; }
         .avatar-slot img { width: 100%; height: 100%; object-fit: cover; }
-        .edit-profile-btn { background: none; border: 1px solid var(--mint-primary); color: var(--text-color); font-size: 11px; padding: 2px 5px; margin-left: 5px; border-radius: 4px; cursor: pointer; }
+
+        /* Всплывающее меню настроек аккаунта */
+        .profile-modal { display: none; position: fixed; top: 70px; right: 20px; background: var(--card-bg); border: 2px solid var(--mint-primary); padding: 15px; border-radius: 12px; z-index: 2000; width: 220px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .modal-btn { background: var(--mint-primary); color: var(--bg-color); border: none; padding: 6px 10px; margin: 5px 0; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; font-size: 12px; text-align: center; }
 
         #notification-container { position: fixed; right: 20px; top: 80px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; max-width: 300px; }
         .toast-notification { background: var(--card-bg); color: var(--text-color); padding: 12px; border-radius: 8px; border-left: 5px solid #ff4757; box-shadow: 0 4px 10px rgba(0,0,0,0.2); animation: slideIn 0.3s ease; }
@@ -71,44 +74,74 @@
         <p>The Mint-Choco Video Space</p>
 
         <div class="account-box">
-            <div class="avatar-slot" onclick="alert('This is your profile!')">
+            <div class="avatar-slot" onclick="toggleProfileModal()">
                 <img id="my-avatar" src="https://unsplash.com" alt="Ava">
             </div>
-            <div>
-                <span id="my-username" style="font-size:12px; display:block; font-weight:bold;">@NekoUser</span>
-                <button class="edit-profile-btn" onclick="editProfile()">Edit</button>
-                <input type="file" id="ava-uploader" style="display:none;" accept="image/*" onchange="changeAvatar(event)">
+            <div style="margin-left: 10px;">
+                <span id="my-username" style="font-size:14px; font-weight:bold;">@NekoUser</span>
             </div>
+        </div>
+
+        <div class="profile-modal" id="profile-menu">
+            <h4 style="margin: 0 0 10px 0; color: var(--mint-primary);">Account Settings</h4>
+            <button class="modal-btn" onclick="changeNickname()">✏️ Change Nickname</button>
+            <button class="modal-btn" onclick="triggerAvatarUpload()">🖼️ Change Avatar</button>
+            <input type="file" id="ava-uploader" style="display:none;" accept="image/*" onchange="changeAvatar(event)">
+            <button class="modal-btn" style="background:#ff4757; color:white; margin-top:10px;" onclick="toggleProfileModal()">Close</button>
         </div>
     </header>
 
     <div id="notification-container"></div>
 
+    <div style="max-width: 500px; margin: 15px auto 15px auto; padding: 0 10px;">
+        <input type="text" id="search-input" placeholder="🔍 Search by title or #hashtag..." oninput="searchContent()" style="width: 100%; border: 2px solid var(--mint-primary); background: var(--card-bg); color: var(--text-color); box-sizing: border-box; padding: 10px; border-radius: 20px;">
+    </div>
+
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('all')">All Feed</button>
-        <button class="tab-btn" onclick="switchTab('gallery')">🍫 Choco Gallery</button>
-        <button class="tab-btn" onclick="switchTab('shorts')">🍦 Mint Choco Shorts</button>
-        <button class="tab-btn" onclick="switchTab('long')">🐈 Chocolate Cat Longs</button>
+        <button class="tab-btn active" id="tab-all" onclick="switchTab('all')">All Feed</button>
+        <button class="tab-btn" id="tab-gallery" onclick="switchTab('gallery')">🍫 Choco Gallery</button>
+        <button class="tab-btn" id="tab-shorts" onclick="switchTab('shorts')">🍦 Mint Choco Shorts</button>
+        <button class="tab-btn" id="tab-long" onclick="switchTab('long')">🐈 Chocolate Cat Longs</button>
     </div>
 
-    <div style="max-width: 500px; margin: 0 auto 15px auto;">
-        <input type="text" id="search-input" placeholder="🔍 Search by title..." oninput="searchContent()" style="width: 100%; border: 2px solid var(--mint-primary); background: var(--card-bg); color: var(--text-color); box-sizing: border-box;">
+    <div class="feed-container" id="feed"></div>
+
+    <div class="messages-panel" id="messages-window">
+        <h3 style="margin-top:0; color: var(--mint-primary); border-bottom: 2px solid var(--mint-primary); padding-bottom: 10px;">Inbox & Notifications</h3>
+        <div class="msg-list" id="msg-content-list">
+            <div class="msg-item" style="text-align: center; opacity: 0.6; padding: 20px 0;">No new notifications yet. You are all caught up! 🐾</div>
+        </div>
+        <button class="action-submit" style="background:#ff4757; color:white;" onclick="toggleMessages()">Close Inbox</button>
     </div>
 
-    <div class="upload-section">
-        <h3 style="text-align: center; margin-top:0;">Publish Content</h3>
-        <select id="content-type" onchange="checkDurationLimit()">
+    <div class="upload-modal" id="upload-window">
+        <h3 style="text-align: center; margin-top:0; color: var(--mint-primary);">Create New Post 🚀</h3>
+        <select id="content-type" onchange="checkUploadFields()">
             <option value="gallery">🍫 Choco Gallery (Images)</option>
             <option value="shorts">🍦 Mint Choco Shorts (Video)</option>
             <option value="long">🐈 Chocolate Cat Longs (Video max 4m)</option>
         </select>
+        
+        <label style="font-size:12px; display:block; margin: 5px 0 2px 20px;">Select Main File:</label>
         <input type="file" id="media-file" accept="image/*,video/*">
-        <input type="text" id="content-title" placeholder="Enter title...">
+        
+        <div id="cover-upload-box" style="display: none;">
+            <label style="font-size:12px; display:block; margin: 5px 0 2px 20px; color: #ff9f43;">Select Video Cover (Image):</label>
+            <input type="file" id="cover-file" accept="image/*">
+        </div>
+
+        <input type="text" id="content-title" placeholder="Enter title (use #hashtags)...">
         <textarea id="content-desc" placeholder="Enter description..." rows="2"></textarea>
+        
         <button class="action-submit" onclick="publishContent()">Publish to Feed 🚀</button>
+        <button class="action-submit" style="background:#ff4757; color:white; margin-top:5px;" onclick="toggleUploadModal()">Cancel</button>
     </div>
 
-    <div class="feed-container" id="feed"></div>
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="switchTab('all')">🏠<span style="display:block;font-size:10px;">Home</span></div>
+        <div class="nav-btn-plus" onclick="toggleUploadModal()">+</div>
+        <div class="nav-item" onclick="toggleMessages()">📩<span style="display:block;font-size:10px;">Inbox</span></div>
+    </div>
     <script>
         let currentUser = {
             username: localStorage.getItem('neko_name') || 'MintyCat',
@@ -126,21 +159,40 @@
             const currentTheme = document.documentElement.getAttribute('data-theme');
             if (currentTheme === 'light') {
                 document.documentElement.setAttribute('data-theme', 'dark');
-                showNotification('Dark theme activated! More choco style 🍫');
+                showNotification('Dark theme activated! 🍫');
             } else {
                 document.documentElement.setAttribute('data-theme', 'light');
-                showNotification('Light theme activated! More minty style 🍦');
+                showNotification('Light theme activated! 🍦');
             }
         }
 
-        function editProfile() {
+        function toggleProfileModal() {
+            const menu = document.getElementById('profile-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleUploadModal() {
+            const win = document.getElementById('upload-window');
+            win.style.display = win.style.display === 'block' ? 'none' : 'block';
+            checkUploadFields();
+        }
+
+        function toggleMessages() {
+            const win = document.getElementById('messages-window');
+            win.style.display = win.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function changeNickname() {
             const newName = prompt('Enter your new nickname:', currentUser.username);
             if (newName) {
                 currentUser.username = newName.replace(/\s+/g, '');
                 localStorage.setItem('neko_name', currentUser.username);
                 document.getElementById('my-username').innerText = '@' + currentUser.username;
-                showNotification('Profile updated!');
+                showNotification('Nickname updated to @' + currentUser.username + '!');
             }
+        }
+
+        function triggerAvatarUpload() {
             document.getElementById('ava-uploader').click();
         }
 
@@ -153,6 +205,7 @@
                     localStorage.setItem('neko_ava', currentUser.avatar);
                     document.getElementById('my-avatar').src = currentUser.avatar;
                     showNotification('Avatar changed successfully!');
+                    renderFeed();
                 };
                 reader.readAsDataURL(file);
             }
@@ -167,17 +220,34 @@
             setTimeout(function() { noti.remove(); }, 4000);
         }
 
-        function checkDurationLimit() {
+        function checkUploadFields() {
             const type = document.getElementById('content-type').value;
             const fileInput = document.getElementById('media-file');
-            if (type === 'gallery') fileInput.accept = 'image/*';
-            else fileInput.accept = 'video/*';
+            const coverBox = document.getElementById('cover-upload-box');
+            
+            if (type === 'gallery') {
+                fileInput.accept = 'image/*';
+                coverBox.style.display = 'none';
+            } else {
+                fileInput.accept = 'video/*';
+                if (type === 'long') {
+                    coverBox.style.display = 'block';
+                } else {
+                    coverBox.style.display = 'none';
+                }
+            }
         }
 
         function switchTab(type) {
             currentFilter = type;
-            document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
-            event.target.classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(function(btn) { 
+                btn.classList.remove('active'); 
+            });
+            
+            const activeTab = document.getElementById('tab-' + type);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
             renderFeed();
         }
 
@@ -185,12 +255,11 @@
             searchQuery = document.getElementById('search-input').value.toLowerCase();
             renderFeed();
         }
-
         function addLike(postId) {
             posts = posts.map(function(post) {
                 if (post.id === postId) {
                     post.likes = (post.likes || 0) + 1;
-                    showNotification('You liked @' + post.author + 's post! Total: ' + post.likes);
+                    showNotification('You liked this post!');
                 }
                 return post;
             });
@@ -207,8 +276,9 @@
             }
         }
 
-        async function publishContent() {
+        function publishContent() {
             const fileInput = document.getElementById('media-file');
+            const coverInput = document.getElementById('cover-file');
             const titleInput = document.getElementById('content-title');
             const descInput = document.getElementById('content-desc');
             const typeSelect = document.getElementById('content-type');
@@ -217,36 +287,47 @@
                 return alert('Please select a file and enter a title!');
             }
 
-            const file = fileInput.files;
-            
-            if (typeSelect.value === 'long') {
-                showNotification('Checking video duration... Max 4 minutes allowed! 🐈');
-            }
+            const mainReader = new FileReader();
+            mainReader.onload = function(e) {
+                const mediaDataUrl = e.target.result;
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const newPost = {
-                    id: Date.now(),
-                    author: currentUser.username,
-                    authorAva: currentUser.avatar,
-                    type: typeSelect.value,
-                    title: titleInput.value,
-                    desc: descInput.value,
-                    mediaUrl: e.target.result,
-                    likes: 0
-                };
-
-                posts.unshift(newPost);
-                localStorage.setItem('mint_neko_posts', JSON.stringify(posts));
-                
-                titleInput.value = '';
-                descInput.value = '';
-                fileInput.value = '';
-
-                showNotification('👤 Your post published to Mint Neko!');
-                renderFeed();
+                if (typeSelect.value === 'long' && coverInput.files) {
+                    const coverReader = new FileReader();
+                    coverReader.onload = function(cEvent) {
+                        saveAndPost(typeSelect.value, titleInput.value, descInput.value, mediaDataUrl, cEvent.target.result);
+                    };
+                    coverReader.readAsDataURL(coverInput.files);
+                } else {
+                    saveAndPost(typeSelect.value, titleInput.value, descInput.value, mediaDataUrl, '');
+                }
             };
-            reader.readAsDataURL(file);
+            mainReader.readAsDataURL(fileInput.files);
+        }
+
+        function saveAndPost(type, title, desc, mediaUrl, coverUrl) {
+            const newPost = {
+                id: Date.now(),
+                author: currentUser.username,
+                authorAva: currentUser.avatar,
+                type: type,
+                title: title,
+                desc: desc,
+                mediaUrl: mediaUrl,
+                coverUrl: coverUrl,
+                likes: 0
+            };
+
+            posts.unshift(newPost);
+            localStorage.setItem('mint_neko_posts', JSON.stringify(posts));
+
+            document.getElementById('media-file').value = '';
+            document.getElementById('cover-file').value = '';
+            document.getElementById('content-title').value = '';
+            document.getElementById('content-desc').value = '';
+
+            toggleUploadModal();
+            showNotification('Your post published to Mint Neko!');
+            renderFeed();
         }
 
         function renderFeed() {
@@ -254,56 +335,107 @@
             feed.innerHTML = '';
 
             let filtered = posts.filter(function(p) { return currentFilter === 'all' || p.type === currentFilter; });
-            
+
             if (searchQuery) {
-                filtered = filtered.filter(function(p) { return p.title.toLowerCase().indexOf(searchQuery) !== -1; });
+                filtered = filtered.filter(function(p) {
+                    return p.title.toLowerCase().indexOf(searchQuery) !== -1 || p.desc.toLowerCase().indexOf(searchQuery) !== -1;
+                });
             }
 
-            if(filtered.length === 0) {
-                feed.innerHTML = '<p style="text-align:center; opacity:0.6;">No content matches your criteria...</p>';
+            if (filtered.length === 0) {
+                feed.innerHTML = '<p style="text-align:center; opacity:0.6; padding-top:20px;">No content found...</p>';
                 return;
             }
 
             filtered.forEach(function(post) {
-                let mediaHtml = '';
-                let typeBadge = '';
-
-                if (post.type === 'gallery') {
-                    typeBadge = '🍫 Choco Gallery';
-                    mediaHtml = '<img src="' + post.mediaUrl + '">';
-                } else if (post.type === 'shorts') {
-                    typeBadge = '🍦 Mint Choco Shorts';
-                    mediaHtml = '<video controls src="' + post.mediaUrl + '"></video>';
-                } else {
-                    typeBadge = '🐈 Chocolate Cat Longs';
-                    mediaHtml = '<video controls src="' + post.mediaUrl + '"></video>';
-                }
-
                 const card = document.createElement('div');
                 card.className = 'content-card';
 
-                let infoDiv = '<div class="author-info"><div class="author-ava"><img src="' + post.authorAva + '"></div><div class="author-name" onclick="viewUserProfile(\'' + post.author + '\')">@' + post.author + '</div></div>';
-                let badgeSpan = '<span class="badge">' + typeBadge + '</span>';
-                let titleDiv = '<div class="card-title">' + post.title + '</div>';
-                let descDiv = '<div class="card-desc">' + post.desc + '</div>';
-                let mediaBox = '<div class="media-box">' + mediaHtml + '</div>';
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'author-info';
                 
-                let currentLikes = post.likes || 0;
-                let actionsDiv = '<div class="actions"><button class="action-btn" onclick="addLike(' + post.id + ')">💚 Like (' + currentLikes + ')</button><button class="action-btn" onclick="showNotification(\'💬 Reply notification sent to @' + post.author + '!\')">💬 Reply</button>';
+                const avaDiv = document.createElement('div');
+                avaDiv.className = 'author-ava';
+                const avaImg = document.createElement('img');
+                avaImg.src = post.authorAva;
+                avaDiv.appendChild(avaImg);
                 
-                if (post.author === currentUser.username) {
-                    actionsDiv += '<button class="action-btn" style="color: #ff4757; border-color: #ff4757;" onclick="deletePost(' + post.id + ')">🗑 Delete</button>';
-                }
-                actionsDiv += '</div>';
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'author-name';
+                nameDiv.innerText = '@' + post.author;
+                nameDiv.onclick = function() { viewUserProfile(post.author); };
+                
+                infoDiv.appendChild(avaDiv);
+                infoDiv.appendChild(nameDiv);
+                card.appendChild(infoDiv);
 
-                card.innerHTML = infoDiv + badgeSpan + titleDiv + descDiv + mediaBox + actionsDiv;
+                const badgeSpan = document.createElement('span');
+                badgeSpan.className = 'badge';
+                if (post.type === 'gallery') badgeSpan.innerText = '🍫 Choco Gallery';
+                else if (post.type === 'shorts') badgeSpan.innerText = '🍦 Mint Choco Shorts';
+                else badgeSpan.innerText = '🐈 Chocolate Cat Longs';
+                card.appendChild(badgeSpan);
+
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'card-title';
+                titleDiv.innerText = post.title;
+                card.appendChild(titleDiv);
+
+                const descDiv = document.createElement('div');
+                descDiv.className = 'card-desc';
+                descDiv.innerText = post.desc;
+                card.appendChild(descDiv);
+
+                const mediaBox = document.createElement('div');
+                mediaBox.className = 'media-box';
+                if (post.type === 'gallery') {
+                    const img = document.createElement('img');
+                    img.src = post.mediaUrl;
+                    mediaBox.appendChild(img);
+                } else {
+                    const video = document.createElement('video');
+                    video.controls = true;
+                    video.src = post.mediaUrl;
+                    if (post.type === 'long' && post.coverUrl) {
+                        video.poster = post.coverUrl;
+                    }
+                    mediaBox.appendChild(video);
+                }
+                card.appendChild(mediaBox);
+
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'actions';
+
+                const likeBtn = document.createElement('button');
+                likeBtn.className = 'action-btn';
+                likeBtn.innerText = '💚 Like (' + (post.likes || 0) + ')';
+                likeBtn.onclick = function() { addLike(post.id); };
+                actionsDiv.appendChild(likeBtn);
+
+                const replyBtn = document.createElement('button');
+                replyBtn.className = 'action-btn';
+                replyBtn.innerText = '💬 Reply';
+                replyBtn.onclick = function() { showNotification('Reply notification sent to @' + post.author + '!'); };
+                actionsDiv.appendChild(replyBtn);
+
+                if (post.author === currentUser.username) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'action-btn';
+                    deleteBtn.style.color = '#ff4757';
+                    deleteBtn.style.borderColor = '#ff4757';
+                    deleteBtn.innerText = '🗑 Delete';
+                    deleteBtn.onclick = function() { deletePost(post.id); };
+                    actionsDiv.appendChild(deleteBtn);
+                }
+
+                card.appendChild(actionsDiv);
                 feed.appendChild(card);
             });
         }
 
         function viewUserProfile(name) {
             if (name === currentUser.username) {
-                alert('This is you (@' + name + ')! You can edit yourself via the Edit button in the header.');
+                alert('This is you (@' + name + ')! You can edit yourself via the avatar button in the header.');
             } else {
                 alert('Viewing @' + name + 's profile. Only @' + name + ' can change their data, you can only watch!');
             }
