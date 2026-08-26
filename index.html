@@ -17,6 +17,8 @@
     .post-author { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer; }
     .post-author img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 1px solid #5ce1b6; }
     .post-author span { font-weight: bold; color: #5ce1b6; }
+    .post-title { font-size: 18px; font-weight: bold; margin: 10px 0 5px 0; color: #fff; }
+    .post-desc { font-size: 14px; color: #c7b3aa; margin: 0 0 10px 0; }
     .post-media img, .post-media video { width: 100%; border-radius: 8px; display: block; }
     .post-actions { display: flex; gap: 15px; margin-top: 10px; }
     .like-btn { background: none; border: none; color: #c7b3aa; cursor: pointer; font-size: 18px; display: flex; align-items: center; gap: 5px; }
@@ -26,9 +28,9 @@
     .profile-name { font-size: 24px; margin: 10px 0 5px 0; color: #5ce1b6; }
     .profile-bio { color: #c7b3aa; margin-bottom: 15px; }
     .edit-form, .preview-container { background: #3d2a20; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #4e3629; }
-    .edit-form input, .edit-form textarea { width: 100%; background: #2b1d16; border: 1px solid #4e3629; color: #fff; padding: 8px; margin-bottom: 10px; border-radius: 6px; box-sizing: border-box; }
+    .edit-form input, .edit-form textarea, .upload-dialog input[type='text'], .upload-dialog textarea { width: 100%; background: #2b1d16; border: 1px solid #4e3629; color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
     .btn { background: #5ce1b6; color: #2b1d16; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-    .btn-secondary { background: #4e3629; color: #f7f4f2; border: 1px solid #5e4335; padding: 8px 15px; border-radius: 6px; cursor: pointer; }
+    .btn-secondary { background: #4e3629; color: #f7f4f2; border: 1px solid #5e4335; padding: 8px 15px; border-radius: 6px; cursor: pointer; display: inline-block; margin-bottom: 10px; }
     .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background-color: #3d2a20; border-top: 2px solid #5ce1b6; display: flex; justify-content: space-around; align-items: center; z-index: 10; }
     .menu-btn { background: none; border: none; color: #c7b3aa; font-size: 26px; cursor: pointer; }
     .menu-btn.active { color: #5ce1b6; }
@@ -65,6 +67,10 @@
         <option value='mint-ice-cream'>Mint Ice Cream (Shorts)</option>
         <option value='chocolate-pieces'>Chocolate Pieces (Long Videos)</option>
       </select>
+      
+      <input type='text' id='postTitle' placeholder='Post Title (e.g. My Cute Kitten)'>
+      <textarea id='postDesc' placeholder='Description / Tags...'></textarea>
+      
       <button class='btn-secondary' onclick='document.getElementById("mediaFile").click()'>Choose File</button>
       <input type='file' id='mediaFile' accept='image/*,video/*' style='display:none;' onchange='previewMedia()'>
       
@@ -95,7 +101,7 @@
     </div>
 
     <div class='profile-tabs'>
-      <button class='cat-btn active' id='prof-tab-all' onclick='filterProfileFeed("all")'>All</button>
+      <button class='cat-btn active' id='prof-tab-all' onclick='filterProfileFeed("all")'>All My Posts</button>
       <button class='cat-btn' id='prof-tab-pics' onclick='filterProfileFeed("chocolate-cat")'>Images</button>
       <button class='cat-btn' id='prof-tab-shorts' onclick='filterProfileFeed("mint-ice-cream")'>Shorts</button>
       <button class='cat-btn' id='prof-tab-long' onclick='filterProfileFeed("chocolate-pieces")'>Long</button>
@@ -128,8 +134,8 @@
     };
 
     var posts = [
-      { id: 1, userId: 'user_neko1', category: 'chocolate-cat', type: 'image', url: 'https://placehold.co' },
-      { id: 2, userId: 'user_neko2', category: 'mint-ice-cream', type: 'video', url: 'https://w3schools.com' }
+      { id: 1, userId: 'user_neko1', category: 'chocolate-cat', title: 'Fluffy Friend', desc: 'Look at this sweet chocolate kitten! #cats #cute', type: 'image', url: 'https://placehold.co' },
+      { id: 2, userId: 'user_neko2', category: 'mint-ice-cream', title: 'Summer Vibes', desc: 'Making the best mint ice cream at home 🍦 #shorts', type: 'video', url: 'https://w3schools.com' }
     ];
 
     var userInteractions = { 'chocolate-cat': 0, 'mint-ice-cream': 0, 'chocolate-pieces': 0 };
@@ -211,8 +217,11 @@
     }
     async function uploadPost() {
       var cat = document.getElementById('postCategory').value;
+      var titleInput = document.getElementById('postTitle');
+      var descInput = document.getElementById('postDesc');
       var fileInput = document.getElementById('mediaFile');
       var btn = document.getElementById('publishBtn');
+      
       if (fileInput.files.length === 0) return alert('Choose file first');
       
       var file = fileInput.files[0];
@@ -226,6 +235,8 @@
         id: Date.now(),
         userId: currentUser.id,
         category: cat,
+        title: titleInput.value || 'Untitled',
+        desc: descInput.value || '',
         type: file.type.includes('video') ? 'video' : 'image',
         url: blobData.url,
         likes: 0
@@ -237,6 +248,8 @@
       btn.disabled = false;
       btn.textContent = 'Publish';
       fileInput.value = '';
+      titleInput.value = '';
+      descInput.value = '';
       document.getElementById('previewContainer').style.display = 'none';
       
       showToast();
@@ -256,7 +269,8 @@
         }
       });
       localStorage.setItem('mint_posts', JSON.stringify(posts));
-      var currentCat = document.querySelector('.cat-btn.active').id.replace('cat-', '');
+      var activeBtn = document.querySelector('.categories .cat-btn.active');
+      var currentCat = activeBtn ? activeBtn.id.replace('cat-', '') : 'all';
       renderFeeds(currentCat);
     }
 
@@ -264,7 +278,6 @@
       var sortedCats = Object.keys(userInteractions).sort(function(a, b) {
         return userInteractions[b] - userInteractions[a];
       });
-
       var recommended = [];
       sortedCats.forEach(function(cat) {
         posts.forEach(function(p) { if (p.category === cat) recommended.push(p); });
@@ -276,7 +289,6 @@
     function renderFeeds(filterCat) {
       var mainFeed = document.getElementById('mainFeed');
       mainFeed.innerHTML = '';
-      
       var displayPosts = (filterCat === 'all') ? getRecommendedPosts() : posts;
 
       displayPosts.forEach(function(post) {
@@ -293,6 +305,16 @@
         authorDiv.onclick = function() { openUserProfile(post.userId); };
         authorDiv.innerHTML = '<img src="' + author.avatar + '"><span>' + author.name + '</span>';
         postHtml.appendChild(authorDiv);
+
+        var titleDiv = document.createElement('div');
+        titleDiv.className = 'post-title';
+        titleDiv.textContent = post.title;
+        postHtml.appendChild(titleDiv);
+
+        var descDiv = document.createElement('div');
+        descDiv.className = 'post-desc';
+        descDiv.textContent = post.desc;
+        postHtml.appendChild(descDiv);
 
         var mediaDiv = document.createElement('div');
         mediaDiv.className = 'post-media';
@@ -339,6 +361,12 @@
 
         var postHtml = document.createElement('div');
         postHtml.className = 'post';
+
+        var titleDiv = document.createElement('div');
+        titleDiv.className = 'post-title';
+        titleDiv.textContent = post.title;
+        postHtml.appendChild(titleDiv);
+
         var mediaDiv = document.createElement('div');
         mediaDiv.className = 'post-media';
         if (post.type === 'video') { mediaDiv.innerHTML = '<video src="' + post.url + '" controls></video>'; }
@@ -364,7 +392,18 @@
         if (post.userId === userId) {
           var postHtml = document.createElement('div');
           postHtml.className = 'post';
-          postHtml.innerHTML = '<div class="post-media">' + (post.type === 'video' ? '<video src="' + post.url + '" controls></video>' : '<img src="' + post.url + '">') + '</div>';
+          
+          var titleDiv = document.createElement('div');
+          titleDiv.className = 'post-title';
+          titleDiv.textContent = post.title;
+          postHtml.appendChild(titleDiv);
+
+          var mediaDiv = document.createElement('div');
+          mediaDiv.className = 'post-media';
+          if (post.type === 'video') { mediaDiv.innerHTML = '<video src="' + post.url + '" controls></video>'; }
+          else { mediaDiv.innerHTML = '<img src="' + post.url + '">'; }
+          postHtml.appendChild(mediaDiv);
+          
           viewFeed.appendChild(postHtml);
         }
       });
