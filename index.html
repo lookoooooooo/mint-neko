@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mint Neko 🌲🐱</title>
+    <style>
+       
+        body { background-color: #2b1d16; color: #e6f9f3; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        header { background-color: #3d2a1f; padding: 15px; text-align: center; border-bottom: 4px solid #98ffdb; }
+        h1 { color: #98ffdb; margin: 0; font-size: 28px; }
+        
+        /* Notifications */
+        .noti-box { background: #3d2a1f; max-width: 450px; margin: 15px auto; padding: 10px; border-radius: 8px; border-left: 5px solid #98ffdb; text-align: left; font-size: 14px; }
+        
+        
+        .upload-section { background: #3d2a1f; max-width: 450px; margin: 20px auto; padding: 20px; border-radius: 12px; border: 2px dashed #98ffdb; }
+        input, textarea, button { width: 90%; padding: 10px; margin: 8px 0; border-radius: 6px; border: none; font-size: 14px; }
+        input[type="text"], textarea { background: #fff; color: #2b1d16; }
+        button { background-color: #98ffdb; color: #2b1d16; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { background-color: #66ffcc; }
+
+       
+        .video-card { background: #3d2a1f; max-width: 450px; margin: 25px auto; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .video-title { color: #98ffdb; font-size: 18px; margin: 5px 0; text-align: left; }
+        .video-desc { color: #d1bfa7; font-size: 14px; text-align: left; margin-bottom: 10px; }
+        video { width: 100%; border-radius: 8px; background: #000; }
+        .actions { display: flex; justify-content: space-around; margin-top: 10px; }
+        .action-btn { background: none; color: #98ffdb; border: 1px solid #98ffdb; width: auto; padding: 5px 15px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Mint Neko 🌲🐱</h1>
+        <p>The Mint-Choco Video Space</p>
+    </header>
+
+   
+    <div class="noti-box">
+        🔔 <b>Notifications:</b> New comment on your video! • 💚 Someone liked your post! • 👤 New follower!
+    </div>
+
+   
+    <div class="upload-section">
+        <h3>Share your video with the world!</h3>
+        <input type="file" id="video-file" accept="video/*">
+        <input type="text" id="video-title-input" placeholder="Enter video title...">
+        <textarea id="video-desc-input" placeholder="Enter description..." rows="3"></textarea>
+        <button onclick="publishVideo()">Publish to Feed 🚀</button>
+    </div>
+
+    
+    <div id="feed">
+      
+        <div class="video-card">
+            <div class="video-title">Welcome to Mint Neko! Minty Cat Power 🐱</div>
+            <div class="video-desc">This is how your video with description will look like for users.</div>
+            <video controls src=""></video>
+            <div class="actions">
+                <button class="action-btn" onclick="alert('Liked!')">💚 Like</button>
+                <button class="action-btn" onclick="alert('Comment section opening...')">💬 Comment</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function publishVideo() {
+            alert('Great! Now let\'s connect Vercel Storage to make this button upload for real!');
+        }
+    </script>
+
+</body>
+</html>
