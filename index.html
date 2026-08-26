@@ -1,416 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mint Neko 🌲🐱</title>
-    <style>
-        :root {
-            --bg-color: #2b1d16;
-            --header-bg: #3d2a1f;
-            --text-color: #e6f9f3;
-            --mint-primary: #98ffdb;
-            --card-bg: #3d2a1f;
-            --input-bg: #fff;
-            --input-text: #2b1d16;
-        }
-        [data-theme="light"] {
-            --bg-color: #e6f9f3;
-            --header-bg: #98ffdb;
-            --text-color: #2b1d16;
-            --mint-primary: #3d2a1f;
-            --card-bg: #bffff0;
-            --input-bg: #fff;
-            --input-text: #2b1d16;
-        }
-        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; transition: 0.3s; padding-bottom: 90px; }
-        header { background-color: var(--header-bg); padding: 15px; text-align: center; border-bottom: 4px solid var(--mint-primary); position: relative; }
-        h1 { color: var(--mint-primary); margin: 0; font-size: 28px; cursor: pointer; }
-        .theme-toggle { position: absolute; left: 20px; top: 20px; background: var(--mint-primary); color: var(--bg-color); border: none; padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; }
-        .account-box { position: absolute; right: 20px; top: 12px; display: flex; align-items: center; background: rgba(0,0,0,0.1); padding: 5px 10px; border-radius: 25px; }
-        .avatar-slot { width: 40px; height: 40px; border-radius: 50%; background: #ccc; overflow: hidden; border: 2px solid var(--mint-primary); cursor: pointer; }
-        .avatar-slot img { width: 100%; height: 100%; object-fit: cover; }
-        .profile-modal, .channel-modal { display: none; position: fixed; top: 75px; right: 20px; background: var(--card-bg); border: 2px solid var(--mint-primary); padding: 15px; border-radius: 12px; z-index: 2000; width: 240px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
-        .channel-modal { left: 50%; top: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 380px; text-align: center; }
-        .modal-btn { background: var(--mint-primary); color: var(--bg-color); border: none; padding: 8px 10px; margin: 5px 0; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; font-size: 13px; text-align: center; }
-        #notification-container { position: fixed; right: 20px; top: 80px; z-index: 3000; display: flex; flex-direction: column; gap: 10px; max-width: 300px; }
-        .toast-notification { background: var(--card-bg); color: var(--text-color); padding: 12px; border-radius: 8px; border-left: 5px solid var(--mint-primary); box-shadow: 0 4px 10px rgba(0,0,0,0.2); animation: slideIn 0.3s ease; }
-        .tabs { display: flex; justify-content: center; gap: 10px; margin: 20px 0; padding: 0 10px; flex-wrap: wrap; }
-        .tab-btn { background: var(--card-bg); color: var(--text-color); border: 2px solid var(--mint-primary); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 12px; }
-        .tab-btn.active { background: var(--mint-primary); color: var(--bg-color); }
-        .upload-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card-bg); border: 3px solid var(--mint-primary); padding: 20px; border-radius: 16px; z-index: 2500; width: 90%; max-width: 440px; box-shadow: 0 4px 25px rgba(0,0,0,0.5); }
-        input, textarea, select, .action-submit { width: 92%; padding: 10px; margin: 8px 0; border-radius: 6px; border: none; font-size: 14px; display: block; margin-left: auto; margin-right: auto; }
-        input[type="text"], textarea, select { background: var(--input-bg); color: var(--input-text); border: 1px solid var(--mint-primary); }
-        .action-submit { background-color: var(--mint-primary); color: var(--bg-color); font-weight: bold; cursor: pointer; }
-        .feed-container { max-width: 500px; margin: 0 auto; padding: 0 10px; }
-        .content-card { background: var(--card-bg); margin: 20px auto; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 1px solid rgba(152,255,219,0.1); }
-        .author-info { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(152,255,219,0.2); }
-        .author-ava { width: 35px; height: 35px; border-radius: 50%; background: #aaa; overflow: hidden; border: 1px solid var(--mint-primary); }
-        .author-ava img { width: 100%; height: 100%; object-fit: cover; }
-        .author-name { font-weight: bold; color: var(--mint-primary); cursor: pointer; font-size: 15px; }
-        .card-title { font-size: 18px; margin: 5px 0; font-weight: bold; color: var(--mint-primary); }
-        .card-desc { color: var(--text-color); opacity: 0.8; font-size: 14px; margin-bottom: 10px; }
-        .media-box img, .media-box video { width: 100%; border-radius: 8px; background: #000; max-height: 380px; object-fit: contain; }
-        .badge { background: var(--mint-primary); color: var(--bg-color); padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 8px; }
-        .actions { display: flex; justify-content: space-around; margin-top: 12px; gap: 10px; }
-        .action-btn { background: none; color: var(--mint-primary); border: 1px solid var(--mint-primary); padding: 6px 14px; border-radius: 8px; cursor: pointer; flex: 1; font-weight: bold; font-size: 13px; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--header-bg); border-top: 3px solid var(--mint-primary); height: 65px; display: flex; justify-content: center; align-items: center; z-index: 1500; }
-        .nav-btn-plus { background: var(--mint-primary); color: var(--bg-color); width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.4); }
-        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
-    </style>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>Mint Neko 🌲</title>
+  <style>
+    body {
+      background-color: #121214;
+      color: #e1e1e6;
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #29292e;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #00b37e;
+      margin: 0;
+      font-size: 24px;
+    }
+    .post-form {
+      background: #202024;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #29292e;
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      background: #121214;
+      border: 1px solid #29292e;
+      border-radius: 6px;
+      color: #fff;
+      padding: 10px;
+      box-sizing: border-box;
+      resize: none;
+      margin-bottom: 10px;
+    }
+    input[type='file'] {
+      margin-bottom: 15px;
+      display: block;
+    }
+    button {
+      background: #00b37e;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #00875f;
+    }
+    .feed {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .post {
+      background: #202024;
+      border: 1px solid #29292e;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .post img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-top: 10px;
+      display: block;
+    }
+  </style>
 </head>
-    <div class="bottom-nav">
-        <div class="nav-btn-plus" onclick="toggleUploadModal()">+</div>
+<body>
+
+  <div class='container'>
+    <header>
+      <h1>Mint Neko 🌲</h1>
+    </header>
+
+    <div class='post-form'>
+      <textarea id='postText' placeholder='Share something minty...'></textarea>
+      <input type='file' id='fileInput' accept='image/*'>
+      <button onclick='createPost()'>Publish</button>
     </div>
 
-    <script>
-        let currentUser = {
-            username: localStorage.getItem('neko_name') || 'MintyCat',
-            avatar: localStorage.getItem('neko_ava') || 'https://unsplash.com'
-        };
+    <div class='feed' id='feed'>
+    </div>
+  </div>
 
-        document.getElementById('my-username').innerText = '@' + currentUser.username;
-        document.getElementById('my-avatar').src = currentUser.avatar;
+  <script>
+    function createPost() {
+      var text = document.getElementById('postText').value;
+      var fileInput = document.getElementById('fileInput');
+      var feed = document.getElementById('feed');
 
-        let systemPosts = [
-            {
-                id: 1,
-                author: 'ChocoNeko',
-                authorAva: 'https://unsplash.com',
-                type: 'shorts',
-                title: 'Cute mint cat playing with chocolate wrapper #cat #mint',
-                desc: 'Look at those paws! She absolutely loves the minty choco vibes.',
-                mediaUrl: 'https://zencdn.net',
-                likes: 42
-            },
-            {
-                id: 2,
-                author: 'MintyBaker',
-                authorAva: 'https://unsplash.com',
-                type: 'gallery',
-                title: 'Perfect mint chocolate chip ice cream tutorial! #icecream #choco',
-                desc: 'Homemade recipe for my beautiful followers. Stay fresh!',
-                mediaUrl: 'https://unsplash.com',
-                likes: 128
-            },
-            {
-                id: 3,
-                author: 'NekoTravels',
-                authorAva: 'https://unsplash.com',
-                type: 'long',
-                title: 'Exploring the famous Chocolate Hills with a minty view #hills #travel',
-                desc: 'Full cinematic presentation of this beautiful landscape.',
-                mediaUrl: 'https://html5demos.com',
-                coverUrl: 'https://unsplash.com',
-                likes: 89
-            }
-        ];
+      var postDiv = document.createElement('div');
+      postDiv.className = 'post';
 
-        let localPosts = JSON.parse(localStorage.getItem('mint_neko_posts')) || [];
-        let posts = systemPosts.concat(localPosts);
-        let currentFilter = 'all';
-        let searchQuery = '';
-        let viewChannelMode = false;
-        let selectedChannel = '';
+      var textElement = document.createElement('p');
+      textElement.textContent = text;
+      postDiv.appendChild(textElement);
 
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'light') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                showNotification('Dark theme activated!');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'light');
-                showNotification('Light theme activated!');
-            }
-        }
+      var imgElement = document.createElement('img');
+      imgElement.src = URL.createObjectURL(fileInput.files[0]);
+      postDiv.appendChild(imgElement);
 
-        function toggleProfileModal() {
-            const menu = document.getElementById('profile-menu');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
+      feed.insertBefore(postDiv, feed.firstChild);
 
-        function toggleUploadModal() {
-            const win = document.getElementById('upload-window');
-            win.style.display = win.style.display === 'block' ? 'none' : 'block';
-            checkUploadFields();
-        }
+      document.getElementById('postText').value = '';
+      fileInput.value = '';
+    }
+  </script>
 
-        function changeNickname() {
-            const newName = prompt('Enter your new nickname:', currentUser.username);
-            if (newName) {
-                currentUser.username = newName.replace(/\s+/g, '');
-                localStorage.setItem('neko_name', currentUser.username);
-                document.getElementById('my-username').innerText = '@' + currentUser.username;
-                showNotification('Nickname updated!');
-                renderFeed();
-            }
-        }
-
-        function triggerAvatarUpload() {
-            document.getElementById('ava-uploader').click();
-        }
-
-        function changeAvatar(event) {
-            const file = event.target.files;
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentUser.avatar = e.target.result;
-                    localStorage.setItem('neko_ava', currentUser.avatar);
-                    document.getElementById('my-avatar').src = currentUser.avatar;
-                    showNotification('Avatar changed successfully!');
-                    renderFeed();
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function showNotification(text) {
-            const container = document.getElementById('notification-container');
-            const noti = document.createElement('div');
-            noti.className = 'toast-notification';
-            noti.innerText = text;
-            container.appendChild(noti);
-            setTimeout(function() { noti.remove(); }, 4000);
-        }
-
-        function checkUploadFields() {
-            const type = document.getElementById('content-type').value;
-            const fileInput = document.getElementById('media-file');
-            const coverBox = document.getElementById('cover-upload-box');
-            if (type === 'gallery') {
-                fileInput.accept = 'image/*';
-                coverBox.style.display = 'none';
-            } else {
-                fileInput.accept = 'video/*';
-                coverBox.style.display = type === 'long' ? 'block' : 'none';
-            }
-        }
-
-        function switchTab(type) {
-            currentFilter = type;
-            viewChannelMode = false;
-            document.getElementById('channel-view').style.display = 'none';
-            document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
-            const activeTab = document.getElementById('tab-' + type);
-            if (activeTab) activeTab.classList.add('active');
-            renderFeed();
-        }
-
-        function searchContent() {
-            searchQuery = document.getElementById('search-input').value.toLowerCase();
-            renderFeed();
-        }
-        function addLike(postId) {
-            posts = posts.map(function(post) {
-                if (post.id === postId) {
-                    post.likes = (post.likes || 0) + 1;
-                    showNotification('You liked this post! Algorithm updated');
-                }
-                return post;
-            });
-            localStorage.setItem('mint_neko_posts', JSON.stringify(posts.filter(function(p) { return p.id > 3; })));
-            renderFeed();
-        }
-
-        function deletePost(postId) {
-            if (confirm('Delete this post?')) {
-                localPosts = localPosts.filter(function(post) { return post.id !== postId; });
-                localStorage.setItem('mint_neko_posts', JSON.stringify(localPosts));
-                posts = systemPosts.concat(localPosts);
-                showNotification('Post removed!');
-                renderFeed();
-            }
-        }
-
-        function viewUserProfile(name) {
-            viewChannelMode = true;
-            selectedChannel = name;
-            const matchedPost = posts.find(function(p) { return p.author === name; });
-            const avaUrl = matchedPost ? matchedPost.authorAva : currentUser.avatar;
-            document.getElementById('channel-name').innerText = '@' + name;
-            document.getElementById('channel-ava').src = avaUrl;
-            const channelPosts = posts.filter(function(p) { return p.author === name; });
-            document.getElementById('channel-stat').innerText = 'Channel Author • ' + channelPosts.length + ' minty posts';
-            document.getElementById('channel-view').style.display = 'block';
-            renderFeed();
-        }
-
-        function closeChannelView() {
-            viewChannelMode = false;
-            document.getElementById('channel-view').style.display = 'none';
-            renderFeed();
-        }
-
-        function resetFeed() {
-            searchQuery = '';
-            document.getElementById('search-input').value = '';
-            switchTab('all');
-        }
-
-        function publishContent() {
-            const fileInput = document.getElementById('media-file');
-            const coverInput = document.getElementById('cover-file');
-            const titleInput = document.getElementById('content-title');
-            const descInput = document.getElementById('content-desc');
-            const typeSelect = document.getElementById('content-type');
-
-            if (!fileInput.files || !titleInput.value) {
-                return alert('Please select a file and enter a title!');
-            }
-
-            const mainReader = new FileReader();
-            mainReader.onload = function(e) {
-                if (typeSelect.value === 'long' && coverInput.files) {
-                    const coverReader = new FileReader();
-                    coverReader.onload = function(cEvent) {
-                        saveAndPost(typeSelect.value, titleInput.value, descInput.value, e.target.result, cEvent.target.result);
-                    };
-                    coverReader.readAsDataURL(coverInput.files);
-                } else {
-                    saveAndPost(typeSelect.value, titleInput.value, descInput.value, e.target.result, '');
-                }
-            };
-            mainReader.readAsDataURL(fileInput.files);
-        }
-
-        function saveAndPost(type, title, desc, mediaUrl, coverUrl) {
-            const newPost = {
-                id: Date.now(),
-                author: currentUser.username,
-                authorAva: currentUser.avatar,
-                type: type,
-                title: title,
-                desc: desc,
-                mediaUrl: mediaUrl,
-                coverUrl: coverUrl,
-                likes: 0
-            };
-
-            localPosts.unshift(newPost);
-            try {
-                localStorage.setItem('mint_neko_posts', JSON.stringify(localPosts));
-            } catch(e) {
-                alert('File too big for local storage! Try a smaller one.');
-                return;
-            }
-
-            posts = systemPosts.concat(localPosts);
-            document.getElementById('media-file').value = '';
-            document.getElementById('cover-file').value = '';
-            document.getElementById('content-title').value = 'test picture';
-            document.getElementById('content-desc').value = '';
-
-            toggleUploadModal();
-            showNotification('Published successfully!');
-            renderFeed();
-        }
-
-        function renderFeed() {
-            const feed = document.getElementById('feed');
-            feed.innerHTML = '';
-            let filtered = posts;
-
-            if (viewChannelMode) {
-                filtered = filtered.filter(function(p) { return p.author === selectedChannel; });
-            } else {
-                filtered = filtered.filter(function(p) { return currentFilter === 'all' || p.type === currentFilter; });
-            }
-
-            if (searchQuery) {
-                filtered = filtered.filter(function(p) {
-                    return p.title.toLowerCase().includes(searchQuery) || p.desc.toLowerCase().includes(searchQuery);
-                });
-            }
-
-            if (currentFilter === 'all' && !searchQuery && !viewChannelMode) {
-                filtered.sort(function(a, b) { return b.likes - a.likes; });
-            }
-
-            if (filtered.length === 0) {
-                feed.innerHTML = '<p style="text-align:center; opacity:0.6; padding-top:20px;">No choco-content here...</p>';
-                return;
-            }
-
-            filtered.forEach(function(post) {
-                const card = document.createElement('div');
-                card.className = 'content-card';
-
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'author-info';
-                
-                const avaDiv = document.createElement('div');
-                avaDiv.className = 'author-ava';
-                const avaImg = document.createElement('img');
-                avaImg.src = post.authorAva;
-                avaDiv.appendChild(avaImg);
-                
-                const nameDiv = document.createElement('div');
-                nameDiv.className = 'author-name';
-                nameDiv.innerText = '@' + post.author;
-                nameDiv.onclick = function() { viewUserProfile(post.author); };
-                
-                infoDiv.appendChild(avaDiv);
-                infoDiv.appendChild(nameDiv);
-                card.appendChild(infoDiv);
-
-                const badgeSpan = document.createElement('span');
-                badgeSpan.className = 'badge';
-                if (post.type === 'gallery') badgeSpan.innerText = '🍫 Choco Gallery';
-                else if (post.type === 'shorts') badgeSpan.innerText = '🍦 Mint Choco Shorts';
-                else badgeSpan.innerText = '🐈 Chocolate Cat Longs';
-                card.appendChild(badgeSpan);
-
-                const titleDiv = document.createElement('div');
-                titleDiv.className = 'card-title';
-                titleDiv.innerText = post.title;
-                card.appendChild(titleDiv);
-
-                const descDiv = document.createElement('div');
-                descDiv.className = 'card-desc';
-                descDiv.innerText = post.desc;
-                card.appendChild(descDiv);
-
-                const mediaBox = document.createElement('div');
-                mediaBox.className = 'media-box';
-                if (post.type === 'gallery') {
-                    const img = document.createElement('img');
-                    img.src = post.mediaUrl;
-                    mediaBox.appendChild(img);
-                } else {
-                    const video = document.createElement('video');
-                    video.controls = true;
-                    video.src = post.mediaUrl;
-                    if (post.type === 'long' && post.coverUrl) video.poster = post.coverUrl;
-                    mediaBox.appendChild(video);
-                }
-                card.appendChild(mediaBox);
-
-                const actionsDiv = document.createElement('div');
-                actionsDiv.className = 'actions';
-
-                const likeBtn = document.createElement('button');
-                likeBtn.className = 'action-btn';
-                likeBtn.innerText = '💚 Like (' + (post.likes || 0) + ')';
-                likeBtn.onclick = function() { addLike(post.id); };
-                actionsDiv.appendChild(likeBtn);
-
-                if (post.author === currentUser.username) {
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'action-btn';
-                    deleteBtn.style.color = '#ff4757';
-                    deleteBtn.style.borderColor = '#ff4757';
-                    deleteBtn.innerText = '🗑 Delete';
-                    deleteBtn.onclick = function() { deletePost(post.id); };
-                    actionsDiv.appendChild(deleteBtn);
-                }
-
-                card.appendChild(actionsDiv);
-                feed.appendChild(card);
-            });
-        }
-
-        renderFeed();
-    </script>
 </body>
 </html>
