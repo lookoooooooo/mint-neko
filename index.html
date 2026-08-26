@@ -5,41 +5,47 @@
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
   <title>Mint Neko 🌲</title>
   <style>
-    body { background-color: #1a1513; color: #e1e1e6; font-family: system-ui, sans-serif; margin: 0; padding: 0; }
-    .screen { display: none; padding: 20px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; }
+    body { background-color: #2b1d16; color: #f7f4f2; font-family: system-ui, sans-serif; margin: 0; padding: 0; }
+    .top-bar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background-color: #3d2a20; border-bottom: 2px solid #5ce1b6; display: flex; align-items: center; padding: 0 10px; z-index: 10; }
+    .categories { display: flex; gap: 8px; overflow-x: auto; width: 100%; }
+    .cat-btn { background: #4e3629; color: #f7f4f2; border: 1px solid #5e4335; padding: 6px 12px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 13px; }
+    .cat-btn.active { background: #5ce1b6; color: #2b1d16; font-weight: bold; border-color: #5ce1b6; }
+    .screen { display: none; padding: 20px; padding-top: 80px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; box-sizing: border-box; }
     .screen.active { display: block; }
-    .categories { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; }
-    .cat-btn { background: #261f1c; color: #e1e1e6; border: 1px solid #362c28; padding: 8px 16px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
-    .cat-btn.active { background: #5ce1b6; color: #1a1513; font-weight: bold; }
     .feed { display: flex; flex-direction: column; gap: 20px; }
-    .post { background: #261f1c; border: 1px solid #362c28; padding: 15px; border-radius: 12px; }
+    .post { background: #3d2a20; border: 1px solid #4e3629; padding: 15px; border-radius: 12px; }
     .post-author { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer; }
-    .post-author img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+    .post-author img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 1px solid #5ce1b6; }
     .post-author span { font-weight: bold; color: #5ce1b6; }
     .post-media img, .post-media video { width: 100%; border-radius: 8px; display: block; }
     .profile-header { text-align: center; margin-bottom: 30px; }
     .profile-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #5ce1b6; }
-    .profile-name { font-size: 24px; margin: 10px 0 5px 0; }
-    .profile-bio { color: #a0908a; margin-bottom: 15px; }
-    .edit-form { background: #261f1c; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-    .edit-form input, .edit-form textarea { width: 100%; background: #1a1513; border: 1px solid #362c28; color: #fff; padding: 8px; margin-bottom: 10px; border-radius: 6px; box-sizing: border-box; }
-    .btn { background: #5ce1b6; color: #1a1513; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background-color: #1a1513; border-top: 2px solid #5ce1b6; display: flex; justify-content: space-around; align-items: center; }
-    .menu-btn { background: none; border: none; color: #a0908a; font-size: 24px; cursor: pointer; }
+    .profile-name { font-size: 24px; margin: 10px 0 5px 0; color: #5ce1b6; }
+    .profile-bio { color: #c7b3aa; margin-bottom: 15px; }
+    .edit-form { background: #3d2a20; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #4e3629; }
+    .edit-form input, .edit-form textarea { width: 100%; background: #2b1d16; border: 1px solid #4e3629; color: #fff; padding: 8px; margin-bottom: 10px; border-radius: 6px; box-sizing: border-box; }
+    .btn { background: #5ce1b6; color: #2b1d16; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background-color: #3d2a20; border-top: 2px solid #5ce1b6; display: flex; justify-content: space-around; align-items: center; z-index: 10; }
+    .menu-btn { background: none; border: none; color: #c7b3aa; font-size: 26px; cursor: pointer; }
     .menu-btn.active { color: #5ce1b6; }
-    .upload-dialog { background: #261f1c; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-    .upload-dialog select { width: 100%; background: #1a1513; border: 1px solid #362c28; color: #fff; padding: 8px; margin-bottom: 10px; border-radius: 6px; }
+    .upload-dialog { background: #3d2a20; padding: 20px; border-radius: 12px; border: 1px solid #4e3629; }
+    .upload-dialog h3 { color: #5ce1b6; margin-top: 0; }
+    .upload-dialog select { width: 100%; background: #2b1d16; border: 1px solid #4e3629; color: #fff; padding: 8px; margin-bottom: 15px; border-radius: 6px; }
+    .upload-dialog input[type='file'] { margin-bottom: 20px; display: block; }
   </style>
 </head>
 <body>
 
-  <div id='feedScreen' class='screen active'>
+  <div class='top-bar' id='topBarMenu'>
     <div class='categories'>
       <button class='cat-btn active' onclick='filterCategory("all")'>All</button>
       <button class='cat-btn' onclick='filterCategory("chocolate-cat")'>Chocolate Cat</button>
       <button class='cat-btn' onclick='filterCategory("mint-ice-cream")'>Mint Ice Cream</button>
       <button class='cat-btn' onclick='filterCategory("chocolate-pieces")'>Chocolate Pieces</button>
     </div>
+  </div>
+
+  <div id='feedScreen' class='screen active'>
     <div class='feed' id='mainFeed'></div>
   </div>
 
@@ -91,18 +97,11 @@
     <button class='menu-btn' id='btn-profile' onclick='switchTab("profile")'>👤</button>
   </div>
   <script>
-    var currentUser = {
-      id: 'user_me',
-      name: 'Mint Lover',
-      bio: 'Creating something minty...',
-      avatar: 'https://placehold.co'
-    };
-
+    var currentUser = { id: 'user_me', name: 'Mint Lover', bio: 'Creating something minty...', avatar: 'https://placehold.co' };
     var mockUsers = {
       'user_neko1': { id: 'user_neko1', name: 'ChocoCat_99', bio: 'I love chocolate gifs!', avatar: 'https://placehold.co' },
       'user_neko2': { id: 'user_neko2', name: 'IceCreamQueen', bio: 'Short video maker 🍦', avatar: 'https://placehold.co' }
     };
-
     var posts = [
       { id: 1, userId: 'user_neko1', category: 'chocolate-cat', type: 'image', url: 'https://placehold.co' },
       { id: 2, userId: 'user_neko2', category: 'mint-ice-cream', type: 'video', url: 'https://w3schools.com' }
@@ -118,6 +117,16 @@
       renderFeeds();
     };
 
+    function switchTab(tab) {
+      document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.menu-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.getElementById('topBarMenu').style.display = (tab === 'feed') ? 'flex' : 'none';
+
+      if (tab === 'feed') { document.getElementById('feedScreen').classList.add('active'); document.getElementById('btn-feed').classList.add('active'); }
+      else if (tab === 'upload') { document.getElementById('uploadScreen').classList.add('active'); document.getElementById('btn-upload').classList.add('active'); }
+      else if (tab === 'profile') { document.getElementById('profileScreen').classList.add('active'); document.getElementById('btn-profile').classList.add('active'); }
+    }
+
     function toggleEditForm() {
       var form = document.getElementById('editForm');
       form.style.display = form.style.display === 'none' ? 'block' : 'none';
@@ -129,16 +138,13 @@
       var name = document.getElementById('editName').value;
       var bio = document.getElementById('editBio').value;
       var avatarFile = document.getElementById('editAvatarInput').files[0];
-
       currentUser.name = name;
       currentUser.bio = bio;
-
       if (avatarFile) {
         var response = await fetch('/api/upload?filename=' + avatarFile.name, { method: 'POST', body: avatarFile });
         var blobData = await response.json();
         currentUser.avatar = blobData.url;
       }
-
       localStorage.setItem('mint_user', JSON.stringify(currentUser));
       document.getElementById('userName').textContent = currentUser.name;
       document.getElementById('userBio').textContent = currentUser.bio;
@@ -147,64 +153,13 @@
       renderFeeds();
     }
 
-    function openUserProfile(userId) {
-      if (userId === currentUser.id) {
-        switchTab('profile');
-        return;
-      }
-      var author = mockUsers[userId];
-      document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-      document.getElementById('viewProfileScreen').classList.add('active');
-      
-      document.getElementById('viewName').textContent = author.name;
-      document.getElementById('viewBio').textContent = author.bio;
-      document.getElementById('viewAvatar').src = author.avatar;
-
-      var viewFeed = document.getElementById('viewFeed');
-      viewFeed.innerHTML = '';
-      
-      posts.forEach(function(post) {
-        if (post.userId === userId) {
-          var postHtml = document.createElement('div');
-          postHtml.className = 'post';
-          postHtml.innerHTML = '<div class="post-media">' + (post.type === 'video' ? '<video src="' + post.url + '" controls></video>' : '<img src="' + post.url + '">') + '</div>';
-          viewFeed.appendChild(postHtml);
-        }
-      });
-    }
-  </script>
-  <script>
-    function switchTab(tab) {
-      document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-      document.querySelectorAll('.menu-btn').forEach(function(b) { b.classList.remove('active'); });
-
-      if (tab === 'feed') {
-        document.getElementById('feedScreen').classList.add('active');
-        document.getElementById('btn-feed').classList.add('active');
-      } else if (tab === 'upload') {
-        document.getElementById('uploadScreen').classList.add('active');
-        document.getElementById('btn-upload').classList.add('active');
-      } else if (tab === 'profile') {
-        document.getElementById('profileScreen').classList.add('active');
-        document.getElementById('btn-profile').classList.add('active');
-      }
-    }
-
-    function filterCategory(cat) {
-      document.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
-      event.target.classList.add('active');
-      renderFeeds(cat);
-    }
-
     async function uploadPost() {
       var cat = document.getElementById('postCategory').value;
       var fileInput = document.getElementById('mediaFile');
       var file = fileInput.files[0];
       if (!file) return alert('Choose file first');
-
       var response = await fetch('/api/upload?filename=' + file.name, { method: 'POST', body: file });
       var blobData = await response.json();
-      
       var newPost = {
         id: Date.now(),
         userId: currentUser.id,
@@ -212,10 +167,8 @@
         type: file.type.includes('video') ? 'video' : 'image',
         url: blobData.url
       };
-
       posts.unshift(newPost);
       localStorage.setItem('mint_posts', JSON.stringify(posts));
-      
       fileInput.value = '';
       switchTab('feed');
       renderFeeds();
@@ -224,41 +177,49 @@
     function renderFeeds(filterCat) {
       var mainFeed = document.getElementById('mainFeed');
       var myFeed = document.getElementById('myFeed');
-      mainFeed.innerHTML = '';
-      myFeed.innerHTML = '';
-
+      mainFeed.innerHTML = ''; myFeed.innerHTML = '';
       posts.forEach(function(post) {
         if (filterCat && filterCat !== 'all' && post.category !== filterCat) return;
-
         var author = post.userId === currentUser.id ? currentUser : mockUsers[post.userId];
         if (!author) return;
-
-        var postHtml = document.createElement('div');
-        postHtml.className = 'post';
-
-        var authorDiv = document.createElement('div');
-        authorDiv.className = 'post-author';
+        var postHtml = document.createElement('div'); postHtml.className = 'post';
+        var authorDiv = document.createElement('div'); authorDiv.className = 'post-author';
         authorDiv.onclick = function() { openUserProfile(post.userId); };
         authorDiv.innerHTML = '<img src="' + author.avatar + '"><span>' + author.name + '</span>';
         postHtml.appendChild(authorDiv);
-
-        var mediaDiv = document.createElement('div');
-        mediaDiv.className = 'post-media';
-        if (post.type === 'video') {
-          mediaDiv.innerHTML = '<video src="' + post.url + '" controls></video>';
-        } else {
-          mediaDiv.innerHTML = '<img src="' + post.url + '">';
-        }
+        var mediaDiv = document.createElement('div'); mediaDiv.className = 'post-media';
+        if (post.type === 'video') { mediaDiv.innerHTML = '<video src="' + post.url + '" controls></video>'; }
+        else { mediaDiv.innerHTML = '<img src="' + post.url + '">'; }
         postHtml.appendChild(mediaDiv);
-
         mainFeed.appendChild(postHtml);
+        if (post.userId === currentUser.id) { myFeed.appendChild(postHtml.cloneNode(true)); }
+      });
+    }
 
-        if (post.userId === currentUser.id) {
-          myFeed.appendChild(postHtml.cloneNode(true));
+    function filterCategory(cat) {
+      document.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
+      event.target.classList.add('active');
+      renderFeeds(cat);
+    }
+
+    function openUserProfile(userId) {
+      if (userId === currentUser.id) { switchTab('profile'); return; }
+      var author = mockUsers[userId];
+      document.getElementById('topBarMenu').style.display = 'none';
+      document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+      document.getElementById('viewProfileScreen').classList.add('active');
+      document.getElementById('viewName').textContent = author.name;
+      document.getElementById('viewBio').textContent = author.bio;
+      document.getElementById('viewAvatar').src = author.avatar;
+      var viewFeed = document.getElementById('viewFeed'); viewFeed.innerHTML = '';
+      posts.forEach(function(post) {
+        if (post.userId === userId) {
+          var postHtml = document.createElement('div'); postHtml.className = 'post';
+          postHtml.innerHTML = '<div class="post-media">' + (post.type === 'video' ? '<video src="' + post.url + '" controls></video>' : '<img src="' + post.url + '">') + '</div>';
+          viewFeed.appendChild(postHtml);
         }
       });
     }
   </script>
-
 </body>
 </html>
