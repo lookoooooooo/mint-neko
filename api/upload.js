@@ -1,6 +1,6 @@
-import { put } from '@vercel/blob';
+var blob = require('@vercel/blob');
 
-export default async function handler(request, response) {
+module.exports = async function handler(request, response) {
   if (request.method !== 'POST') {
     return response.status(405).json({ error: 'Method not allowed' });
   }
@@ -8,14 +8,14 @@ export default async function handler(request, response) {
   var url = new URL(request.url, 'http://localhost');
   var filename = url.searchParams.get('filename');
 
-  var blob = await put(filename, request, {
+  var uploadedBlob = await blob.put(filename, request, {
     access: 'public'
   });
 
-  return response.status(200).json(blob);
-}
+  return response.status(200).json(uploadedBlob);
+};
 
-export var config = {
+module.exports.config = {
   api: {
     bodyParser: false
   }
