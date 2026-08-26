@@ -96,7 +96,7 @@
     <button class='menu-btn' id='btn-upload' onclick='switchTab("upload")'>➕</button>
     <button class='menu-btn' id='btn-profile' onclick='switchTab("profile")'>👤</button>
   </div>
-  <script>
+    <script>
     var currentUser = { id: 'user_me', name: 'Mint Lover', bio: 'Creating something minty...', avatar: 'https://placehold.co' };
     var mockUsers = {
       'user_neko1': { id: 'user_neko1', name: 'ChocoCat_99', bio: 'I love chocolate gifs!', avatar: 'https://placehold.co' },
@@ -137,11 +137,12 @@
     async function saveProfile() {
       var name = document.getElementById('editName').value;
       var bio = document.getElementById('editBio').value;
-      var avatarFile = document.getElementById('editAvatarInput').files[0];
+      var avatarFileInput = document.getElementById('editAvatarInput');
+      var file = avatarFileInput.files[0];
       currentUser.name = name;
       currentUser.bio = bio;
-      if (avatarFile) {
-        var response = await fetch('/api/upload?filename=' + avatarFile.name, { method: 'POST', body: avatarFile });
+      if (file) {
+        var response = await fetch('/api/upload?filename=' + file.name, { method: 'POST', body: file });
         var blobData = await response.json();
         currentUser.avatar = blobData.url;
       }
