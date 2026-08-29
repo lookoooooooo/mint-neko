@@ -20,15 +20,16 @@
         .nav-links {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 12px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
         .nav-button {
             background: #4b2e1e;
             color: #6ee7b7;
             border: 3px dashed #34d399;
-            padding: 12px 25px;
-            font-size: 1.1rem;
+            padding: 10px 20px;
+            font-size: 1rem;
             font-weight: bold;
             border-radius: 12px;
             text-decoration: none;
@@ -258,8 +259,10 @@
     </div>
 
     <div class="nav-links">
-        <a href="mint-choco.html" class="nav-button">ENTER MINT-CHOCO ZONE 🍫</a>
-        <a href="clicker.html" class="nav-button">NEKO GAME CLICKER 🐾</a>
+        <a href="index.html" class="nav-button">HOME FACTS 📑</a>
+        <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
+        <a href="clicker.html" class="nav-button">MINT CLICKER 🪙</a>
+        <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
     </div>
 
     <h1>MINT NEKO FACTS</h1>
@@ -286,90 +289,6 @@
         <button class="reset-btn" onclick="resetAchievements()">Reset Achievements ⚙️</button>
     </div>
     <script>
-        const catFacts = [
-            "Cats sleep for about 70% of their lives.",
-            "A cat has 32 muscles in each outer ear.",
-            "Cats can't taste sweetness at all.",
-            "The first cat in space was a French cat named Felicette.",
-            "Cats make about 100 different vocal sounds.",
-            "A cat's nose print is completely unique, just like a human fingerprint.",
-            "Cats are near-sighted, but their peripheral vision is amazing.",
-            "A cat can jump up to six times its height.",
-            "The oldest known pet cat was found in a 9,500-year-old grave in Cyprus.",
-            "Cats use their whiskers to feel if they can fit through a space.",
-            "Grown-up cats only meow to communicate with humans.",
-            "A cat's purr vibrates at a frequency that can improve bone density.",
-            "Cats sweat only through their foot paws.",
-            "Every cat has 18 toes in total: 5 on front paws, 4 on back paws.",
-            "The richest cat in the world inherited 13 million dollars.",
-            "Cats can rotate their ears 180 degrees independently.",
-            "A group of adult cats is called a 'clowder'.",
-            "A group of tiny kittens is officially called a 'kindle'.",
-            "Cats have a third eyelid called the nictitating membrane.",
-            "Black cats are actually considered good luck in Japan.",
-            "Cats can run at speeds of up to 30 miles per hour.",
-            "A cat's heart beats two to three times faster than a human heart.",
-            "Isaac Newton is said to have invented the cat door.",
-            "Cats have an extra organ that allows them to taste scents in the air.",
-            "A cat's jaw cannot move sideways, so they cannot chew large pieces.",
-            "Most cats do not have eyelashes at all.",
-            "A green or minty environment can calm a nervous kitten down.",
-            "Cats can drink seawater to survive because their kidneys filter salt.",
-            "The first cartoon cat was Felix the Cat, created in 1919.",
-            "Cats usually prefer their food to be at room temperature.",
-            "A cat's spine is super flexible because it has 53 loose vertebrae.",
-            "Calico cats are almost always female due to genetics.",
-            "Cats can track noises four times better than human beings.",
-            "Male cats are more likely to be left-pawed than females.",
-            "A cat's rough tongue acts like a comb to clean their fur.",
-            "Cats don't like water because their coat doesn't dry fast.",
-            "The largest cat breed is the Maine Coon.",
-            "The smallest wild cat is the Rusty-spotted cat.",
-            "Cats step with both left legs, then both right legs when walking.",
-            "Cats can predict earthquakes due to their sensitive paw pads.",
-            "A cat's memory can last up to 16 hours.",
-            "Cats have been domesticated for more than 4,000 years.",
-            "The ancient Egyptians shaved their eyebrows when their cat died.",
-            "Cats have a special collarbone that always lets them land on their feet.",
-            "A kitten's eyes are always blue when they are first born.",
-            "Cats can process sounds much faster than dogs.",
-            "A house cat is 95.6% genetically identical to a wild tiger.",
-            "Cats prefer small spaces because it makes them feel safe.",
-            "Purring can mean a cat is happy, scared, or even hurt.",
-            "Cats always find a way to rule over their human servants."
-        ];
-
-        let unlockedFacts = JSON.parse(localStorage.getItem('unlockedFacts')) || [];
-        let partyUnlocked = localStorage.getItem('partyUnlocked') === 'true';
-        let partyHasHappened = localStorage.getItem('partyHasHappened') === 'true';
-        let currentFactIndex = 0;
-        let partyIntervals = [];
-
-        function initAchievements() {
-            const container = document.getElementById('badges-container');
-            container.innerHTML = '';
-            for (let i = 0; i < 50; i++) {
-                const badge = document.createElement('div');
-                badge.className = 'badge';
-                badge.id = `badge-${i}`;
-                badge.innerText = `Fact #${i + 1}`;
-                if (unlockedFacts.includes(i)) {
-                    badge.classList.add('unlocked');
-                }
-                container.appendChild(badge);
-            }
-            
-            const specialBadge = document.createElement('div');
-            specialBadge.className = 'badge special';
-            specialBadge.id = 'badge-special';
-            specialBadge.innerText = 'Cat Party! 🎉';
-            if (partyUnlocked) {
-                specialBadge.classList.add('unlocked');
-            }
-            container.appendChild(specialBadge);
-            
-            updateProgress();
-        }
         function loadRandomFact() {
             if (unlockedFacts.length >= 50) {
                 currentFactIndex = Math.floor(Math.random() * 50);
