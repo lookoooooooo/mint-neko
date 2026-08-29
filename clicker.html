@@ -169,8 +169,6 @@
             <img src="cat.gif" alt="Click Neko" id="click-cat" onclick="meowClick(event)" style="width: 180px; height: 180px; object-fit: contain;">
             <div id="paw-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
         </div>
-        
-      
         <div class="helpers-container" id="helpers-box"></div>
     </div>
     
@@ -211,8 +209,68 @@
             { id: 17, name: "Double Choco Glaze 🍩", type: "click", cost: 60000, power: 5000, purchased: false, revealed: false },
             { id: 18, name: "Mint Cookie Crust 🍪", type: "click", cost: 85000, power: 6500, purchased: false, revealed: false },
             { id: 19, name: "Cocoa Butter Sprinkles ✨", type: "click", cost: 120000, power: 8000, purchased: false, revealed: false },
-            { id: 20, name: "Choco Wafer Bar 🍫", type: "click", cost: 170000, power: 11000, purchased: false, revealed: false }
+            { id: 20, name: "Choco Wafer Bar 🍫", type: "click", cost: 170000, power: 11000, purchased: false, revealed: false },
+            { id: 21, name: "Mint Macaron 🥮", type: "click", cost: 240000, power: 15000, purchased: false, revealed: false },
+            { id: 22, name: "Corporate Upgrade 🕴️", type: "click", cost: 350000, power: 22000, purchased: false, revealed: false },
+            { id: 23, name: "Pure Mint Extract 🧪", type: "click", cost: 500000, power: 35000, purchased: false, revealed: false },
+            { id: 24, name: "Financial Boost 📊", type: "click", cost: 750000, power: 50000, purchased: false, revealed: false },
+            { id: 25, name: "Choco Diamond Sugar 💎", type: "click", cost: 1100000, power: 75000, purchased: false, revealed: false },
+            { id: 26, name: "Mint Laser Pointer 🚨", type: "click", cost: 1600000, power: 110000, purchased: false, revealed: false },
+            { id: 27, name: "Cyber Coffee Pot ☕", type: "click", cost: 2300000, power: 160000, purchased: false, revealed: false },
+            { id: 28, name: "Neko Space Rocket 🚀", type: "click", cost: 3200000, power: 250000, purchased: false, revealed: false },
+            { id: 29, name: "Mint Crystal Cluster 🔮", type: "click", cost: 4500000, power: 400000, purchased: false, revealed: false },
+            { id: 30, name: "Quantum Mint Herb 🌌", type: "click", cost: 6500000, power: 650000, purchased: false, revealed: false },
+            { id: 31, name: "Cosmic Cocoa Bean ☄️", type: "click", cost: 9000000, power: 1000000, purchased: false, revealed: false },
+            { id: 32, name: "Choco Neko Satellite 🛰️", type: "click", cost: 13000000, power: 1600000, purchased: false, revealed: false },
+            { id: 33, name: "Mint Solar Panel ☀️", type: "click", cost: 19000000, power: 2500000, purchased: false, revealed: false },
+            { id: 34, name: "Nebula Chocolate 🌌", type: "click", cost: 28000000, power: 4000000, purchased: false, revealed: false },
+            { id: 35, name: "Supernova Mint Spice 💥", type: "click", cost: 40000000, power: 6500000, purchased: false, revealed: false },
+            { id: 36, name: "Black Hole Cocoa 🕳️", type: "click", cost: 58000000, power: 10000000, purchased: false, revealed: false },
+            { id: 37, name: "Neko Quantum Core 🔮", type: "click", cost: 85000000, power: 16000000, purchased: false, revealed: false },
+            { id: 38, name: "Choco Galaxy Matrix 🌌", type: "click", cost: 125000000, power: 25000000, purchased: false, revealed: false },
+            { id: 39, name: "Mint Universe Engine 🌌", type: "click", cost: 185000000, power: 40000000, purchased: false, revealed: false },
+            { id: 40, name: "Infinity Neko Crown 👑", type: "click", cost: 300000000, power: 70000000, purchased: false, revealed: false }
         ];
+
+        function updateUI() {
+            document.getElementById('coins-display').innerText = Math.floor(coins);
+            document.getElementById('click-display').innerText = clickPower;
+            document.getElementById('cps-display').innerText = cps;
+
+            const grid = document.getElementById('items-shop-grid');
+            grid.innerHTML = '';
+
+            shopItems.forEach((item) => {
+                if (!item.revealed || item.purchased) return;
+
+                const box = document.createElement('div');
+                box.className = 'shop-item';
+
+                const info = document.createElement('div');
+                info.className = 'item-info';
+
+                const name = document.createElement('div');
+                name.className = 'item-name';
+                name.innerText = item.name;
+
+                const desc = document.createElement('div');
+                desc.className = 'item-desc';
+                desc.innerText = item.type === 'click' ? `Boosts click power by +${item.power}` : `Adds +${item.cps} CPS to your empire`;
+
+                info.appendChild(name);
+                info.appendChild(desc);
+
+                const btn = document.createElement('button');
+                btn.className = 'shop-btn';
+                btn.innerText = `Cost: ${item.cost}`;
+                btn.disabled = coins < item.cost;
+                btn.onclick = () => buyItem(item.id);
+
+                box.appendChild(info);
+                box.appendChild(btn);
+                grid.appendChild(box);
+            });
+        }
         function buyItem(id) {
             const item = shopItems.find(i => i.id === id);
             if (item && coins >= item.cost && !item.purchased) {
