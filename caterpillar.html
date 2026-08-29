@@ -176,7 +176,7 @@
     <h1>SILLY CATERPILLAR</h1>
 
     <div class="info-card">
-        <img src="caterpillar.jpg" alt="Silly Caterpillar Biology" class="caterpillar-main-img">
+        <img src="caterpillar.png" alt="Silly Caterpillar Biology" class="caterpillar-main-img">
         <div style="font-size: 1.6rem; color: #6ee7b7; font-weight: bold; margin-bottom: 10px;">About Sasakia Charonda 🐛</div>
         <div style="font-size: 1.05rem; color: #a7f3d0; line-height: 1.5; text-align: left;">
             This creature is famous for its silly, cat-like face mask and tiny dragon horns. It uses these horns to blend in perfectly with the leaves of Chinese Hackberry trees. It strictly feeds on minty greens and changes its color to a chocolate brown shade to hibernate during cold winters!
@@ -188,7 +188,7 @@
         <div style="font-size: 1.2rem; margin-top: 5px; color: #a7f3d0;">Weight: <span id="weight-display">1</span>g</div>
         
         <div class="caterpillar-frame">
-            <img src="caterpillar.jpg" alt="Silly Caterpillar" id="pet-avatar" class="pet-img" onclick="petCaterpillar(event)">
+            <img src="caterpillar.png" alt="Silly Caterpillar" id="pet-avatar" class="pet-img" onclick="petCaterpillar(event)">
             <div id="text-layer" style="position: absolute; width: 100%; height: 100%; pointer-events: none;"></div>
         </div>
 
@@ -203,10 +203,12 @@
         let weight = 1;
         let isMaxed = false;
 
+        
         function acceptWarning() {
             document.getElementById('phobia-screen').style.display = 'none';
         }
 
+        
         function updatePet() {
             document.getElementById('weight-display').innerText = weight;
             
@@ -238,6 +240,7 @@
             }
         }
 
+   
         function feedCaterpillar() {
             if (weight < 450) {
                 weight += Math.floor(Math.random() * 8) + 8;
@@ -253,6 +256,7 @@
             playAudio();
         }
 
+    
         function petCaterpillar(event) {
             playAudio();
             
@@ -282,6 +286,7 @@
             audio.play().catch(() => {});
         }
 
+       
         window.onbeforeunload = function(e) {
             if (weight > 1 && weight < 450) {
                 e.preventDefault();
