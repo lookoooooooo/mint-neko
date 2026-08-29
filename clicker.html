@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neko Game Clicker</title>
+    <style>
+        * {
+            cursor: url('cursor2.png') 16 16, auto !important;
+        }
+        body {
+            background-color: #a7f3d0;
+            color: #2b1810;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .nav-button {
+            background: #2b1810;
+            color: #34d399;
+            border: 3px solid #1f110a;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .nav-button:hover {
+            transform: scale(1.05);
+            background: #1f110a;
+        }
+        h1 {
+            color: #2b1810;
+            text-shadow: 3px 3px #6ee7b7;
+            font-size: 3.5rem;
+            letter-spacing: 1px;
+        }
+        .main-btn {
+            background: #2b1810;
+            color: #6ee7b7;
+            border: 4px solid #1f110a;
+            padding: 20px 50px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-radius: 40px;
+            box-shadow: 0 8px #150b06, 0 0 20px rgba(43, 24, 16, 0.2);
+            transition: transform 0.1s;
+            margin: 20px 0;
+        }
+        .main-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px #150b06;
+        }
+        #stats-panel {
+            font-size: 1.8rem;
+            margin: 25px 0;
+            color: #2b1810;
+            font-weight: bold;
+            text-shadow: 1px 1px #6ee7b7;
+        }
+        .shop-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border: 4px solid #2b1810;
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(43, 24, 16, 0.1);
+        }
+        .shop-title {
+            font-size: 2rem;
+            color: #2b1810;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 3px double #2b1810;
+            padding-bottom: 10px;
+        }
+        .shop-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f0fdf4;
+            border: 2px dashed #2b1810;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 16px;
+            transition: transform 0.2s;
+        }
+        .shop-item:hover {
+            transform: scale(1.01);
+        }
+        .item-info {
+            text-align: left;
+        }
+        .item-name {
+            font-size: 1.3rem;
+            color: #2b1810;
+            font-weight: bold;
+        }
+        .item-desc {
+            font-size: 1rem;
+            color: #047857;
+            margin-top: 4px;
+        }
+        .shop-btn {
+            background: #34d399;
+            color: #2b1810;
+            border: 2px solid #2b1810;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 0 4px #1f110a;
+        }
+        .shop-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px #1f110a;
+        }
+        .shop-btn:disabled {
+            background: #cbd5e1;
+            color: #64748b;
+            border-color: #94a3b8;
+            box-shadow: none;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-links">
+        <a href="index.html" class="nav-button">HOME FACTS 📑</a>
+        <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
+        <a href="clicker.html" class="nav-button">MINT CLICKER 🪙</a>
+        <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
+    </div>
+
+    <h1>MINT NEKO CLICKER</h1>
+    <div style="position: relative; display: inline-block; margin: 20px auto;">
+        <img src="neko_click.gif" alt="Click Neko" id="click-cat" onclick="meowClick(event)" style="width: 200px; height: 200px; object-fit: contain;">
+        <div id="paw-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+    </div>
+
+    <div id="stats-panel">
+        <div>Mint Coins: <span id="coins-display">0</span> 🐾</div>
+        <div style="font-size: 1.2rem; margin-top: 8px; color: #047857;">Autoclick Power: +<span id="cps-display">0</span>/sec</div>
+    </div>
+
+    <div class="shop-container">
+        <div class="shop-title">Minty Upgrade Shop</div>
+        
+        <div class="shop-item">
+            <div class="item-info">
+                <div class="item-name">Mint Mouse 🐭</div>
+                <div class="item-desc">Generates +1 coin per second<br>Owned: <span id="mouse-count">0</span></div>
+            </div>
+            <button class="shop-btn" id="mouse-btn" onclick="buyItem('mouse')">Cost: 15</button>
+        </div>
+
+        <div class="shop-item">
+            <div class="item-info">
+                <div class="item-name">Choco Robo-Cat 🤖</div>
+                <div class="item-desc">Generates +5 coins per second<br>Owned: <span id="robo-count">0</span></div>
+            </div>
+            <button class="shop-btn" id="robo-btn" onclick="buyItem('robo')">Cost: 100</button>
+        </div>
+    </div>
+
+    <script>
+        let coins = parseFloat(localStorage.getItem('mintCoins')) || 0;
+        let mice = parseInt(localStorage.getItem('mintMice')) || 0;
+        let robos = parseInt(localStorage.getItem('mintRobos')) || 0;
+
+        const prices = { mouse: 15, robo: 100 };
+
+        function updateUI() {
+            document.getElementById('coins-display').innerText = Math.floor(coins);
+            document.getElementById('mouse-count').innerText = mice;
+            document.getElementById('robo-count').innerText = robos;
+            
+            let cps = (mice * 1) + (robos * 5);
+            document.getElementById('cps-display').innerText = cps;
+
+            let currentMouseCost = Math.floor(prices.mouse * Math.pow(1.15, mice));
+            let currentRoboCost = Math.floor(prices.robo * Math.pow(1.15, robos));
+
+            document.getElementById('mouse-btn').innerText = `Cost: ${currentMouseCost}`;
+            document.getElementById('robo-btn').innerText = `Cost: ${currentRoboCost}`;
+
+            document.getElementById('mouse-btn').disabled = coins < currentMouseCost;
+            document.getElementById('robo-btn').disabled = coins < currentRoboCost;
+        }
+
+        function meowClick(event) {
+            coins += 1;
+            saveData();
+            updateUI();
+            playAudio();
+
+            const container = document.getElementById('paw-container');
+            const p = document.createElement('div');
+            p.innerText = '+1 🐾';
+            p.style.position = 'absolute';
+            p.style.color = '#2b1810';
+            p.style.fontWeight = 'bold';
+            p.style.fontSize = '1.5rem';
+            p.style.left = (event.offsetX - 20) + 'px';
+            p.style.top = (event.offsetY - 20) + 'px';
+            p.style.pointerEvents = 'none';
+            p.style.transition = 'all 0.6s ease-out';
+            
+            container.appendChild(p);
+
+            setTimeout(() => {
+                p.style.transform = 'translateY(-60px)';
+                p.style.opacity = '0';
+            }, 10);
+
+            setTimeout(() => p.remove(), 600);
+        }
+
+        function buyItem(item) {
+            let currentMouseCost = Math.floor(prices.mouse * Math.pow(1.15, mice));
+            let currentRoboCost = Math.floor(prices.robo * Math.pow(1.15, robos));
+
+            if (item === 'mouse' && coins >= currentMouseCost) {
+                coins -= currentMouseCost;
+                mice++;
+            } else if (item === 'robo' && coins >= currentRoboCost) {
+                coins -= currentRoboCost;
+                robos++;
+            }
+            saveData();
+            updateUI();
+            playAudio();
+        }
+
+        function saveData() {
+            localStorage.setItem('mintCoins', coins);
+            localStorage.setItem('mintMice', mice);
+            localStorage.setItem('mintRobos', robos);
+        }
+
+        function playAudio() {
+            const audio = new Audio('https://mixkit.co');
+            audio.play().catch(() => {});
+        }
+
+        setInterval(() => {
+            let cps = (mice * 1) + (robos * 5);
+            if (cps > 0) {
+                coins += cps;
+                saveData();
+                updateUI();
+            }
+        }, 1000);
+
+        window.onload = updateUI;
+    </script>
+</body>
+</html>
