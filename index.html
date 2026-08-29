@@ -3,81 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>U.S. Web Zone</title>
+    <title>Mint Neko</title>
     <style>
         body {
-            background-color: #111;
-            color: #fff;
-            font-family: 'Impact', 'Arial Black', sans-serif;
+            background-color: #2b1810;
+            color: #a7f3d0;
+            font-family: 'Courier New', Courier, monospace;
             padding: 20px;
             text-align: center;
         }
         h1 {
-            color: #ff0055;
-            text-shadow: 3px 3px #00ffff;
-            font-size: 3rem;
+            color: #34d399;
+            text-shadow: 3px 3px #4b2e1e;
+            font-size: 3.5rem;
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             padding: 20px;
         }
         .box {
-            border: 4px dashed #00ff00;
-            background: #222;
+            border: 4px dashed #34d399;
+            background: #3d2314;
             padding: 15px;
             cursor: pointer;
-            transition: transform 0.2s;
+            border-radius: 12px;
+            transition: transform 0.2s, border-color 0.2s;
         }
         .box:hover {
-            transform: scale(1.05) rotate(2deg);
-            background: #333;
+            transform: scale(1.03) rotate(-1deg);
+            border-color: #6ee7b7;
         }
         img, video {
-            max-width: 100%;
-            height: auto;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
             border-radius: 8px;
         }
         button {
-            background: #ffcc00;
+            background: #34d399;
+            color: #2b1810;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.5rem;
+            padding: 15px 35px;
+            font-size: 1.3rem;
             font-weight: bold;
+            border-radius: 25px;
             cursor: pointer;
-            box-shadow: 5px 5px 0px #ff0055;
+            box-shadow: 0 5px #1f110a;
         }
         button:active {
-            transform: translate(5px, 5px);
-            box-shadow: none;
+            transform: translateY(4px);
+            box-shadow: 0 1px #1f110a;
+        }
+        #meow-counter {
+            font-size: 1.5rem;
+            margin-top: 15px;
+            color: #6ee7b7;
         }
     </style>
 </head>
 <body>
 
-    <h1>WELCOME TO THE ZONE</h1>
+    <h1>MINT NEKO ZONE</h1>
     
-    <button onclick="playSurprise()">CLICK FOR INTERACTIVE</button>
+    <button onclick="meowInteractive()">PRESS FOR MEOW</button>
+    <div id="meow-counter">Total Meows: <span id="count">0</span></div>
 
     <div class="grid">
-        <div class="box">
-            <img src="https://giphy.com" alt="gif">
+        <div class="box" onclick="playAudio('https://mixkit.co')">
+            <img src="https://unsplash.com" alt="Mint Cat">
         </div>
-        <div class="box" onclick="alert('USA! USA! 🇺🇸')">
-            <img src="https://unsplash.com" alt="pic">
+        <div class="box" onclick="playAudio('https://mixkit.co')">
+            <img src="https://giphy.com" alt="Neko Gif">
         </div>
-        <div class="box">
-            <video autoplay loop muted playsinline>
-                <source src="https://w3schools.com" type="video/mp4">
-            </video>
+        <div class="box" onclick="playAudio('https://mixkit.co')">
+            <img src="https://unsplash.com" alt="Chocolate Cat">
         </div>
     </div>
 
     <script>
-        function playSurprise() {
-            document.body.style.backgroundColor = document.body.style.backgroundColor === 'rgb(17, 17, 17)' ? '#440066' : '#111';
-            const audio = new Audio('https://soundjay.com');
+        let meows = 0;
+        function meowInteractive() {
+            meows++;
+            document.getElementById('count').innerText = meows;
+            playAudio('https://mixkit.co');
+            document.body.style.backgroundColor = document.body.style.backgroundColor === 'rgb(61, 35, 20)' ? '#2b1810' : '#3d2314';
+        }
+        function playAudio(url) {
+            const audio = new Audio(url);
             audio.play().catch(() => {});
         }
     </script>
