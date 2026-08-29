@@ -45,7 +45,7 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             padding: 20px;
-            margin-bottom: 120px;
+            margin-bottom: 50px;
         }
         .box {
             border: 5px dashed #34d399;
@@ -90,66 +90,6 @@
             font-weight: bold;
             text-shadow: 1px 1px #000;
         }
-        .corner-widget {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            width: 120px;
-            height: 120px;
-            transition: transform 0.2s;
-        }
-        .corner-widget2 {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 9999;
-            width: 120px;
-            height: 120px;
-            transition: transform 0.2s;
-        }
-        .corner-widget:hover, .corner-widget2:hover {
-            transform: scale(1.1);
-        }
-        .widget-img {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-        }
-        .bubble {
-            position: fixed;
-            bottom: 150px;
-            right: 20px;
-            background: #34d399;
-            color: #1f110a;
-            padding: 12px 18px;
-            border-radius: 12px;
-            font-weight: bold;
-            max-width: 200px;
-            font-size: 0.9rem;
-            border: 2px solid #6ee7b7;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: none;
-            text-align: left;
-            z-index: 10000;
-        }
-        .bubble-left {
-            position: fixed;
-            bottom: 150px;
-            left: 20px;
-            background: #6ee7b7;
-            color: #1f110a;
-            padding: 12px 18px;
-            border-radius: 12px;
-            font-weight: bold;
-            max-width: 200px;
-            font-size: 0.9rem;
-            border: 2px solid #34d399;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: none;
-            text-align: left;
-            z-index: 10000;
-        }
     </style>
 </head>
 <body>
@@ -172,79 +112,3 @@
             <img src="cat3.jpg" alt="Chocolate Cat">
         </div>
     </div>
-
-    <div class="bubble" id="quote-bubble"></div>
-    <div class="corner-widget" onclick="showNekoTalk()">
-        <img src="cat_widget0.gif" alt="Widget Neko 0" class="widget-img">
-    </div>
-
-    <div class="bubble-left" id="fortune-bubble"></div>
-    <div class="corner-widget2" onclick="showNekoFortune()">
-        <img src="cat_widget1.gif" alt="Widget Neko 1" class="widget-img">
-    </div>
-    <script>
-        let meows = 0;
-        let bubbleTimeout;
-        let fortuneTimeout;
-        
-        const phrases = [
-            "Feed me mint ice cream!", "Meow? Purr...", "Humans are so boring.", "Is it nap time yet?",
-            "Give me more chocolate!", "I rule this mint zone.", "Pet my head, please.", "Catching lasers is my job.",
-            "Meow means YES.", "More meows, more power!", "Look at my cute nose.", "Do you have snacks?",
-            "Mint and chocolate is best.", "Sleeping 18 hours today.", "Don't touch my paws!", "Paws up!",
-            "I see a bird outside.", "Can I bite your keyboard?", "Neko energy activated.", "Everything belongs to me.",
-            "Stay minty, friend.", "Purrfectly sweet.", "Just a little kitten.", "Meow all day long.",
-            "I love this website.", "Where is my fish?", "Chasing my own tail.", "Wake up and pet me.",
-            "Best neko in the world.", "Munching on grass..."
-        ];
-
-        const fortunes = [
-            "Cat fortune: You will find a hidden snack today!",
-            "Neko mission: Go drink some clean water right now!",
-            "Cat fortune: A very fluffy cat thinks about you.",
-            "Neko mission: Softly pet the nearest soft object.",
-            "Cat fortune: Your next 5 meows will bring good luck.",
-            "Neko mission: Take a 10-minute cozy cat nap.",
-            "Cat fortune: Someone will buy you chocolate soon!",
-            "Neko mission: Stretch your spine like a happy kitten.",
-            "Cat fortune: You are the chosen one in the mint zone.",
-            "Neko mission: Look out the window and look for birds."
-        ];
-
-        function meowInteractive() {
-            meows++;
-            document.getElementById('count').innerText = meows;
-            playAudio('https://mixkit.co');
-            document.body.style.backgroundColor = document.body.style.backgroundColor === 'rgb(43, 24, 16)' ? '#1f110a' : '#2b1810';
-        }
-
-        function showNekoTalk() {
-            clearTimeout(bubbleTimeout);
-            playAudio('https://mixkit.co');
-            const bubble = document.getElementById('quote-bubble');
-            const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-            bubble.innerText = randomPhrase;
-            bubble.style.display = 'block';
-            const displayTime = randomPhrase.length <= 20 ? 2500 : 4000;
-            bubbleTimeout = setTimeout(() => { bubble.style.display = 'none'; }, displayTime);
-        }
-
-        function showNekoFortune() {
-            clearTimeout(fortuneTimeout);
-            playAudio('https://mixkit.co');
-            const bubble = document.getElementById('fortune-bubble');
-            const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-            bubble.innerText = randomFortune;
-            bubble.style.display = 'block';
-            const displayTime = randomFortune.length <= 25 ? 2500 : 4000;
-            fortuneTimeout = setTimeout(() => { bubble.style.display = 'none'; }, displayTime);
-        }
-
-        function playAudio(url) {
-            const audio = new Audio(url);
-            audio.play().catch(() => {});
-        }
-    </script>
-
-</body>
-</html>
