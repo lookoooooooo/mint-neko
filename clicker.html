@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neko Game Clicker</title>
+    <title>Mint Neko Hardcore Clicker</title>
     <style>
         * {
             cursor: url('cursor2.png') 16 16, auto !important;
@@ -19,48 +19,46 @@
         .nav-links {
             display: flex;
             justify-content: center;
-            gap: 12px;
             margin-bottom: 30px;
-            flex-wrap: wrap;
         }
         .nav-button {
             background: #2b1810;
             color: #34d399;
             border: 3px solid #1f110a;
-            padding: 10px 20px;
-            font-size: 1rem;
+            padding: 10px 25px;
+            font-size: 1.1rem;
             font-weight: bold;
             border-radius: 12px;
             text-decoration: none;
-            display: inline-block;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            transition: transform 0.2s, background 0.2s;
+            transition: transform 0.2s;
         }
         .nav-button:hover {
             transform: scale(1.05);
-            background: #1f110a;
         }
         h1 {
             color: #2b1810;
             text-shadow: 3px 3px #6ee7b7;
             font-size: 3.5rem;
-            letter-spacing: 1px;
         }
-        .main-btn {
-            background: #2b1810;
-            color: #6ee7b7;
-            border: 4px solid #1f110a;
-            padding: 20px 50px;
-            font-size: 1.6rem;
-            font-weight: bold;
-            border-radius: 40px;
-            box-shadow: 0 8px #150b06, 0 0 20px rgba(43, 24, 16, 0.2);
-            transition: transform 0.1s;
-            margin: 20px 0;
+        .game-zone {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 20px auto;
+            min-height: 220px;
         }
-        .main-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 4px #150b06;
+        .assistant-img {
+            width: 120px;
+            height: 180px;
+            object-fit: contain;
+            display: none;
+            animation: bounceAssistant 1s infinite alternate ease-in-out;
+        }
+        @keyframes bounceAssistant {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
         }
         #stats-panel {
             font-size: 1.8rem;
@@ -70,7 +68,7 @@
             text-shadow: 1px 1px #6ee7b7;
         }
         .shop-container {
-            max-width: 600px;
+            max-width: 750px;
             margin: 40px auto;
             background: #ffffff;
             border: 4px solid #2b1810;
@@ -87,68 +85,68 @@
             border-bottom: 3px double #2b1810;
             padding-bottom: 10px;
         }
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
         .shop-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: #f0fdf4;
             border: 2px dashed #2b1810;
-            padding: 18px;
-            margin-bottom: 15px;
+            padding: 15px;
             border-radius: 16px;
-            transition: transform 0.2s;
-        }
-        .shop-item:hover {
-            transform: scale(1.01);
         }
         .item-info {
             text-align: left;
         }
         .item-name {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             color: #2b1810;
             font-weight: bold;
         }
         .item-desc {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #047857;
-            margin-top: 4px;
+            margin-top: 2px;
         }
         .shop-btn {
             background: #34d399;
             color: #2b1810;
             border: 2px solid #2b1810;
-            padding: 12px 24px;
-            font-size: 1.1rem;
+            padding: 10px 18px;
+            font-size: 1rem;
             font-weight: bold;
             border-radius: 10px;
             box-shadow: 0 4px #1f110a;
-        }
-        .shop-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px #1f110a;
         }
         .shop-btn:disabled {
             background: #cbd5e1;
             color: #64748b;
             border-color: #94a3b8;
             box-shadow: none;
-            transform: none;
         }
     </style>
 </head>
 <body>
 
     <div class="nav-links">
-        <a href="index.html" class="nav-button">HOME FACTS 📑</a>
-        <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
-        <a href="clicker.html" class="nav-button">MINT CLICKER 🪙</a>
-        <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
-     <div style="position: relative; display: inline-block; margin: 20px auto;">
-        <img src="cat.gif" alt="Click Neko" id="click-cat" onclick="meowClick(event)" style="width: 200px; height: 200px; object-fit: contain;">
-        <div id="paw-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+        <a href="index.html" class="nav-button" onclick="return confirmLeave()">← HOME</a>
     </div>
 
+    <h1>MINT NEKO CLICKER</h1>
+    
+    <div class="game-zone">
+        <div style="position: relative; display: inline-block;">
+            <img src="cat.gif" alt="Click Neko" id="click-cat" onclick="meowClick(event)" style="width: 200px; height: 200px; object-fit: contain;">
+            <div id="paw-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+        </div>
+       
+        <img src="assistant.jpg" alt="Japanese Assistant" id="assistant-graphic" class="assistant-img">
+    </div>
+    
     <div id="stats-panel">
         <div>Mint Coins: <span id="coins-display">0</span> 🐾</div>
         <div style="font-size: 1.2rem; margin-top: 8px; color: #047857;">Autoclick Power: +<span id="cps-display">0</span>/sec</div>
@@ -156,52 +154,134 @@
 
     <div class="shop-container">
         <div class="shop-title">Minty Upgrade Shop</div>
-        
-        <div class="shop-item">
-            <div class="item-info">
-                <div class="item-name">Mint Mouse 🐭</div>
-                <div class="item-desc">Generates +1 coin per second<br>Owned: <span id="mouse-count">0</span></div>
+        <div class="shop-grid">
+            <div class="shop-item" id="item-box-assistant">
+                <div class="item-info">
+                    <div class="item-name">Japanese Assistant 👩‍💼</div>
+                    <div class="item-desc">Adds +30 CPS. One-time purchase!</div>
+                </div>
+                <button class="shop-btn" id="btn-assistant" onclick="buyAssistant()">Cost: 500</button>
             </div>
-            <button class="shop-btn" id="mouse-btn" onclick="buyItem('mouse')">Cost: 15</button>
-        </div>
-
-        <div class="shop-item">
-            <div class="item-info">
-                <div class="item-name">Choco Robo-Cat 🤖</div>
-                <div class="item-desc">Generates +5 coins per second<br>Owned: <span id="robo-count">0</span></div>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Mint Mouse 🐭</div>
+                    <div class="item-desc">Generates +1 CPS. Owned: <span id="count-mouse">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-mouse" onclick="buyStandard('mouse')">Cost: 15</button>
             </div>
-            <button class="shop-btn" id="robo-btn" onclick="buyItem('robo')">Cost: 100</button>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Choco Robo-Cat 🤖</div>
+                    <div class="item-desc">Generates +5 CPS. Owned: <span id="count-robo">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-robo" onclick="buyStandard('robo')">Cost: 100</button>
+            </div>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Mint Yarn Ball 🧶</div>
+                    <div class="item-desc">Generates +12 CPS. Owned: <span id="count-yarn">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-yarn" onclick="buyStandard('yarn')">Cost: 350</button>
+            </div>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Cat Tree Mansion 🏰</div>
+                    <div class="item-desc">Generates +25 CPS. Owned: <span id="count-tree">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-tree" onclick="buyStandard('tree')">Cost: 1000</button>
+            </div>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Mint Ice Cream 🍦</div>
+                    <div class="item-desc">Generates +45 CPS. Owned: <span id="count-cream">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-cream" onclick="buyStandard('cream')">Cost: 2500</button>
+            </div>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Golden Fish 🐟</div>
+                    <div class="item-desc">Generates +70 CPS. Owned: <span id="count-fish">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-fish" onclick="buyStandard('fish')">Cost: 6000</button>
+            </div>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Cyber Milk Box 🥛</div>
+                    <div class="item-desc">Generates +110 CPS. Owned: <span id="count-milk">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-milk" onclick="buyStandard('milk')">Cost: 15000</button>
+            </div>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Mint Laser Pointer 🚨</div>
+                    <div class="item-desc">Generates +180 CPS. Owned: <span id="count-laser">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-laser" onclick="buyStandard('laser')">Cost: 40000</button>
+            </div>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Choco Neko Satellite 🛰️</div>
+                    <div class="item-desc">Generates +300 CPS. Owned: <span id="count-sat">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-sat" onclick="buyStandard('sat')">Cost: 120000</button>
+            </div>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Mint Crown 👑</div>
+                    <div class="item-desc">Generates +500 CPS. Owned: <span id="count-crown">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-crown" onclick="buyStandard('crown')">Cost: 350000</button>
+            </div>
+            <div class="shop-item">
+                <div class="item-info">
+                    <div class="item-name">Neko Quantum Core 🔮</div>
+                    <div class="item-desc">Generates +1000 CPS. Owned: <span id="count-core">0</span></div>
+                </div>
+                <button class="shop-btn" id="btn-core" onclick="buyStandard('core')">Cost: 1000000</button>
+            </div>
         </div>
     </div>
 
     <script>
-        let coins = parseFloat(localStorage.getItem('mintCoins')) || 0;
-        let mice = parseInt(localStorage.getItem('mintMice')) || 0;
-        let robos = parseInt(localStorage.getItem('mintRobos')) || 0;
-
-        const prices = { mouse: 15, robo: 100 };
+        let coins = 0;
+        let assistantPurchased = false;
+        
+        let items = {
+            mouse: { count: 0, baseCost: 15, cps: 1 },
+            robo: { count: 0, baseCost: 100, cps: 5 },
+            yarn: { count: 0, baseCost: 350, cps: 12 },
+            tree: { count: 0, baseCost: 1000, cps: 25 },
+            cream: { count: 0, baseCost: 2500, cps: 45 },
+            fish: { count: 0, baseCost: 6000, cps: 70 },
+            milk: { count: 0, baseCost: 15000, cps: 110 },
+            laser: { count: 0, baseCost: 40000, cps: 180 },
+            sat: { count: 0, baseCost: 120000, cps: 300 },
+            crown: { count: 0, baseCost: 350000, cps: 500 },
+            core: { count: 0, baseCost: 1000000, cps: 1000 }
+        };
 
         function updateUI() {
             document.getElementById('coins-display').innerText = Math.floor(coins);
-            document.getElementById('mouse-count').innerText = mice;
-            document.getElementById('robo-count').innerText = robos;
             
-            let cps = (mice * 1) + (robos * 5);
-            document.getElementById('cps-display').innerText = cps;
-
-            let currentMouseCost = Math.floor(prices.mouse * Math.pow(1.15, mice));
-            let currentRoboCost = Math.floor(prices.robo * Math.pow(1.15, robos));
-
-            document.getElementById('mouse-btn').innerText = `Cost: ${currentMouseCost}`;
-            document.getElementById('robo-btn').innerText = `Cost: ${currentRoboCost}`;
-
-            document.getElementById('mouse-btn').disabled = coins < currentMouseCost;
-            document.getElementById('robo-btn').disabled = coins < currentRoboCost;
+            let totalCps = (assistantPurchased ? 30 : 0);
+            for (let id in items) {
+                totalCps += items[id].count * items[id].cps;
+                document.getElementById(`count-${id}`).innerText = items[id].count;
+                
+                let cost = Math.floor(items[id].baseCost * Math.pow(1.15, items[id].count));
+                document.getElementById(`btn-${id}`).innerText = `Cost: ${cost}`;
+                document.getElementById(`btn-${id}`).disabled = coins < cost;
+            }
+            
+            document.getElementById('cps-display').innerText = totalCps;
+            
+            if (!assistantPurchased) {
+                document.getElementById('btn-assistant').disabled = coins < 500;
+            }
         }
 
         function meowClick(event) {
             coins += 1;
-            saveData();
             updateUI();
             playAudio();
 
@@ -227,26 +307,25 @@
             setTimeout(() => p.remove(), 600);
         }
 
-        function buyItem(item) {
-            let currentMouseCost = Math.floor(prices.mouse * Math.pow(1.15, mice));
-            let currentRoboCost = Math.floor(prices.robo * Math.pow(1.15, robos));
-
-            if (item === 'mouse' && coins >= currentMouseCost) {
-                coins -= currentMouseCost;
-                mice++;
-            } else if (item === 'robo' && coins >= currentRoboCost) {
-                coins -= currentRoboCost;
-                robos++;
+        function buyAssistant() {
+            if (coins >= 500 && !assistantPurchased) {
+                coins -= 500;
+                assistantPurchased = true;
+                document.getElementById('assistant-graphic').style.display = 'block';
+                document.getElementById('item-box-assistant').style.display = 'none';
+                updateUI();
+                playAudio();
             }
-            saveData();
-            updateUI();
-            playAudio();
         }
 
-        function saveData() {
-            localStorage.setItem('mintCoins', coins);
-            localStorage.setItem('mintMice', mice);
-            localStorage.setItem('mintRobos', robos);
+        function buyStandard(id) {
+            let cost = Math.floor(items[id].baseCost * Math.pow(1.15, items[id].count));
+            if (coins >= cost) {
+                coins -= cost;
+                items[id].count++;
+                updateUI();
+                playAudio();
+            }
         }
 
         function playAudio() {
@@ -255,13 +334,32 @@
         }
 
         setInterval(() => {
-            let cps = (mice * 1) + (robos * 5);
-            if (cps > 0) {
-                coins += cps;
-                saveData();
+            let totalCps = (assistantPurchased ? 30 : 0);
+            for (let id in items) {
+                totalCps += items[id].count * items[id].cps;
+            }
+            if (totalCps > 0) {
+                coins += totalCps;
                 updateUI();
             }
         }, 1000);
+
+        function confirmLeave() {
+            if (confirm("Are you sure you want to leave??")) {
+                if (confirm("ARE YOU REALLY SURE?!")) {
+                    if (confirm("ALL YOUR PURCHASES AND CLICKS WILL BE RESET!!!")) {
+                        alert("DON'T BLAME ME, YOU WANTED THIS YOURSELF!");
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        window.onbeforeunload = function(e) {
+            e.preventDefault();
+            e.returnValue = '';
+        };
 
         window.onload = updateUI;
     </script>
