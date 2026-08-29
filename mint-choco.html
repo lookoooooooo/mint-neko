@@ -38,7 +38,7 @@
             font-size: 3.5rem;
         }
         .aesthetic-container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 40px auto;
             background: #ffffff;
             border: 4px solid #2b1810;
@@ -46,24 +46,29 @@
             padding: 30px;
             box-shadow: 0 10px 30px rgba(43, 24, 16, 0.1);
         }
-        p {
+        .intro-text {
             font-size: 1.3rem;
             line-height: 1.6;
             font-weight: bold;
+            max-width: 700px;
+            margin: 0 auto 25px auto;
         }
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin: 30px 0;
         }
         .gallery-box {
             border: 4px solid #2b1810;
             background: #f0fdf4;
-            padding: 10px;
+            padding: 15px;
             border-radius: 16px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .gallery-box:hover {
             transform: scale(1.04) rotate(1deg);
@@ -76,6 +81,62 @@
             border-radius: 10px;
             border: 2px solid #2b1810;
         }
+        .box-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 12px;
+            color: #1f110a;
+            border-top: 2px dashed #2b1810;
+            padding-top: 8px;
+        }
+        .palette-section {
+            margin-top: 50px;
+            border-top: 4px dashed #2b1810;
+            padding-top: 30px;
+        }
+        .palette-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2b1810;
+            text-shadow: 2px 2px #6ee7b7;
+            margin-bottom: 30px;
+        }
+        .mega-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+        .color-sphere {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 4px solid #2b1810;
+            margin: 0 auto;
+            box-shadow: inset -8px -8px 15px rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .color-sphere:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: inset -4px -4px 10px rgba(0,0,0,0.1), 0 10px 20px rgba(43,24,16,0.3);
+        }
+        .color-card {
+            text-align: center;
+        }
+        .color-label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 8px;
+            color: #2b1810;
+            text-transform: uppercase;
+        }
+        #color-status {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #047857;
+            height: 30px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -85,28 +146,71 @@
     <h1>THE MINT-CHOCO ZONE</h1>
 
     <div class="aesthetic-container">
-        <p>Welcome to the ultimate color experience. This zone is fully optimized for Mint & Chocolate textures.</p>
+        <p class="intro-text">Welcome to the ultimate color experience. This zone is fully optimized for Mint & Chocolate textures.</p>
         
         <div class="gallery-grid">
-            <div class="gallery-box" onclick="playMeow()">
-                <img src="mint1.jpg" alt="Chocolate Mint Aesthetic 1">
+            <div class="gallery-box" onclick="playMeow('Classic Mint')">
+                <img src="mint1.jpg" alt="Mint Aesthetic 1">
+                <div class="box-title">Classic Mint Aesthetic</div>
             </div>
-            <div class="gallery-box" onclick="playMeow()">
-                <img src="mint2.jpg" alt="Chocolate Mint Aesthetic 2">
+            <div class="gallery-box" onclick="playMeow('Vintage Mint')">
+                <img src="mint2.jpg" alt="Mint Aesthetic 2">
+                <div class="box-title">Vintage Mint Palette</div>
             </div>
-            <div class="gallery-box" onclick="playMeow()">
-                <img src="choco1.jpg" alt="Mint Chocolate Aesthetic 3">
+            <div class="gallery-box" onclick="playMeow('Tasty Chocolate')">
+                <img src="choco1.jpg" alt="Chocolate Aesthetic 1">
+                <div class="box-title">Mint Chocolate Chip</div>
             </div>
-            <div class="gallery-box" onclick="playMeow()">
-                <img src="choco2.jpg" alt="Mint Chocolate Aesthetic 4">
+            <div class="gallery-box" onclick="playMeow('Dark Chocolate')">
+                <img src="choco2.jpg" alt="Chocolate Aesthetic 2">
+                <div class="box-title">Dark Chocolate Palette</div>
             </div>
         </div>
 
-        <p>Enjoy your exclusive custom cursor here!</p>
+        <div id="color-status">Click any texture or color block! 🐾</div>
+        <div class="palette-section">
+            <div class="palette-title">🍫 MEGA MINT & CHOCOLATE COLLECTION 🌿</div>
+            
+            <div class="mega-palette">
+               
+                <div class="color-card" onclick="playMeow('Magic Mint')"><div class="color-sphere" style="background: #a7f3d0;"></div><div class="color-label">#a7f3</div></div>
+                <div class="color-card" onclick="playMeow('Neon Mint')"><div class="color-sphere" style="background: #6ee7b7;"></div><div class="color-label">#6ee7</div></div>
+                <div class="color-card" onclick="playMeow('Bright Mint')"><div class="color-sphere" style="background: #34d399;"></div><div class="color-label">#34d3</div></div>
+                <div class="color-card" onclick="playMeow('Emerald Mint')"><div class="color-sphere" style="background: #10b981;"></div><div class="color-label">#10b9</div></div>
+                <div class="color-card" onclick="playMeow('Seafoam Mint')"><div class="color-sphere" style="background: #059669;"></div><div class="color-label">#0596</div></div>
+                <div class="color-card" onclick="playMeow('Deep Forest')"><div class="color-sphere" style="background: #047857;"></div><div class="color-label">#0478</div></div>
+                <div class="color-card" onclick="playMeow('Cyan Turquoise')"><div class="color-sphere" style="background: #06b6d4;"></div><div class="color-label">#06b6</div></div>
+                <div class="color-card" onclick="playMeow('Teal Mint')"><div class="color-sphere" style="background: #0f766e;"></div><div class="color-label">#0f76</div></div>
+                <div class="color-card" onclick="playMeow('Ice Mint')"><div class="color-sphere" style="background: #e6fffa;"></div><div class="color-label">#e6ff</div></div>
+                <div class="color-card" onclick="playMeow('Aquamarine')"><div class="color-sphere" style="background: #99f6e4;"></div><div class="color-label">#99f6</div></div>
+                <div class="color-card" onclick="playMeow('Pastel Turquoise')"><div class="color-sphere" style="background: #2dd4bf;"></div><div class="color-label">#2dd4</div></div>
+                <div class="color-card" onclick="playMeow('Dark Cyan')"><div class="color-sphere" style="background: #115e59;"></div><div class="color-label">#115e</div></div>
+
+                
+                <div class="color-card" onclick="playMeow('Soft Cocoa')"><div class="color-sphere" style="background: #854d0e;"></div><div class="color-label">#854d</div></div>
+                <div class="color-card" onclick="playMeow('Milk Chocolate')"><div class="color-sphere" style="background: #78350f;"></div><div class="color-label">#7835</div></div>
+                <div class="color-card" onclick="playMeow('Dark Choco')"><div class="color-sphere" style="background: #451a03;"></div><div class="color-label">#451a</div></div>
+                <div class="color-card" onclick="playMeow('Deep Coffee')"><div class="color-sphere" style="background: #1f110a;"></div><div class="color-label">#1f11</div></div>
+                <div class="color-card" onclick="playMeow('Sweet Brown')"><div class="color-sphere" style="background: #2b1810;"></div><div class="color-label">#2b18</div></div>
+                <div class="color-card" onclick="playMeow('Caramel Choco')"><div class="color-sphere" style="background: #b45309;"></div><div class="color-label">#b453</div></div>
+                <div class="color-card" onclick="playMeow('Golden Latte')"><div class="color-sphere" style="background: #d97706;"></div><div class="color-label">#d977</div></div>
+                <div class="color-card" onclick="playMeow('Warm Bronze')"><div class="color-sphere" style="background: #a16207;"></div><div class="color-label">#a162</div></div>
+                <div class="color-card" onclick="playMeow('Cookie Crust')"><div class="color-sphere" style="background: #b45309;"></div><div class="color-label">#b453</div></div>
+                <div class="color-card" onclick="playMeow('Bitter Chocolate')"><div class="color-sphere" style="background: #3e2723;"></div><div class="color-label">#3e27</div></div>
+                <div class="color-card" onclick="playMeow('Creamy Toffee')"><div class="color-sphere" style="background: #d7ccc8;"></div><div class="color-label">#d7cc</div></div>
+                <div class="color-card" onclick="playMeow('Sweet Chestnut')"><div class="color-sphere" style="background: #5d4037;"></div><div class="color-label">#5d40</div></div>
+            </div>
+        </div>
+
+        <p style="margin-top: 40px;">Enjoy your exclusive custom cursor here!</p>
     </div>
 
     <script>
-        function playMeow() {
+        function playMeow(colorName) {
+            const status = document.getElementById('color-status');
+            status.innerText = `✨ ${colorName} Active! ✨`;
+            status.style.color = colorName.toLowerCase().includes('mint') || colorName.toLowerCase().includes('forest') || colorName.toLowerCase().includes('cyan') || colorName.toLowerCase().includes('aqua') || colorName.toLowerCase().includes('turquoise') || colorName.toLowerCase().includes('teal') ? '#047857' : '#78350f';
+            
             const audio = new Audio('https://mixkit.co');
             audio.play().catch(() => {});
         }
