@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mint Neko Hardcore Clicker v2</title>
+    <title>Mint Neko Hardcore Clicker Max</title>
     <style>
         * {
             cursor: url('cursor2.png') 16 16, auto !important;
@@ -43,17 +43,24 @@
         }
         .game-zone {
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 20px auto;
+        }
+        .helpers-container {
+            display: flex;
             justify-content: center;
             align-items: center;
-            gap: 30px;
-            margin: 20px auto;
-            min-height: 220px;
+            flex-wrap: wrap;
+            gap: 15px;
+            min-height: 190px;
+            max-width: 900px;
         }
         .helper-display-img {
-            width: 130px;
-            height: 180px;
+            width: 90px;
+            height: 140px;
             object-fit: contain;
-            display: none;
             animation: bounceHelper 1s infinite alternate ease-in-out;
         }
         @keyframes bounceHelper {
@@ -76,7 +83,7 @@
             margin-top: 10px;
         }
         .shop-container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 40px auto;
             background: #ffffff;
             border: 4px solid #2b1810;
@@ -94,9 +101,12 @@
             padding-bottom: 10px;
         }
         .shop-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
         }
         .shop-item {
             display: flex;
@@ -104,31 +114,30 @@
             align-items: center;
             background: #f0fdf4;
             border: 2px dashed #2b1810;
-            padding: 20px;
+            padding: 15px 20px;
             border-radius: 16px;
-            min-height: 100px;
+            transition: all 0.2s;
         }
         .item-info {
             text-align: left;
-            max-width: 60%;
+            max-width: 65%;
         }
         .item-name {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: #2b1810;
             font-weight: bold;
         }
         .item-desc {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #047857;
-            margin-top: 4px;
-            line-height: 1.3;
+            margin-top: 2px;
         }
         .shop-btn {
             background: #34d399;
             color: #2b1810;
             border: 2px solid #2b1810;
-            padding: 12px 20px;
-            font-size: 1.05rem;
+            padding: 10px 18px;
+            font-size: 1rem;
             font-weight: bold;
             border-radius: 10px;
             box-shadow: 0 4px #1f110a;
@@ -157,11 +166,12 @@
     
     <div class="game-zone">
         <div style="position: relative; display: inline-block;">
-            <img src="cat.gif" alt="Click Neko" id="click-cat" onclick="meowClick(event)" style="width: 200px; height: 200px; object-fit: contain;">
+            <img src="cat.gif" alt="Click Neko" id="click-cat" onclick="meowClick(event)" style="width: 180px; height: 180px; object-fit: contain;">
             <div id="paw-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
         </div>
-       
-        <img src="helper.png" alt="Neko Assistant" id="helper-graphic" class="helper-display-img">
+        
+      
+        <div class="helpers-container" id="helpers-box"></div>
     </div>
     
     <div id="stats-panel">
@@ -171,111 +181,74 @@
             <div>Autoclick Power: +<span id="cps-display">0</span>/sec</div>
         </div>
     </div>
+
     <div class="shop-container">
         <div class="shop-title">Minty Upgrade Shop</div>
-        <div class="shop-grid">
-            
-           
-            <div class="shop-item" id="shop-box-helper">
-                <div class="item-info">
-                    <div class="item-name" id="helper-name">Japanese Assistant 👩‍💼</div>
-                    <div class="item-desc" id="helper-desc">Hire an assistant to help you get +30 CPS. One-time hire!</div>
-                </div>
-                <button class="shop-btn" id="btn-helper" onclick="upgradeHelper()">Cost: 500</button>
-            </div>
-
-           
-            <div class="shop-item" id="shop-box-click">
-                <div class="item-info">
-                    <div class="item-name" id="click-name">Fresh Mint Leaf 🌿</div>
-                    <div class="item-desc" id="click-desc">Slightly boosts your clicks to +10 per click.</div>
-                </div>
-                <button class="shop-btn" id="btn-click" onclick="upgradeClick()">Cost: 15</button>
-            </div>
-
-        </div>
+        <div class="shop-grid" id="items-shop-grid"></div>
     </div>
     <script>
         let coins = 0;
-        let currentHelperLevel = 0;
-        let currentClickLevel = 0;
+        let clickPower = 1;
+        let cps = 0;
 
-        const helperUpgrades = [
-            { level: 1, name: "Japanese Assistant 👩‍💼", cost: 500, cps: 30, file: "helper.png", desc: "Hire an assistant to get +30 CPS." },
-            { level: 2, name: "Japanese Salaryman 👨‍💼", cost: 2500, cps: 150, file: "helper2.png", desc: "Upgrade to a businessman for +150 CPS!" },
-            { level: 3, name: "Tokyo Business Boss 👔", cost: 12000, cps: 600, file: "helper3.png", desc: "Promote to an executive for +600 CPS!" },
-            { level: 4, name: "Robo-Secretary 9000 🤖", cost: 50000, cps: 2500, file: "helper4.png", desc: "Upgrade to a cyber worker for +2500 CPS!" },
-            { level: 5, name: "Mint Cyber-Samurai ⚔️", cost: 250000, cps: 12000, file: "helper5.png", desc: "Hire a digital guardian for +12000 CPS!" },
-            { level: 6, name: "Mint Empire Emperor 👑", cost: 1000000, cps: 60000, file: "helper6.png", desc: "Max level! Ultimate tycoon provides +60000 CPS!" }
+        const shopItems = [
+            { id: 1, name: "Fresh Mint Leaf 🌿", type: "click", cost: 15, power: 2, purchased: false, revealed: true },
+            { id: 2, name: "Spearmint Shoot 🌱", type: "click", cost: 50, power: 5, purchased: false, revealed: false },
+            { id: 3, name: "Peppermint Powder 🍃", type: "click", cost: 120, power: 10, purchased: false, revealed: false },
+            { id: 4, name: "Wild Catnip Sprig 🌿", type: "click", cost: 250, power: 20, purchased: false, revealed: false },
+            { id: 5, name: "Mint Tea Bag ☕", type: "click", cost: 500, power: 45, purchased: false, revealed: false },
+            { id: 6, name: "Japanese Assistant 👩‍💼", type: "helper", cost: 500, cps: 30, file: "helper.png", purchased: false, revealed: false },
+            { id: 7, name: "Japanese Salaryman 👨‍💼", type: "helper", cost: 1200, cps: 80, file: "helper2.png", purchased: false, revealed: false },
+            { id: 8, name: "Mint Candy Cane 🍬", type: "click", cost: 1500, power: 90, purchased: false, revealed: false },
+            { id: 9, name: "Sweet Mint Syrup 🍯", type: "click", cost: 3000, power: 180, purchased: false, revealed: false },
+            { id: 10, name: "Spearmint Extract 🧪", type: "click", cost: 4000, power: 300, purchased: false, revealed: false },
+            { id: 11, name: "Mint Ice Cream 🍦", type: "click", cost: 7000, power: 500, purchased: false, revealed: false },
+            { id: 12, name: "Choco Coating 🍫", type: "click", cost: 10000, power: 800, purchased: false, revealed: false },
+            { id: 13, name: "Chocolate Chip Chunk 🍫", type: "click", cost: 15000, power: 1200, purchased: false, revealed: false },
+            { id: 14, name: "Double Mint Glaze 🍩", type: "click", cost: 22000, power: 1800, purchased: false, revealed: false },
+            { id: 15, name: "Mint Soda Pop 🥤", type: "click", cost: 30000, power: 2500, purchased: false, revealed: false },
+            { id: 16, name: "Choco Robo-Cat 🤖", type: "click", cost: 45000, power: 3800, purchased: false, revealed: false },
+            { id: 17, name: "Double Choco Glaze 🍩", type: "click", cost: 60000, power: 5000, purchased: false, revealed: false },
+            { id: 18, name: "Mint Cookie Crust 🍪", type: "click", cost: 85000, power: 6500, purchased: false, revealed: false },
+            { id: 19, name: "Cocoa Butter Sprinkles ✨", type: "click", cost: 120000, power: 8000, purchased: false, revealed: false },
+            { id: 20, name: "Choco Wafer Bar 🍫", type: "click", cost: 170000, power: 11000, purchased: false, revealed: false }
         ];
+        function buyItem(id) {
+            const item = shopItems.find(i => i.id === id);
+            if (item && coins >= item.cost && !item.purchased) {
+                coins -= item.cost;
+                item.purchased = true;
 
-        const clickUpgrades = [
-            { level: 1, name: "Fresh Mint Leaf 🌿", cost: 15, power: 10, desc: "Boosts your clicks to +10 per press." },
-            { level: 2, name: "Wild Catnip Sprig 🌱", cost: 150, power: 60, desc: "Upgrades your clicks to +60 per press." },
-            { level: 3, name: "Mint Chocolate Chip 🍫", cost: 800, power: 250, desc: "Upgrades your clicks to +250 per press." },
-            { level: 4, name: "Sweet Neko Syrup 🍯", cost: 4000, power: 1100, desc: "Upgrades your clicks to +1100 per press." },
-            { level: 5, name: "Quantum Mint Spice 🌌", cost: 20000, power: 5000, desc: "Upgrades your clicks to +5000 per press." },
-            { level: 6, name: "Cosmic Catnip Essence ✨", cost: 100000, power: 25000, desc: "Max click! Blast off to +25000 per press!" }
-        ];
+                if (item.type === 'click') {
+                    clickPower = item.power;
+                } else if (item.type === 'helper') {
+                    cps += item.cps;
+                    const helpersBox = document.getElementById('helpers-box');
+                    const img = document.createElement('img');
+                    img.src = item.file;
+                    img.className = 'helper-display-img';
+                    img.alt = item.name;
+                    helpersBox.appendChild(img);
+                }
 
-        function getClickPower() {
-            if (currentClickLevel === 0) return 1;
-            return clickUpgrades[currentClickLevel - 1].power;
-        }
+                const nextItem = shopItems.find(i => i.id === id + 1);
+                if (nextItem) {
+                    nextItem.revealed = true;
+                }
 
-        function getCpsPower() {
-            if (currentHelperLevel === 0) return 0;
-            return helperUpgrades[currentHelperLevel - 1].cps;
-        }
-        function updateUI() {
-            document.getElementById('coins-display').innerText = Math.floor(coins);
-            document.getElementById('click-display').innerText = getClickPower();
-            document.getElementById('cps-display').innerText = getCpsPower();
-
-            if (currentHelperLevel < helperUpgrades.length) {
-                let up = helperUpgrades[currentHelperLevel];
-                document.getElementById('helper-name').innerText = up.name;
-                document.getElementById('helper-desc').innerText = up.desc;
-                document.getElementById('btn-helper').innerText = `Cost: ${up.cost}`;
-                document.getElementById('btn-helper').disabled = coins < up.cost;
-            } else {
-                document.getElementById('helper-name').innerText = "Max Level Reached! 🌟";
-                document.getElementById('helper-desc').innerText = "Your Japanese corporate empire is fully optimized.";
-                document.getElementById('btn-helper').innerText = "SOLD OUT";
-                document.getElementById('btn-helper').disabled = true;
-            }
-
-            if (currentClickLevel < clickUpgrades.length) {
-                let up = clickUpgrades[currentClickLevel];
-                document.getElementById('click-name').innerText = up.name;
-                document.getElementById('click-desc').innerText = up.desc;
-                document.getElementById('btn-click').innerText = `Cost: ${up.cost}`;
-                document.getElementById('btn-click').disabled = coins < up.cost;
-            } else {
-                document.getElementById('click-name').innerText = "Max Level Reached! 🌟";
-                document.getElementById('click-desc').innerText = "Your mouse clicks hold cosmic clicking powers.";
-                document.getElementById('btn-click').innerText = "SOLD OUT";
-                document.getElementById('btn-click').disabled = true;
-            }
-
-            let graphic = document.getElementById('helper-graphic');
-            if (currentHelperLevel > 0) {
-                graphic.src = helperUpgrades[currentHelperLevel - 1].file;
-                graphic.style.display = 'block';
-            } else {
-                graphic.style.display = 'none';
+                updateUI();
+                playAudio();
             }
         }
 
         function meowClick(event) {
-            let power = getClickPower();
-            coins += power;
+            coins += clickPower;
             updateUI();
             playAudio();
 
             const container = document.getElementById('paw-container');
             const p = document.createElement('div');
-            p.innerText = `+${power} 🐾`;
+            p.innerText = `+${clickPower} 🐾`;
             p.style.position = 'absolute';
             p.style.color = '#2b1810';
             p.style.fontWeight = 'bold';
@@ -295,37 +268,12 @@
             setTimeout(() => p.remove(), 600);
         }
 
-        function upgradeHelper() {
-            if (currentHelperLevel < helperUpgrades.length) {
-                let up = helperUpgrades[currentHelperLevel];
-                if (coins >= up.cost) {
-                    coins -= up.cost;
-                    currentHelperLevel++;
-                    updateUI();
-                    playAudio();
-                }
-            }
-        }
-
-        function upgradeClick() {
-            if (currentClickLevel < clickUpgrades.length) {
-                let up = clickUpgrades[currentClickLevel];
-                if (coins >= up.cost) {
-                    coins -= up.cost;
-                    currentClickLevel++;
-                    updateUI();
-                    playAudio();
-                }
-            }
-        }
-
         function playAudio() {
             const audio = new Audio('https://mixkit.co');
             audio.play().catch(() => {});
         }
 
         setInterval(() => {
-            let cps = getCpsPower();
             if (cps > 0) {
                 coins += cps;
                 updateUI();
