@@ -6,7 +6,7 @@
     <title>Mint Neko</title>
     <style>
         * {
-            cursor: url('cursor1.png') 16 16, auto !important;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' width='32' height='32' viewBox='0 0 24 24'%3E%3Cpath fill='%236ee7b7' d='M12 14c1.66 0 3-1.34 3-3s-1.34-3-3-3s-3 1.34-3 3s1.34 3 3 3zm-4.5-2c.83 0 1.5-.67 1.5-1.5S8.33 9 7.5 9S6 9.67 6 10.5S6.67 12 7.5 12zm9 0c.83 0 1.5-.67 1.5-1.5S17.33 9 16.5 9S15 9.67 15 10.5S15.67 12 16.5 12zm-4.5-5c.83 0 1.5-.67 1.5-1.5S12.83 4 12 4s-1.5.67-1.5 1.5S11.17 7 12 7z'/%3E%3C/svg%3E") 16 16, auto !important;
         }
         body {
             background-color: #1f110a;
@@ -95,8 +95,8 @@
             bottom: 20px;
             right: 20px;
             z-index: 9999;
-            width: 120px;
-            height: 120px;
+            width: 90px;
+            height: 90px;
             transition: transform 0.2s;
         }
         .corner-widget2 {
@@ -104,21 +104,28 @@
             bottom: 20px;
             left: 20px;
             z-index: 9999;
-            width: 120px;
-            height: 120px;
+            width: 90px;
+            height: 90px;
             transition: transform 0.2s;
         }
         .corner-widget:hover, .corner-widget2:hover {
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
-        .widget-img {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
+        .corner-widget svg, .corner-widget2 svg {
+            width: 90px;
+            height: 90px;
+            animation: bounceNeko 1.2s infinite alternate ease-in-out;
+        }
+        .corner-widget2 svg {
+            animation-delay: 0.6s;
+        }
+        @keyframes bounceNeko {
+            from { transform: translateY(0) scaleX(1); }
+            to { transform: translateY(-15px) scaleX(0.95); }
         }
         .bubble {
             position: fixed;
-            bottom: 150px;
+            bottom: 130px;
             right: 20px;
             background: #34d399;
             color: #1f110a;
@@ -128,14 +135,14 @@
             max-width: 200px;
             font-size: 0.9rem;
             border: 2px solid #6ee7b7;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
             display: none;
             text-align: left;
             z-index: 10000;
         }
         .bubble-left {
             position: fixed;
-            bottom: 150px;
+            bottom: 130px;
             left: 20px;
             background: #6ee7b7;
             color: #1f110a;
@@ -145,7 +152,7 @@
             max-width: 200px;
             font-size: 0.9rem;
             border: 2px solid #34d399;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
             display: none;
             text-align: left;
             z-index: 10000;
@@ -175,14 +182,20 @@
 
     <div class="bubble" id="quote-bubble"></div>
     <div class="corner-widget" onclick="showNekoTalk()">
-        <img src="https://giphy.com" alt="Widget Neko 1" class="widget-img">
+        <svg viewBox="0 0 24 24" xmlns="http://w3.org">
+            <path fill="%2334d399" d="M12 21c-4.41 0-8-3.59-8-8 0-1.63.49-3.15 1.34-4.42L3.29 6.29a1 1 0 0 1 1.42-1.42l2.29 2.29C8.27 6.42 9.58 6 11 6c.34 0 .67.03 1 .07V3a1 1 0 0 1 2 0v3.26c3.54.84 6.16 3.94 6.33 7.68l1.38 1.38a1 1 0 0 1-1.42 1.42l-1.15-1.15c-.94 1.94-2.88 3.32-5.14 3.41V21h-2zm-1-12.92A6.002 6.002 0 0 0 6 13c0 3.31 2.69 6 6 6s6-2.69 6-6c0-2.22-1.21-4.15-3-5.19V9a1 1 0 0 1-2 0V8.08z"/>
+            <circle cx="9" cy="13" r="1.5" fill="%231f110a"/>
+            <circle cx="15" cy="13" r="1.5" fill="%231f110a"/>
+            <path d="M12 16.5c-.83 0-1.5-.67-1.5-1.5h3c0 .83-.67 1.5-1.5 1.5z" fill="%231f110a"/>
+        </svg>
     </div>
 
     <div class="bubble-left" id="fortune-bubble"></div>
     <div class="corner-widget2" onclick="showNekoFortune()">
-        <img src="https://giphy.com" alt="Widget Neko 2" class="widget-img">
+        <svg viewBox="0 0 24 24" xmlns="http://w3.org">
+            <path fill="%236ee7b7" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.25z"/>
+        </svg>
     </div>
-
     <script>
         let meows = 0;
         let bubbleTimeout;
