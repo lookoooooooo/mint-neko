@@ -91,6 +91,200 @@
             0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
             100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
         }
+        .fact-container {
+            max-width: 650px;
+            margin: 30px auto;
+            background: #2b1810;
+            border: 4px dashed #34d399;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.15);
+        }
+        #fact-num {
+            font-size: 1.8rem;
+            color: #6ee7b7;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        #fact-text {
+            font-size: 1.3rem;
+            color: #a7f3d0;
+            line-height: 1.5;
+            min-height: 80px;
+        }
+        .claim-btn {
+            background: #34d399;
+            color: #1f110a;
+            border: 3px solid #6ee7b7;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            margin-top: 15px;
+            box-shadow: 0 4px #0f0805;
+        }
+        .claim-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px #0f0805;
+        }
+        .claim-btn:disabled {
+            background: #4b2e1e;
+            color: #1f110a;
+            border-color: #3d2314;
+            box-shadow: none;
+            transform: none;
+        }
+        #warning-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000;
+            color: #ff3333;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+            font-size: 2.5rem;
+            font-weight: bold;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        #stop-party-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #ff3333;
+            color: #fff;
+            border: 4px solid #fff;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 12px;
+            display: none;
+            z-index: 100001;
+            box-shadow: 0 0 20px #ff0000;
+        }
+        #achievement-popup {
+            position: fixed;
+            top: 20px;
+            right: -350px;
+            background: linear-gradient(45deg, #ffcc00, #ff0055);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px #ff0055;
+            z-index: 100002;
+            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .achievements-panel {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #150b06;
+            border: 3px solid #34d399;
+            padding: 20px;
+            border-radius: 16px;
+        }
+        .achievements-title {
+            font-size: 1.4rem;
+            color: #6ee7b7;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .achievements-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .badge {
+            background: #2b1810;
+            color: #4b2e1e;
+            border: 2px solid #3d2314;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .badge.unlocked {
+            background: #34d399;
+            color: #1f110a;
+            border-color: #6ee7b7;
+            box-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
+        }
+        .badge.special {
+            background: #4b2e1e;
+            border-color: #ffaa00;
+            color: #7a5500;
+        }
+        .badge.special.unlocked {
+            background: linear-gradient(45deg, #ffcc00, #ff0055);
+            color: #fff;
+            border-color: #fff;
+            box-shadow: 0 0 20px #ff0055;
+        }
+        .reset-btn {
+            background: #1f110a;
+            color: #ff3333;
+            border: 2px dashed #ff3333;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+        .reset-btn:hover {
+            background: #ff3333;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <button id="stop-party-btn" onclick="stopParty()">STOP THE PARTY! 🛑</button>
+    <div id="achievement-popup">New Achievement:<br>Cat Party! 🎉</div>
+
+    <div id="warning-screen">
+        <div>⚠️ WARNING! FLASHING LIGHTS PARTY INBOUND! ⚠️</div>
+        <div style="font-size: 1.6rem; margin-top: 20px; color: #fff; max-width: 700px; line-height: 1.4;">
+            This site will flash rapid bright colors in a few seconds. If you have epilepsy or sensitivity to light, please leave now.
+        </div>
+        <div style="font-size: 2rem; margin-top: 30px; color: #ffcc00;">PARTY STARTS IN: <span id="timer-count">20</span>s</div>
+    </div>
+
+    <div class="nav-links">
+        <a href="mint-choco.html" class="nav-button">ENTER MINT-CHOCO ZONE 🍫</a>
+        <a href="clicker.html" class="nav-button">NEKO GAME CLICKER 🐾</a>
+    </div>
+
+    <h1>MINT NEKO FACTS</h1>
+
+    <div class="fact-container">
+        <div id="fact-num">Fact #--</div>
+        <div id="fact-text">Loading neko intelligence...</div>
+        <button class="claim-btn" id="claim-button" onclick="claimAchievement()">Claim Achievement 🏆</button>
+    </div>
+    
+    <div style="color: #6ee7b7; font-weight: bold; font-size: 1.1rem;">
+        Progress: <span id="progress-count">0</span> / 51 Achievements Collected
+    </div>
+
+    <div class="grid">
+        <div class="box" id="cbox1"><img src="cat1.jpg" alt="Mint Cat" class="top-focus"></div>
+        <div class="box" id="cbox2"><img src="cat2.jpg" alt="Neko Photo"></div>
+        <div class="box" id="cbox3"><img src="cat3.jpg" alt="Chocolate Cat"></div>
+    </div>
+
+    <div class="achievements-panel">
+        <div class="achievements-title">🐾 Your Saved Achievement Badges 🐾</div>
+        <div class="achievements-grid" id="badges-container"></div>
+        <button class="reset-btn" onclick="resetAchievements()">Reset Achievements ⚙️</button>
+    </div>
     <script>
         const catFacts = [
             "Cats sleep for about 70% of their lives.",
@@ -343,6 +537,5 @@
             loadRandomFact();
         };
     </script>
-
 </body>
 </html>
