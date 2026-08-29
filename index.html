@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mint Neko</title>
     <style>
+        * {
+            cursor: url('cursor.png') 16 16, auto !important;
+        }
         body {
             background-color: #1f110a;
             color: #34d399;
             font-family: 'Courier New', Courier, monospace;
             padding: 20px;
             text-align: center;
-            cursor: url('cursor.png'), auto;
         }
         h1 {
             color: #6ee7b7;
@@ -29,7 +31,6 @@
             border: 5px dashed #34d399;
             background: #2b1810;
             padding: 15px;
-            cursor: url('cursor.png'), pointer;
             border-radius: 16px;
             box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
             transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
@@ -56,7 +57,6 @@
             font-size: 1.4rem;
             font-weight: bold;
             border-radius: 30px;
-            cursor: url('cursor.png'), pointer;
             box-shadow: 0 6px #0f0805, 0 0 15px rgba(52, 211, 153, 0.4);
         }
         button:active {
@@ -76,7 +76,6 @@
             right: 20px;
             z-index: 9999;
             width: 100px;
-            cursor: url('cursor.png'), pointer;
             transition: transform 0.2s;
         }
         .corner-widget:hover {
@@ -131,6 +130,7 @@
 
     <script>
         let meows = 0;
+        let bubbleTimeout;
         const phrases = [
             "Feed me mint ice cream!", "Meow? Purr...", "Humans are so boring.", "Is it nap time yet?",
             "Give me more chocolate!", "I rule this mint zone.", "Pet my head, please.", "Catching lasers is my job.",
@@ -150,12 +150,19 @@
         }
 
         function showNekoTalk() {
+            clearTimeout(bubbleTimeout);
             playAudio('https://mixkit.co');
             const bubble = document.getElementById('quote-bubble');
             const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+            
             bubble.innerText = randomPhrase;
             bubble.style.display = 'block';
-            setTimeout(() => { bubble.style.display = 'none'; }, 3000);
+            
+            const displayTime = randomPhrase.length <= 20 ? 2500 : 4000;
+            
+            bubbleTimeout = setTimeout(() => { 
+                bubble.style.display = 'none'; 
+            }, displayTime);
         }
 
         function playAudio(url) {
