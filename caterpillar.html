@@ -78,13 +78,50 @@
             border-radius: 20px;
             box-shadow: 0 0 15px rgba(52, 211, 153, 0.1);
         }
-        .caterpillar-main-img {
+        .crawl-box {
+            position: relative;
             width: 100%;
-            max-height: 320px;
-            object-fit: cover;
-            border-radius: 12px;
+            height: 180px;
+            background: #150b06;
             border: 3px solid #6ee7b7;
+            border-radius: 12px;
+            overflow: hidden;
             margin-bottom: 20px;
+        }
+        .caterpillar-main-img {
+            position: absolute;
+            bottom: 15px;
+            left: -140px;
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            animation: crawlLoop 10s linear infinite;
+        }
+        @keyframes crawlLoop {
+            0% { left: -140px; transform: scaleX(1) scaleY(1); }
+            5% { transform: scaleX(0.7) scaleY(1.2); }
+            10% { transform: scaleX(1.2) scaleY(0.8); }
+            15% { transform: scaleX(0.7) scaleY(1.2); }
+            20% { transform: scaleX(1.2) scaleY(0.8); }
+            25% { transform: scaleX(0.7) scaleY(1.2); }
+            30% { transform: scaleX(1.2) scaleY(0.8); }
+            35% { transform: scaleX(0.7) scaleY(1.2); }
+            40% { transform: scaleX(1.2) scaleY(0.8); }
+            45% { transform: scaleX(0.7) scaleY(1.2); }
+            50% { transform: scaleX(1.2) scaleY(0.8); }
+            55% { transform: scaleX(0.7) scaleY(1.2); }
+            60% { transform: scaleX(1.2) scaleY(0.8); }
+            65% { transform: scaleX(0.7) scaleY(1.2); }
+            70% { transform: scaleX(1.2) scaleY(0.8); }
+            75% { transform: scaleX(0.7) scaleY(1.2); }
+            80% { transform: scaleX(1.2) scaleY(0.8); }
+            85% { transform: scaleX(0.7) scaleY(1.2); }
+            90% { transform: scaleX(1.2) scaleY(0.8); }
+            95% { transform: scaleX(0.7) scaleY(1.2); }
+            100% { left: 105%; transform: scaleX(1) scaleY(1); }
+        }
+        .scared-crawl {
+            animation-duration: 3.5s !important;
         }
         .pet-container {
             max-width: 600px;
@@ -213,7 +250,9 @@
     <h1>SILLY CATERPILLAR</h1>
 
     <div class="info-card">
-        <img src="caterpillar.png" alt="Silly Caterpillar Biology" class="caterpillar-main-img">
+        <div class="crawl-box" id="info-crawl-container">
+            <img src="caterpillar.png" alt="Silly Caterpillar Biology" class="caterpillar-main-img" id="crawling-bug" onclick="scareCaterpillar(event)">
+        </div>
         <div style="font-size: 1.6rem; color: #6ee7b7; font-weight: bold; margin-bottom: 10px;">About Sasakia Charonda 🐛</div>
         <div style="font-size: 1.05rem; color: #a7f3d0; line-height: 1.5; text-align: left;">
             This creature is famous for its silly, cat-like face mask and tiny dragon horns. It uses these horns to blend in perfectly with the leaves of Chinese Hackberry trees. It strictly feeds on minty greens and changes its color to a chocolate brown shade to hibernate during cold winters!
@@ -261,6 +300,33 @@
             document.getElementById('phobia-screen').style.display = 'none';
         }
 
+        function scareCaterpillar(event) {
+            playAudio();
+            
+            const bug = document.getElementById('crawling-bug');
+            bug.classList.add('scared-crawl');
+            
+            const container = document.getElementById('info-crawl-container');
+            const anger = document.createElement('div');
+            anger.innerText = '💢';
+            anger.style.position = 'absolute';
+            anger.style.fontSize = '1.8rem';
+            anger.style.left = event.offsetX + 'px';
+            anger.style.top = event.offsetY + 'px';
+            anger.style.pointerEvents = 'none';
+            anger.style.transition = 'all 0.5s ease-out';
+            
+            container.appendChild(anger);
+            
+            setTimeout(() => {
+                anger.style.transform = 'scale(1.4) translateY(-20px)';
+                anger.style.opacity = '0';
+            }, 10);
+            
+            setTimeout(() => anger.remove(), 500);
+            setTimeout(() => bug.classList.remove('scared-crawl'), 1500);
+        }
+
         function updatePet() {
             document.getElementById('weight-display').innerText = weight;
             
@@ -274,16 +340,16 @@
 
             if (weight < 100) {
                 stageText.innerText = "Stage: Tiny Green Ninja 🍃";
-                avatar.style.filter = `none`;
+                avatar.style.filter = "none";
             } else if (weight >= 100 && weight < 280) {
                 stageText.innerText = "Stage: Minty Cinnamon Roll 🥯";
-                avatar.style.filter = `hue-rotate(60deg) saturate(1.2)`;
+                avatar.style.filter = "hue-rotate(60deg) saturate(1.2)";
             } else if (weight >= 280 && weight < 430) {
                 stageText.innerText = "Stage: Winter Chocolate Bar 🍫";
-                avatar.style.filter = `sepia(0.8) hue-rotate(-30deg) saturate(1.5) brightness(0.6)`;
+                avatar.style.filter = "sepia(0.8) hue-rotate(-30deg) saturate(1.5) brightness(0.6)";
             } else if (weight >= 430) {
                 stageText.innerText = "Stage: Queen of Silly Caterpillars 👑";
-                avatar.style.filter = `hue-rotate(140deg) saturate(2) brightness(1.1)`;
+                avatar.style.filter = "hue-rotate(140deg) saturate(2) brightness(1.1)";
                 if (!isMaxed) {
                     isMaxed = true;
                     document.getElementById('feed-btn').disabled = true;
@@ -380,8 +446,8 @@
             t.style.color = '#6ee7b7';
             t.style.fontWeight = 'bold';
             t.style.fontSize = '1.3rem';
-            t.style.left = (x !== undefined ? x : Math.random() * 150 + 20) + 'px';
-            t.style.top = (y !== undefined ? y : Math.random() * 150 + 20) + 'px';
+            t.style.left = (x !== undefined ? x : Math.random() * 100 + 30) + 'px';
+            t.style.top = (y !== undefined ? y : Math.random() * 100 + 30) + 'px';
             t.style.transition = 'all 0.6s ease-out';
             
             container.appendChild(t);
@@ -405,13 +471,6 @@
                 updatePet();
             }
         }, 1000);
-
-        window.onbeforeunload = function(e) {
-            if (weight > 1 && weight < 450) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        };
 
         window.onload = updatePet;
     </script>
