@@ -159,6 +159,21 @@
             z-index: 100001;
             box-shadow: 0 0 20px #ff0000;
         }
+        #achievement-popup {
+            position: fixed;
+            top: 20px;
+            right: -350px;
+            background: linear-gradient(45deg, #ffcc00, #ff0055);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px #ff0055;
+            z-index: 100002;
+            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
         .achievements-panel {
             max-width: 900px;
             margin: 40px auto;
@@ -211,6 +226,7 @@
 <body>
 
     <button id="stop-party-btn" onclick="stopParty()">STOP THE PARTY! 🛑</button>
+    <div id="achievement-popup">New Achievement:<br>Cat Party! 🎉</div>
 
     <div id="warning-screen">
         <div>⚠️ WARNING! FLASHING LIGHTS PARTY INBOUND! ⚠️</div>
@@ -396,6 +412,15 @@
             }, 1000);
         }
 
+        function showAchievementPopup() {
+            const popup = document.getElementById('achievement-popup');
+            popup.style.right = '20px';
+            
+            setTimeout(() => {
+                popup.style.right = '-350px';
+            }, 4000);
+        }
+
         function startPartyEffect() {
             document.getElementById('stop-party-btn').style.display = 'block';
             document.getElementById('cbox1').classList.add('dancing');
@@ -408,6 +433,7 @@
                 const sBadge = document.getElementById('badge-special');
                 if (sBadge) sBadge.classList.add('unlocked');
                 updateProgress();
+                showAchievementPopup();
             }
 
             const flashInterval = setInterval(() => {
@@ -431,6 +457,8 @@
         function stopParty() {
             partyIntervals.forEach(clearInterval);
             partyIntervals = [];
+            
+            document.querySelectorAll('.candy-emoji').forEach(el => el.remove());
             
             document.getElementById('stop-party-btn').style.display = 'none';
             document.getElementById('cbox1').classList.remove('dancing');
