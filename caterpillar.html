@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Silly Caterpillar Sanctuary</title>
+    <title>Silly Caterpillar Sanctuary Max</title>
     <style>
         * {
             cursor: url('cursor3.jpg') 16 16, auto !important;
@@ -71,7 +71,7 @@
         }
         .info-card {
             max-width: 650px;
-            margin: 20px auto 40px auto;
+            margin: 20px auto 30px auto;
             background: #2b1810;
             border: 4px dashed #34d399;
             padding: 25px;
@@ -91,7 +91,7 @@
             margin: 30px auto;
             background: #2b1810;
             border: 4px dashed #34d399;
-            padding: 30px;
+            padding: 25px;
             border-radius: 24px;
             box-shadow: 0 0 25px rgba(52, 211, 153, 0.15);
         }
@@ -106,7 +106,6 @@
             background: #150b06;
             border: 3px solid #6ee7b7;
             border-radius: 50%;
-            overflow: hidden;
         }
         .pet-img {
             width: 150px;
@@ -115,43 +114,81 @@
             transition: transform 0.1s ease, filter 0.5s ease;
         }
         .wiggle {
-            animation: wiggleAnim 0.3s ease infinite alternate;
+            animation: wiggleAnim 0.2s ease infinite alternate;
+        }
+        .spin {
+            animation: spinAnim 0.4s ease;
         }
         @keyframes wiggleAnim {
-            from { transform: scale(1) rotate(-3deg); }
-            to { transform: scale(1.05) rotate(3deg); }
+            from { transform: scale(1) rotate(-5deg); }
+            to { transform: scale(1.1) rotate(5deg); }
+        }
+        @keyframes spinAnim {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.3) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+        .status-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 85%;
+            margin: 15px auto;
+        }
+        .bar-label {
+            font-size: 0.9rem;
+            text-align: left;
+            font-weight: bold;
+            color: #a7f3d0;
         }
         .status-bar-container {
-            width: 80%;
+            width: 100%;
             background: #4b2e1e;
             border: 2px solid #34d399;
-            height: 20px;
-            border-radius: 10px;
-            margin: 15px auto;
+            height: 16px;
+            border-radius: 8px;
             overflow: hidden;
         }
         .status-bar {
             height: 100%;
-            width: 10%;
-            background: #34d399;
             transition: width 0.3s ease;
+        }
+        #growth-bar { background: #34d399; width: 0%; }
+        #mood-bar { background: #fbbf24; width: 100%; }
+        .control-panel {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
         }
         .control-btn {
             background: #34d399;
             color: #1f110a;
             border: 3px solid #6ee7b7;
-            padding: 12px 28px;
-            font-size: 1.1rem;
+            padding: 10px 20px;
+            font-size: 1rem;
             font-weight: bold;
-            border-radius: 25px;
-            margin: 10px;
+            border-radius: 20px;
             box-shadow: 0 4px #0f0805;
+        }
+        .control-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px #0f0805;
         }
         .control-btn:disabled {
             background: #4b2e1e;
             color: #2b1810;
             border-color: #3d2314;
             box-shadow: none;
+            transform: none;
+        }
+        #event-banner {
+            font-size: 1.1rem;
+            color: #fbbf24;
+            font-weight: bold;
+            height: 25px;
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -183,102 +220,178 @@
         </div>
     </div>
     <div class="pet-container">
-        <div style="font-size: 1.8rem; font-weight: bold; color: #6ee7b7; border-bottom: 2px dashed #34d399; padding-bottom: 10px; margin-bottom: 20px;">🐛 Caterpillar Incubator 🧪</div>
+        <div style="font-size: 1.8rem; font-weight: bold; color: #6ee7b7; border-bottom: 2px dashed #34d399; padding-bottom: 10px; margin-bottom: 15px;">🐛 Caterpillar Life Simulator 🧪</div>
         <div id="pet-stage" style="font-size: 1.3rem; color: #6ee7b7; font-weight: bold;">Stage: Tiny Green Ninja 🍃</div>
         <div style="font-size: 1.2rem; margin-top: 5px; color: #a7f3d0;">Weight: <span id="weight-display">1</span>g</div>
         
+        <div id="event-banner">Caterpillar is feeling great! :3</div>
+
         <div class="caterpillar-frame">
             <img src="caterpillar.png" alt="Silly Caterpillar" id="pet-avatar" class="pet-img" onclick="petCaterpillar(event)">
-            <div id="text-layer" style="position: absolute; width: 100%; height: 100%; pointer-events: none;"></div>
+            <div id="text-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden;"></div>
         </div>
 
-        <div class="status-bar-container">
-            <div class="status-bar" id="growth-bar"></div>
+        <div class="status-container">
+            <div class="bar-label">Caterpillar Growth:</div>
+            <div class="status-bar-container">
+                <div class="status-bar" id="growth-bar"></div>
+            </div>
+            
+            <div class="bar-label">Caterpillar Mood:</div>
+            <div class="status-bar-container">
+                <div class="status-bar" id="mood-bar"></div>
+            </div>
         </div>
 
-        <button class="control-btn" id="feed-button" onclick="feedCaterpillar()">Feed Mint Leaf 🍃</button>
+        <div class="control-panel">
+            <button class="control-btn" id="feed-btn" onclick="feedCaterpillar()">Feed Mint Leaf 🍃</button>
+            <button class="control-btn" id="play-btn" onclick="playWithCaterpillar()">Pet Horns 🧸</button>
+            <button class="control-btn" id="sleep-btn" onclick="putToSleep()">Put to Sleep 💤</button>
+        </div>
     </div>
 
     <script>
         let weight = 1;
+        let mood = 100;
         let isMaxed = false;
+        let isSleeping = false;
+        let isCranky = false;
 
-        
         function acceptWarning() {
             document.getElementById('phobia-screen').style.display = 'none';
         }
 
-        
         function updatePet() {
             document.getElementById('weight-display').innerText = weight;
             
-            let percentage = (weight / 450) * 100;
-            if (percentage > 100) percentage = 100;
-            document.getElementById('growth-bar').style.width = percentage + '%';
+            let growthPercentage = (weight / 450) * 100;
+            if (growthPercentage > 100) growthPercentage = 100;
+            document.getElementById('growth-bar').style.width = growthPercentage + '%';
+            document.getElementById('mood-bar').style.width = mood + '%';
 
             const avatar = document.getElementById('pet-avatar');
             const stageText = document.getElementById('pet-stage');
 
             if (weight < 100) {
                 stageText.innerText = "Stage: Tiny Green Ninja 🍃";
-                avatar.style.filter = "none";
+                avatar.style.filter = `none`;
             } else if (weight >= 100 && weight < 280) {
                 stageText.innerText = "Stage: Minty Cinnamon Roll 🥯";
-                avatar.style.filter = "hue-rotate(60deg) saturate(1.2)";
+                avatar.style.filter = `hue-rotate(60deg) saturate(1.2)`;
             } else if (weight >= 280 && weight < 430) {
                 stageText.innerText = "Stage: Winter Chocolate Bar 🍫";
-                avatar.style.filter = "sepia(0.8) hue-rotate(-30deg) saturate(1.5) brightness(0.6)";
+                avatar.style.filter = `sepia(0.8) hue-rotate(-30deg) saturate(1.5) brightness(0.6)`;
             } else if (weight >= 430) {
                 stageText.innerText = "Stage: Queen of Silly Caterpillars 👑";
-                avatar.style.filter = "hue-rotate(140deg) saturate(2) brightness(1.1)";
+                avatar.style.filter = `hue-rotate(140deg) saturate(2) brightness(1.1)`;
                 if (!isMaxed) {
                     isMaxed = true;
-                    document.getElementById('feed-button').disabled = true;
-                    document.getElementById('feed-button').innerText = "Fully Grown! 🌟";
+                    document.getElementById('feed-btn').disabled = true;
+                    document.getElementById('play-btn').disabled = true;
+                    document.getElementById('sleep-btn').disabled = true;
+                    document.getElementById('event-banner').innerText = "ALL HAIL THE QUEEN! 👑";
                     alert("Congratulations! You raised the Ultimate Silly Caterpillar! She is now the Queen! 👑💚");
                 }
             }
         }
 
-   
         function feedCaterpillar() {
-            if (weight < 450) {
-                weight += Math.floor(Math.random() * 8) + 8;
-            } else {
-                weight = 450;
-            }
+            if (isSleeping || isMaxed) return;
             
+            if (isCranky) {
+                document.getElementById('event-banner').innerText = "She refuses to eat! Pet her horns first!";
+                playAudio();
+                return;
+            }
+
+            let moodMultiplier = mood > 50 ? 1 : 0.5;
+            let gain = Math.floor((Math.random() * 6 + 6) * moodMultiplier);
+            weight = Math.min(450, weight + gain);
+
+            if (Math.random() < 0.25) {
+                isCranky = true;
+                document.getElementById('event-banner').innerText = "Caterpillar is cranky and wants attention! 💢";
+            } else {
+                document.getElementById('event-banner').innerText = `Yum! +${gain}g gained! 🍃`;
+            }
+
             const avatar = document.getElementById('pet-avatar');
             avatar.classList.add('wiggle');
-            setTimeout(() => avatar.classList.remove('wiggle'), 300);
+            setTimeout(() => avatar.classList.remove('wiggle'), 200);
 
             updatePet();
             playAudio();
         }
 
-    
+        function playWithCaterpillar() {
+            if (isSleeping || isMaxed) return;
+
+            mood = Math.min(100, mood + 30);
+            isCranky = false;
+            document.getElementById('event-banner').innerText = "She loves being pet! Mood restored! ✨";
+
+            const avatar = document.getElementById('pet-avatar');
+            avatar.classList.add('spin');
+            setTimeout(() => avatar.classList.remove('spin'), 400);
+
+            updatePet();
+            playAudio();
+        }
+
+        function putToSleep() {
+            if (isSleeping || isMaxed) return;
+
+            isSleeping = true;
+            document.getElementById('feed-btn').disabled = true;
+            document.getElementById('play-btn').disabled = true;
+            document.getElementById('sleep-btn').disabled = true;
+            document.getElementById('event-banner').innerText = "Zzz... Sleeping on a minty pillow... 💤";
+
+            let sleepTicks = 0;
+            const sleepInterval = setInterval(() => {
+                sleepTicks++;
+                triggerTextEffect('Zzz...');
+                if (sleepTicks >= 5) {
+                    clearInterval(sleepInterval);
+                    isSleeping = false;
+                    document.getElementById('feed-btn').disabled = false;
+                    document.getElementById('play-btn').disabled = false;
+                    document.getElementById('sleep-btn').disabled = false;
+                    weight = Math.min(450, weight + 25);
+                    mood = 100;
+                    document.getElementById('event-banner').innerText = "Woke up fully rested! Mega growth bonus +25g! 🌟";
+                    updatePet();
+                }
+            }, 800);
+            
+            playAudio();
+        }
+
         function petCaterpillar(event) {
             playAudio();
-            
+            triggerTextEffect('Silly... :3', event.offsetX, event.offsetY);
+        }
+
+        function triggerTextEffect(text, x, y) {
             const container = document.getElementById('text-layer');
             const t = document.createElement('div');
-            t.innerText = 'Silly... :3';
+            t.innerText = text;
             t.style.position = 'absolute';
             t.style.color = '#6ee7b7';
             t.style.fontWeight = 'bold';
             t.style.fontSize = '1.3rem';
-            t.style.left = event.offsetX + 'px';
-            t.style.top = event.offsetY + 'px';
-            t.style.transition = 'all 0.5s ease-out';
+            t.style.left = (x !== undefined ? x : Math.random() * 150 + 20) + 'px';
+            t.style.top = (y !== undefined ? y : Math.random() * 150 + 20) + 'px';
+            t.style.transition = 'all 0.6s ease-out';
             
             container.appendChild(t);
 
             setTimeout(() => {
-                t.style.transform = 'translateY(-40px) scale(1.2)';
+                t.style.transform = 'translateY(-50px) scale(1.1)';
                 t.style.opacity = '0';
             }, 10);
 
-            setTimeout(() => t.remove(), 500);
+            setTimeout(() => t.remove(), 600);
         }
 
         function playAudio() {
@@ -286,7 +399,13 @@
             audio.play().catch(() => {});
         }
 
-       
+        setInterval(() => {
+            if (!isMaxed && !isSleeping) {
+                mood = Math.max(0, mood - 4);
+                updatePet();
+            }
+        }, 1000);
+
         window.onbeforeunload = function(e) {
             if (weight > 1 && weight < 450) {
                 e.preventDefault();
