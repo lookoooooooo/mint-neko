@@ -112,3 +112,21 @@
             <img src="cat3.jpg" alt="Chocolate Cat">
         </div>
     </div>
+    <script>
+        let meows = 0;
+
+        function meowInteractive() {
+            meows++;
+            document.getElementById('count').innerText = meows;
+            playAudio('https://mixkit.co');
+            document.body.style.backgroundColor = document.body.style.backgroundColor === 'rgb(43, 24, 16)' ? '#1f110a' : '#2b1810';
+        }
+
+        function playAudio(url) {
+            const audio = new Audio(url);
+            audio.play().catch(() => {});
+        }
+    </script>
+
+</body>
+</html>
