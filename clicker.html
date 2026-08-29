@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mint Neko Hardcore Clicker Max</title>
+    <title>Mint Neko RPG Clicker</title>
     <style>
         * {
             cursor: url('cursor2.png') 16 16, auto !important;
@@ -54,7 +54,7 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
-            min-height: 190px;
+            min-height: 150px;
             max-width: 900px;
         }
         .helper-display-img {
@@ -84,7 +84,7 @@
         }
         .shop-container {
             max-width: 850px;
-            margin: 40px auto;
+            margin: 30px auto;
             background: #ffffff;
             border: 4px solid #2b1810;
             border-radius: 24px;
@@ -94,19 +94,17 @@
         .shop-title {
             font-size: 2rem;
             color: #2b1810;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-weight: bold;
             text-transform: uppercase;
             border-bottom: 3px double #2b1810;
             padding-bottom: 10px;
         }
         .shop-grid {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
             gap: 15px;
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 10px;
+            margin-bottom: 30px;
         }
         .shop-item {
             display: flex;
@@ -114,21 +112,20 @@
             align-items: center;
             background: #f0fdf4;
             border: 2px dashed #2b1810;
-            padding: 15px 20px;
+            padding: 15px;
             border-radius: 16px;
-            transition: all 0.2s;
         }
         .item-info {
             text-align: left;
             max-width: 65%;
         }
         .item-name {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #2b1810;
             font-weight: bold;
         }
         .item-desc {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #047857;
             margin-top: 2px;
         }
@@ -136,8 +133,8 @@
             background: #34d399;
             color: #2b1810;
             border: 2px solid #2b1810;
-            padding: 10px 18px;
-            font-size: 1rem;
+            padding: 10px 15px;
+            font-size: 0.95rem;
             font-weight: bold;
             border-radius: 10px;
             box-shadow: 0 4px #1f110a;
@@ -180,9 +177,16 @@
         </div>
     </div>
 
+   
     <div class="shop-container">
-        <div class="shop-title">Minty Upgrade Shop</div>
-        <div class="shop-grid" id="items-shop-grid"></div>
+        <div class="shop-title">🛍️ Dynamic Shop Showcase (Max 6 Items)</div>
+        <div class="shop-grid" id="showcase-grid"></div>
+    </div>
+
+   
+    <div class="shop-container">
+        <div class="shop-title">🧪 Upgrades & Investments (Purchased)</div>
+        <div class="shop-grid" id="upgrades-grid"></div>
     </div>
     <script>
         let coins = 0;
@@ -190,85 +194,129 @@
         let cps = 0;
 
         const shopItems = [
-            { id: 1, name: "Fresh Mint Leaf 🌿", type: "click", cost: 15, power: 2, purchased: false, revealed: true },
-            { id: 2, name: "Spearmint Shoot 🌱", type: "click", cost: 50, power: 5, purchased: false, revealed: false },
-            { id: 3, name: "Peppermint Powder 🍃", type: "click", cost: 120, power: 10, purchased: false, revealed: false },
-            { id: 4, name: "Wild Catnip Sprig 🌿", type: "click", cost: 250, power: 20, purchased: false, revealed: false },
-            { id: 5, name: "Mint Tea Bag ☕", type: "click", cost: 500, power: 45, purchased: false, revealed: false },
-            { id: 6, name: "Japanese Assistant 👩‍💼", type: "helper", cost: 500, cps: 30, file: "helper.png", purchased: false, revealed: false },
-            { id: 7, name: "Japanese Salaryman 👨‍💼", type: "helper", cost: 1200, cps: 80, file: "helper2.png", purchased: false, revealed: false },
-            { id: 8, name: "Mint Candy Cane 🍬", type: "click", cost: 1500, power: 90, purchased: false, revealed: false },
-            { id: 9, name: "Sweet Mint Syrup 🍯", type: "click", cost: 3000, power: 180, purchased: false, revealed: false },
-            { id: 10, name: "Spearmint Extract 🧪", type: "click", cost: 4000, power: 300, purchased: false, revealed: false },
-            { id: 11, name: "Mint Ice Cream 🍦", type: "click", cost: 7000, power: 500, purchased: false, revealed: false },
-            { id: 12, name: "Choco Coating 🍫", type: "click", cost: 10000, power: 800, purchased: false, revealed: false },
-            { id: 13, name: "Chocolate Chip Chunk 🍫", type: "click", cost: 15000, power: 1200, purchased: false, revealed: false },
-            { id: 14, name: "Double Mint Glaze 🍩", type: "click", cost: 22000, power: 1800, purchased: false, revealed: false },
-            { id: 15, name: "Mint Soda Pop 🥤", type: "click", cost: 30000, power: 2500, purchased: false, revealed: false },
-            { id: 16, name: "Choco Robo-Cat 🤖", type: "click", cost: 45000, power: 3800, purchased: false, revealed: false },
-            { id: 17, name: "Double Choco Glaze 🍩", type: "click", cost: 60000, power: 5000, purchased: false, revealed: false },
-            { id: 18, name: "Mint Cookie Crust 🍪", type: "click", cost: 85000, power: 6500, purchased: false, revealed: false },
-            { id: 19, name: "Cocoa Butter Sprinkles ✨", type: "click", cost: 120000, power: 8000, purchased: false, revealed: false },
-            { id: 20, name: "Choco Wafer Bar 🍫", type: "click", cost: 170000, power: 11000, purchased: false, revealed: false },
-            { id: 21, name: "Mint Macaron 🥮", type: "click", cost: 240000, power: 15000, purchased: false, revealed: false },
-            { id: 22, name: "Corporate Upgrade 🕴️", type: "click", cost: 350000, power: 22000, purchased: false, revealed: false },
-            { id: 23, name: "Pure Mint Extract 🧪", type: "click", cost: 500000, power: 35000, purchased: false, revealed: false },
-            { id: 24, name: "Financial Boost 📊", type: "click", cost: 750000, power: 50000, purchased: false, revealed: false },
-            { id: 25, name: "Choco Diamond Sugar 💎", type: "click", cost: 1100000, power: 75000, purchased: false, revealed: false },
-            { id: 26, name: "Mint Laser Pointer 🚨", type: "click", cost: 1600000, power: 110000, purchased: false, revealed: false },
-            { id: 27, name: "Cyber Coffee Pot ☕", type: "click", cost: 2300000, power: 160000, purchased: false, revealed: false },
-            { id: 28, name: "Neko Space Rocket 🚀", type: "click", cost: 3200000, power: 250000, purchased: false, revealed: false },
-            { id: 29, name: "Mint Crystal Cluster 🔮", type: "click", cost: 4500000, power: 400000, purchased: false, revealed: false },
-            { id: 30, name: "Quantum Mint Herb 🌌", type: "click", cost: 6500000, power: 650000, purchased: false, revealed: false },
+            { id: 1, name: "Fresh Mint Leaf 🌿", type: "click", cost: 15, power: 2, purchased: false, state: "available", upgradeLevel: 1 },
+            { id: 2, name: "Spearmint Shoot 🌱", type: "click", cost: 50, power: 5, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 3, name: "Peppermint Powder 🍃", type: "click", cost: 120, power: 10, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 4, name: "Wild Catnip Sprig 🌿", type: "click", cost: 250, power: 20, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 5, name: "Mint Tea Bag ☕", type: "click", cost: 500, power: 45, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 6, name: "Japanese Assistant 👩‍💼", type: "helper", cost: 500, cps: 30, file: "helper.png", purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 7, name: "Japanese Salaryman 👨‍💼", type: "helper", cost: 1200, cps: 80, file: "helper2.png", purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 8, name: "Mint Candy Cane 🍬", type: "click", cost: 1500, power: 90, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 9, name: "Sweet Mint Syrup 🍯", type: "click", cost: 3000, power: 180, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 10, name: "Spearmint Extract 🧪", type: "click", cost: 4000, power: 300, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 11, name: "Mint Ice Cream 🍦", type: "click", cost: 7000, power: 500, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 12, name: "Choco Coating 🍫", type: "click", cost: 10000, power: 800, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 13, name: "Chocolate Chip Chunk 🍫", type: "click", cost: 15000, power: 1200, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 14, name: "Double Mint Glaze 🍩", type: "click", cost: 22000, power: 1800, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 15, name: "Mint Soda Pop 🥤", type: "click", cost: 30000, power: 2500, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 16, name: "Choco Robo-Cat 🤖", type: "click", cost: 45000, power: 3800, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 17, name: "Double Choco Glaze 🍩", type: "click", cost: 60000, power: 5000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 18, name: "Mint Cookie Crust 🍪", type: "click", cost: 85000, power: 6500, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 19, name: "Cocoa Butter Sprinkles ✨", type: "click", cost: 120000, power: 8000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 20, name: "Choco Wafer Bar 🍫", type: "click", cost: 170000, power: 11000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 21, name: "Mint Macaron 🥮", type: "click", cost: 240000, power: 15000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 22, name: "Corporate Upgrade 🕴️", type: "click", cost: 350000, power: 22000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 23, name: "Pure Mint Extract 🧪", type: "click", cost: 500000, power: 35000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 24, name: "Financial Boost 📊", type: "click", cost: 750000, power: 50000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 25, name: "Choco Diamond Sugar 💎", type: "click", cost: 1100000, power: 75000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 26, name: "Mint Laser Pointer 🚨", type: "click", cost: 1600000, power: 110000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 27, name: "Cyber Coffee Pot ☕", type: "click", cost: 2300000, power: 160000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 28, name: "Neko Space Rocket 🚀", type: "click", cost: 3200000, power: 250000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 29, name: "Mint Crystal Cluster 🔮", type: "click", cost: 4500000, power: 400000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 30, name: "Quantum Mint Herb 🌌", type: "click", cost: 6500000, power: 650000, purchased: false, state: "locked", upgradeLevel: 1 },
             { id: 31, name: "Cosmic Cocoa Bean ☄️", type: "click", cost: 9000000, power: 1000000, purchased: false, revealed: false },
-            { id: 32, name: "Choco Neko Satellite 🛰️", type: "click", cost: 13000000, power: 1600000, purchased: false, revealed: false },
-            { id: 33, name: "Mint Solar Panel ☀️", type: "click", cost: 19000000, power: 2500000, purchased: false, revealed: false },
-            { id: 34, name: "Nebula Chocolate 🌌", type: "click", cost: 28000000, power: 4000000, purchased: false, revealed: false },
-            { id: 35, name: "Supernova Mint Spice 💥", type: "click", cost: 40000000, power: 6500000, purchased: false, revealed: false },
-            { id: 36, name: "Black Hole Cocoa 🕳️", type: "click", cost: 58000000, power: 10000000, purchased: false, revealed: false },
-            { id: 37, name: "Neko Quantum Core 🔮", type: "click", cost: 85000000, power: 16000000, purchased: false, revealed: false },
-            { id: 38, name: "Choco Galaxy Matrix 🌌", type: "click", cost: 125000000, power: 25000000, purchased: false, revealed: false },
-            { id: 39, name: "Mint Universe Engine 🌌", type: "click", cost: 185000000, power: 40000000, purchased: false, revealed: false },
-            { id: 40, name: "Infinity Neko Crown 👑", type: "click", cost: 300000000, power: 70000000, purchased: false, revealed: false }
+            { id: 32, name: "Choco Neko Satellite 🛰️", type: "click", cost: 13000000, power: 1600000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 33, name: "Mint Solar Panel ☀️", type: "click", cost: 19000000, power: 2500000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 34, name: "Nebula Chocolate 🌌", type: "click", cost: 28000000, power: 4000000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 35, name: "Supernova Mint Spice 💥", type: "click", cost: 40000000, power: 6500000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 36, name: "Black Hole Cocoa 🕳️", type: "click", cost: 58000000, power: 10000000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 37, name: "Neko Quantum Core 🔮", type: "click", cost: 85000000, power: 16000000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 38, name: "Choco Galaxy Matrix 🌌", type: "click", cost: 125000000, power: 25000000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 39, name: "Mint Universe Engine 🌌", type: "click", cost: 185000000, power: 40000000, purchased: false, state: "locked", upgradeLevel: 1 },
+            { id: 40, name: "Infinity Neko Crown 👑", type: "click", cost: 300000000, power: 70000000, purchased: false, state: "locked", upgradeLevel: 1 }
         ];
+
+        for (let i = 0; i < 6; i++) {
+            if (shopItems[i]) shopItems[i].state = "available";
+        }
 
         function updateUI() {
             document.getElementById('coins-display').innerText = Math.floor(coins);
             document.getElementById('click-display').innerText = clickPower;
             document.getElementById('cps-display').innerText = cps;
 
-            const grid = document.getElementById('items-shop-grid');
-            grid.innerHTML = '';
+            const showcaseGrid = document.getElementById('showcase-grid');
+            showcaseGrid.innerHTML = '';
+
+            let displayedCount = 0;
+            for (let i = 0; i < shopItems.length; i++) {
+                let item = shopItems[i];
+                if (item.state === "available" && !item.purchased && displayedCount < 6) {
+                    displayedCount++;
+                    const box = document.createElement('div');
+                    box.className = 'shop-item';
+                    
+                    const info = document.createElement('div');
+                    info.className = 'item-info';
+                    
+                    const name = document.createElement('div');
+                    name.className = 'item-name';
+                    name.innerText = item.name;
+                    
+                    const desc = document.createElement('div');
+                    desc.className = 'item-desc';
+                    desc.innerText = item.type === 'click' ? `Click: +${item.power}` : `Adds +${item.cps} CPS`;
+                    
+                    info.appendChild(name);
+                    info.appendChild(desc);
+
+                    const btn = document.createElement('button');
+                    btn.className = 'shop-btn';
+                    btn.innerText = `Cost: ${item.cost}`;
+                    btn.disabled = coins < item.cost;
+                    btn.onclick = () => buyItem(item.id);
+
+                    box.appendChild(info);
+                    box.appendChild(btn);
+                    showcaseGrid.appendChild(box);
+                }
+            }
+
+            const upgradesGrid = document.getElementById('upgrades-grid');
+            upgradesGrid.innerHTML = '';
 
             shopItems.forEach((item) => {
-                if (!item.revealed || item.purchased) return;
+                if (item.purchased) {
+                    const box = document.createElement('div');
+                    box.className = 'shop-item';
+                    
+                    const info = document.createElement('div');
+                    info.className = 'item-info';
+                    
+                    const name = document.createElement('div');
+                    name.className = 'item-name';
+                    name.innerText = `${item.name} (Lvl ${item.upgradeLevel})`;
+                    
+                    let currentBonus = item.type === 'click' ? item.power * item.upgradeLevel : item.cps * item.upgradeLevel;
+                    const desc = document.createElement('div');
+                    desc.className = 'item-desc';
+                    desc.innerText = item.type === 'click' ? `Current Click: +${currentBonus}` : `Current CPS: +${currentBonus}`;
+                    
+                    info.appendChild(name);
+                    info.appendChild(desc);
 
-                const box = document.createElement('div');
-                box.className = 'shop-item';
+                    let upgradeCost = Math.floor(item.cost * 1.5 * Math.pow(1.3, item.upgradeLevel - 1));
 
-                const info = document.createElement('div');
-                info.className = 'item-info';
+                    const btn = document.createElement('button');
+                    btn.className = 'shop-btn';
+                    btn.innerText = `Upgrade: ${upgradeCost}`;
+                    btn.disabled = coins < upgradeCost;
+                    btn.onclick = () => upgradeItem(item.id, upgradeCost);
 
-                const name = document.createElement('div');
-                name.className = 'item-name';
-                name.innerText = item.name;
-
-                const desc = document.createElement('div');
-                desc.className = 'item-desc';
-                desc.innerText = item.type === 'click' ? `Boosts click power by +${item.power}` : `Adds +${item.cps} CPS to your empire`;
-
-                info.appendChild(name);
-                info.appendChild(desc);
-
-                const btn = document.createElement('button');
-                btn.className = 'shop-btn';
-                btn.innerText = `Cost: ${item.cost}`;
-                btn.disabled = coins < item.cost;
-                btn.onclick = () => buyItem(item.id);
-
-                box.appendChild(info);
-                box.appendChild(btn);
-                grid.appendChild(box);
+                    box.appendChild(info);
+                    box.appendChild(btn);
+                    upgradesGrid.appendChild(box);
+                }
             });
         }
         function buyItem(id) {
@@ -278,7 +326,7 @@
                 item.purchased = true;
 
                 if (item.type === 'click') {
-                    clickPower = item.power;
+                    clickPower += item.power;
                 } else if (item.type === 'helper') {
                     cps += item.cps;
                     const helpersBox = document.getElementById('helpers-box');
@@ -289,9 +337,31 @@
                     helpersBox.appendChild(img);
                 }
 
-                const nextItem = shopItems.find(i => i.id === id + 1);
-                if (nextItem) {
-                    nextItem.revealed = true;
+                let currentAvailableCount = shopItems.filter(i => i.state === "available" && !i.purchased).length;
+                if (currentAvailableCount < 6) {
+                    for (let i = 0; i < shopItems.length; i++) {
+                        if (shopItems[i].state === "locked") {
+                            shopItems[i].state = "available";
+                            break;
+                        }
+                    }
+                }
+
+                updateUI();
+                playAudio();
+            }
+        }
+
+        function upgradeItem(id, upgradeCost) {
+            const item = shopItems.find(i => i.id === id);
+            if (item && coins >= upgradeCost && item.purchased) {
+                coins -= upgradeCost;
+                item.upgradeLevel++;
+
+                if (item.type === 'click') {
+                    clickPower += item.power;
+                } else if (item.type === 'helper') {
+                    cps += item.cps;
                 }
 
                 updateUI();
@@ -359,3 +429,4 @@
     </script>
 </body>
 </html>
+        
