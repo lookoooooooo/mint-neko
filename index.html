@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mint Neko</title>
+    <title>Mint Neko Facts</title>
     <style>
         * {
             cursor: url('cursor1.png') 16 16, auto !important;
@@ -15,6 +15,7 @@
             padding: 20px;
             text-align: center;
             overflow-x: hidden;
+            transition: background-color 0.1s;
         }
         .nav-button {
             background: #4b2e1e;
@@ -45,7 +46,7 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             padding: 20px;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
         .box {
             border: 5px dashed #34d399;
@@ -54,11 +55,6 @@
             border-radius: 16px;
             box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
             transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-        }
-        .box:hover {
-            transform: scale(1.03) rotate(-1deg);
-            border-color: #6ee7b7;
-            box-shadow: 0 0 25px rgba(110, 231, 183, 0.5);
         }
         .grid img {
             width: 100%;
@@ -69,63 +65,320 @@
         .top-focus {
             object-position: center 10%;
         }
-        button {
+        @keyframes danceCat {
+            0% { transform: scale(1) rotate(0deg) translateY(0); }
+            25% { transform: scale(1.1) rotate(8deg) translateY(-15px); }
+            50% { transform: scale(1) rotate(0deg) translateY(0); }
+            75% { transform: scale(1.1) rotate(-8deg) translateY(-15px); }
+            100% { transform: scale(1) rotate(0deg) translateY(0); }
+        }
+        .dancing {
+            animation: danceCat 0.5s infinite linear !important;
+        }
+        .candy-emoji {
+            position: fixed;
+            font-size: 2.5rem;
+            z-index: 9999;
+            pointer-events: none;
+            animation: fallCandy 3s linear forwards;
+        }
+        @keyframes fallCandy {
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+        .fact-container {
+            max-width: 650px;
+            margin: 30px auto;
+            background: #2b1810;
+            border: 4px dashed #34d399;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.15);
+        }
+        #fact-num {
+            font-size: 1.8rem;
+            color: #6ee7b7;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        #fact-text {
+            font-size: 1.3rem;
+            color: #a7f3d0;
+            line-height: 1.5;
+            min-height: 80px;
+        }
+        .claim-btn {
             background: #34d399;
             color: #1f110a;
             border: 3px solid #6ee7b7;
-            padding: 16px 40px;
-            font-size: 1.4rem;
+            padding: 12px 30px;
+            font-size: 1.1rem;
             font-weight: bold;
-            border-radius: 30px;
-            box-shadow: 0 6px #0f0805, 0 0 15px rgba(52, 211, 153, 0.4);
+            border-radius: 25px;
+            margin-top: 15px;
+            box-shadow: 0 4px #0f0805;
         }
-        button:active {
-            transform: translateY(4px);
+        .claim-btn:active {
+            transform: translateY(2px);
             box-shadow: 0 2px #0f0805;
         }
-        #meow-counter {
-            font-size: 1.8rem;
-            margin-top: 20px;
-            color: #6ee7b7;
+        .claim-btn:disabled {
+            background: #4b2e1e;
+            color: #1f110a;
+            border-color: #3d2314;
+            box-shadow: none;
+            transform: none;
+        }
+        #warning-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000;
+            color: #ff3333;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+            font-size: 2.5rem;
             font-weight: bold;
-            text-shadow: 1px 1px #000;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        .achievements-panel {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #150b06;
+            border: 3px solid #34d399;
+            padding: 20px;
+            border-radius: 16px;
+        }
+        .achievements-title {
+            font-size: 1.4rem;
+            color: #6ee7b7;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .achievements-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .badge {
+            background: #2b1810;
+            color: #4b2e1e;
+            border: 2px solid #3d2314;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .badge.unlocked {
+            background: #34d399;
+            color: #1f110a;
+            border-color: #6ee7b7;
+            box-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
         }
     </style>
 </head>
 <body>
 
+    <div id="warning-screen">
+        <div>⚠️ WARNING! FLASHING LIGHTS PARTY INBOUND! ⚠️</div>
+        <div style="font-size: 1.8rem; margin-top: 20px; color: #fff;">YOU HAVE <span id="timer-count">5</span> SECONDS TO LEAVE THE SITE!</div>
+    </div>
+
     <a href="mint-choco.html" class="nav-button">ENTER MINT-CHOCO ZONE 🍫</a>
 
-    <h1>MINT NEKO ZONE</h1>
+    <h1>MINT NEKO FACTS</h1>
+
+    <div class="fact-container">
+        <div id="fact-num">Fact #--</div>
+        <div id="fact-text">Loading neko intelligence...</div>
+        <button class="claim-btn" id="claim-button" onclick="claimAchievement()">Claim Achievement 🏆</button>
+    </div>
     
-    <button onclick="meowInteractive()">PRESS FOR MEOW</button>
-    <div id="meow-counter">Total Meows: <span id="count">0</span></div>
+    <div style="color: #6ee7b7; font-weight: bold; font-size: 1.1rem;">
+        Progress: <span id="progress-count">0</span> / 50 Achievements Collected
+    </div>
 
     <div class="grid">
-        <div class="box" onclick="playAudio('https://mixkit.co')">
-            <img src="cat1.jpg" alt="Mint Cat" class="top-focus">
-        </div>
-        <div class="box" onclick="playAudio('https://mixkit.co')">
-            <img src="cat2.jpg" alt="Neko Photo">
-        </div>
-        <div class="box" onclick="playAudio('https://mixkit.co')">
-            <img src="cat3.jpg" alt="Chocolate Cat">
-        </div>
+        <div class="box" id="cbox1"><img src="cat1.jpg" alt="Mint Cat" class="top-focus"></div>
+        <div class="box" id="cbox2"><img src="cat2.jpg" alt="Neko Photo"></div>
+        <div class="box" id="cbox3"><img src="cat3.jpg" alt="Chocolate Cat"></div>
+    </div>
+
+    <div class="achievements-panel">
+        <div class="achievements-title">🐾 Your Saved Achievement Badges 🐾</div>
+        <div class="achievements-grid" id="badges-container"></div>
     </div>
     <script>
-        let meows = 0;
+        const catFacts = [
+            "Cats sleep for about 70% of their lives.",
+            "A cat has 32 muscles in each outer ear.",
+            "Cats can't taste sweetness at all.",
+            "The first cat in space was a French cat named Felicette.",
+            "Cats make about 100 different vocal sounds.",
+            "A cat's nose print is completely unique, just like a human fingerprint.",
+            "Cats are near-sighted, but their peripheral vision is amazing.",
+            "A cat can jump up to six times its height.",
+            "The oldest known pet cat was found in a 9,500-year-old grave in Cyprus.",
+            "Cats use their whiskers to feel if they can fit through a space.",
+            "Grown-up cats only meow to communicate with humans.",
+            "A cat's purr vibrates at a frequency that can improve bone density.",
+            "Cats sweat only through their foot paws.",
+            "Every cat has 18 toes in total: 5 on front paws, 4 on back paws.",
+            "The richest cat in the world inherited 13 million dollars.",
+            "Cats can rotate their ears 180 degrees independently.",
+            "A group of adult cats is called a 'clowder'.",
+            "A group of tiny kittens is officially called a 'kindle'.",
+            "Cats have a third eyelid called the nictitating membrane.",
+            "Black cats are actually considered good luck in Japan.",
+            "Cats can run at speeds of up to 30 miles per hour.",
+            "A cat's heart beats two to three times faster than a human heart.",
+            "Isaac Newton is said to have invented the cat door.",
+            "Cats have an extra organ that allows them to taste scents in the air.",
+            "A cat's jaw cannot move sideways, so they cannot chew large pieces.",
+            "Most cats do not have eyelashes at all.",
+            "A green or minty environment can calm a nervous kitten down.",
+            "Cats can drink seawater to survive because their kidneys filter salt.",
+            "The first cartoon cat was Felix the Cat, created in 1919.",
+            "Cats usually prefer their food to be at room temperature.",
+            "A cat's spine is super flexible because it has 53 loose vertebrae.",
+            "Calico cats are almost always female due to genetics.",
+            "Cats can track noises four times better than human beings.",
+            "Male cats are more likely to be left-pawed than females.",
+            "A cat's rough tongue acts like a comb to clean their fur.",
+            "Cats don't like water because their coat doesn't dry fast.",
+            "The largest cat breed is the Maine Coon.",
+            "The smallest wild cat is the Rusty-spotted cat.",
+            "Cats step with both left legs, then both right legs when walking.",
+            "Cats can predict earthquakes due to their sensitive paw pads.",
+            "A cat's memory can last up to 16 hours.",
+            "Cats have been domesticated for more than 4,000 years.",
+            "The ancient Egyptians shaved their eyebrows when their cat died.",
+            "Cats have a special collarbone that always lets them land on their feet.",
+            "A kitten's eyes are always blue when they are first born.",
+            "Cats can process sounds much faster than dogs.",
+            "A house cat is 95.6% genetically identical to a wild tiger.",
+            "Cats prefer small spaces because it makes them feel safe.",
+            "Purring can mean a cat is happy, scared, or even hurt.",
+            "Cats always find a way to rule over their human servants."
+        ];
 
-        function meowInteractive() {
-            meows++;
-            document.getElementById('count').innerText = meows;
-            playAudio('https://mixkit.co');
-            document.body.style.backgroundColor = document.body.style.backgroundColor === 'rgb(43, 24, 16)' ? '#1f110a' : '#2b1810';
+        let unlockedFacts = JSON.parse(localStorage.getItem('unlockedFacts')) || [];
+        let currentFactIndex = 0;
+
+        function initAchievements() {
+            const container = document.getElementById('badges-container');
+            container.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
+                const badge = document.createElement('div');
+                badge.className = 'badge';
+                badge.id = `badge-${i}`;
+                badge.innerText = `Fact #${i + 1}`;
+                if (unlockedFacts.includes(i)) {
+                    badge.classList.add('unlocked');
+                }
+                container.appendChild(badge);
+            }
+            updateProgress();
+        }
+        function loadRandomFact() {
+            if (unlockedFacts.length >= 50) {
+                currentFactIndex = Math.floor(Math.random() * 50);
+                document.getElementById('fact-num').innerText = `Fact #${currentFactIndex + 1}`;
+                document.getElementById('fact-text').innerText = catFacts[currentFactIndex];
+                document.getElementById('claim-button').disabled = true;
+                document.getElementById('claim-button').innerText = "All Unlocked! 🌟";
+                startPartyEffect();
+                return;
+            }
+
+            let availableIndexes = [];
+            for (let i = 0; i < 50; i++) {
+                if (!unlockedFacts.includes(i)) {
+                    availableIndexes.push(i);
+                }
+            }
+
+            currentFactIndex = availableIndexes[Math.floor(Math.random() * availableIndexes.length)];
+            document.getElementById('fact-num').innerText = `Fact #${currentFactIndex + 1}`;
+            document.getElementById('fact-text').innerText = catFacts[currentFactIndex];
+            document.getElementById('claim-button').disabled = false;
+            document.getElementById('claim-button').innerText = "Claim Achievement 🏆";
+        }
+
+        function claimAchievement() {
+            if (!unlockedFacts.includes(currentFactIndex)) {
+                unlockedFacts.push(currentFactIndex);
+                localStorage.setItem('unlockedFacts', JSON.stringify(unlockedFacts));
+                
+                const badge = document.getElementById(`badge-${currentFactIndex}`);
+                if (badge) badge.classList.add('unlocked');
+                
+                playAudio('https://mixkit.co');
+                updateProgress();
+
+                if (unlockedFacts.length >= 50) {
+                    triggerWarning();
+                } else {
+                    loadRandomFact();
+                }
+            }
+        }
+
+        function updateProgress() {
+            document.getElementById('progress-count').innerText = unlockedFacts.length;
+        }
+
+        function triggerWarning() {
+            const warningScreen = document.getElementById('warning-screen');
+            warningScreen.style.display = 'flex';
+            let timeLeft = 5;
+            
+            const timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-count').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    warningScreen.style.display = 'none';
+                    startPartyEffect();
+                }
+            }, 1000);
+        }
+
+        function startPartyEffect() {
+            document.getElementById('cbox1').classList.add('dancing');
+            document.getElementById('cbox2').classList.add('dancing');
+            document.getElementById('cbox3').classList.add('dancing');
+
+            setInterval(() => {
+                const colors = ['#1f110a', '#34d399', '#4b2e1e', '#6ee7b7', '#2b1810', '#a7f3d0'];
+                document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            }, 150);
+
+            setInterval(() => {
+                const candies = ['🍬', '🍫', '🍭', '🍩', '🍪', '💚', '🤎'];
+                const candy = document.createElement('div');
+                candy.className = 'candy-emoji';
+                candy.innerText = candies[Math.floor(Math.random() * candies.length)];
+                candy.style.left = Math.random() * 100 + 'vw';
+                document.body.appendChild(candy);
+                setTimeout(() => candy.remove(), 3000);
+            }, 100);
         }
 
         function playAudio(url) {
             const audio = new Audio(url);
             audio.play().catch(() => {});
         }
+
+        window.onload = function() {
+            initAchievements();
+            loadRandomFact();
+        };
     </script>
 
 </body>
