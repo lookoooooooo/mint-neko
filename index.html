@@ -161,7 +161,7 @@
             font-weight: bold;
             border-radius: 12px;
             display: none;
-            z-index: 100001;
+            z-index: 10001l;
             box-shadow: 0 0 20px #ff0000;
         }
         #achievement-popup {
@@ -226,6 +226,22 @@
             border-color: #fff;
             box-shadow: 0 0 20px #ff0055;
         }
+        .reset-btn {
+            background: #1f110a;
+            color: #ff3333;
+            border: 2px dashed #ff3333;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+        .reset-btn:hover {
+            background: #ff3333;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -261,12 +277,13 @@
     <div class="grid">
         <div class="box" id="cbox1"><img src="cat1.jpg" alt="Mint Cat" class="top-focus"></div>
         <div class="box" id="cbox2"><img src="cat2.jpg" alt="Neko Photo"></div>
-        <div class="box" id="cbox3"><img src="cat3.jpg" alt="Chocolate Cat"></div>
+        <div class="box" id="cbox3"><img src="chocolate.jpg" alt="Chocolate Cat"></div>
     </div>
 
     <div class="achievements-panel">
         <div class="achievements-title">🐾 Your Saved Achievement Badges 🐾</div>
         <div class="achievements-grid" id="badges-container"></div>
+        <button class="reset-btn" onclick="resetAchievements()">Reset Achievements ⚙️</button>
     </div>
     <script>
         const catFacts = [
@@ -324,6 +341,7 @@
 
         let unlockedFacts = JSON.parse(localStorage.getItem('unlockedFacts')) || [];
         let partyUnlocked = localStorage.getItem('partyUnlocked') === 'true';
+        let partyHasHappened = localStorage.getItem('partyHasHappened') === 'true';
         let currentFactIndex = 0;
         let partyIntervals = [];
 
@@ -359,8 +377,9 @@
                 document.getElementById('fact-text').innerText = catFacts[currentFactIndex];
                 document.getElementById('claim-button').disabled = true;
                 document.getElementById('claim-button').innerText = "All Unlocked! 🌟";
-                if (!partyIntervals.length) {
-                    startPartyEffect();
+                
+                if (!partyHasHappened && !partyIntervals.length) {
+                    triggerWarning();
                 }
                 return;
             }
@@ -391,7 +410,11 @@
                 updateProgress();
 
                 if (unlockedFacts.length >= 50) {
-                    triggerWarning();
+                    if (!partyHasHappened) {
+                        triggerWarning();
+                    } else {
+                        loadRandomFact();
+                    }
                 } else {
                     loadRandomFact();
                 }
@@ -475,7 +498,33 @@
             
             document.body.style.backgroundColor = '#1f110a';
             
+            partyHasHappened = true;
+            localStorage.setItem('partyHasHappened', 'true');
+            
             loadRandomFact();
+        }
+
+        function resetAchievements() {
+            if (confirm("Are you sure you want to reset your achievements?")) {
+                if (confirm("ARE YOU ABSOLUTELY SURE!??")) {
+                    if (confirm("ON 101% ?!")) {
+                        if (confirm("OH WELL, okay then...")) {
+                            alert("Don't blame me later!");
+                            
+                            localStorage.removeItem('unlockedFacts');
+                            localStorage.removeItem('partyUnlocked');
+                            localStorage.removeItem('partyHasHappened');
+                            
+                            unlockedFacts = [];
+                            partyUnlocked = false;
+                            partyHasHappened = false;
+                            
+                            initAchievements();
+                            loadRandomFact();
+                        }
+                    }
+                }
+            }
         }
 
         function playAudio(url) {
