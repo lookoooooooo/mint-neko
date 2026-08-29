@@ -60,7 +60,7 @@
             border-color: #6ee7b7;
             box-shadow: 0 0 25px rgba(110, 231, 183, 0.5);
         }
-        img {
+        .grid img {
             width: 100%;
             height: 220px;
             object-fit: cover;
@@ -111,7 +111,7 @@
         .corner-widget:hover, .corner-widget2:hover {
             transform: scale(1.1);
         }
-        .corner-widget img, .corner-widget2 img {
+        .widget-img {
             width: 120px;
             height: 120px;
             object-fit: contain;
@@ -175,12 +175,12 @@
 
     <div class="bubble" id="quote-bubble"></div>
     <div class="corner-widget" onclick="showNekoTalk()">
-        <img src="cat_widget.gif" alt="Widget Neko 1">
+        <img src="cat_widget.gif" alt="Widget Neko 1" class="widget-img">
     </div>
 
     <div class="bubble-left" id="fortune-bubble"></div>
     <div class="corner-widget2" onclick="showNekoFortune()">
-        <img src="cat_widget2.gif" alt="Widget Neko 2">
+        <img src="cat_widget2.gif" alt="Widget Neko 2" class="widget-img">
     </div>
 
     <script>
