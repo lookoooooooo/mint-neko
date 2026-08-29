@@ -144,6 +144,21 @@
             padding: 40px;
             box-sizing: border-box;
         }
+        #stop-party-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #ff3333;
+            color: #fff;
+            border: 4px solid #fff;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 12px;
+            display: none;
+            z-index: 100001;
+            box-shadow: 0 0 20px #ff0000;
+        }
         .achievements-panel {
             max-width: 900px;
             margin: 40px auto;
@@ -180,13 +195,29 @@
             border-color: #6ee7b7;
             box-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
         }
+        .badge.special {
+            background: #4b2e1e;
+            border-color: #ffaa00;
+            color: #7a5500;
+        }
+        .badge.special.unlocked {
+            background: linear-gradient(45deg, #ffcc00, #ff0055);
+            color: #fff;
+            border-color: #fff;
+            box-shadow: 0 0 20px #ff0055;
+        }
     </style>
 </head>
 <body>
 
+    <button id="stop-party-btn" onclick="stopParty()">STOP THE PARTY! 🛑</button>
+
     <div id="warning-screen">
         <div>⚠️ WARNING! FLASHING LIGHTS PARTY INBOUND! ⚠️</div>
-        <div style="font-size: 1.8rem; margin-top: 20px; color: #fff;">YOU HAVE <span id="timer-count">5</span> SECONDS TO LEAVE THE SITE!</div>
+        <div style="font-size: 1.6rem; margin-top: 20px; color: #fff; max-width: 700px; line-height: 1.4;">
+            This site will flash rapid bright colors in a few seconds. If you have epilepsy or sensitivity to light, please leave now.
+        </div>
+        <div style="font-size: 2rem; margin-top: 30px; color: #ffcc00;">PARTY STARTS IN: <span id="timer-count">20</span>s</div>
     </div>
 
     <a href="mint-choco.html" class="nav-button">ENTER MINT-CHOCO ZONE 🍫</a>
@@ -200,7 +231,7 @@
     </div>
     
     <div style="color: #6ee7b7; font-weight: bold; font-size: 1.1rem;">
-        Progress: <span id="progress-count">0</span> / 50 Achievements Collected
+        Progress: <span id="progress-count">0</span> / 51 Achievements Collected
     </div>
 
     <div class="grid">
@@ -268,7 +299,9 @@
         ];
 
         let unlockedFacts = JSON.parse(localStorage.getItem('unlockedFacts')) || [];
+        let partyUnlocked = localStorage.getItem('partyUnlocked') === 'true';
         let currentFactIndex = 0;
+        let partyIntervals = [];
 
         function initAchievements() {
             const container = document.getElementById('badges-container');
@@ -283,6 +316,16 @@
                 }
                 container.appendChild(badge);
             }
+            
+            const specialBadge = document.createElement('div');
+            specialBadge.className = 'badge special';
+            specialBadge.id = 'badge-special';
+            specialBadge.innerText = 'Cat Party! 🎉';
+            if (partyUnlocked) {
+                specialBadge.classList.add('unlocked');
+            }
+            container.appendChild(specialBadge);
+            
             updateProgress();
         }
         function loadRandomFact() {
@@ -292,7 +335,9 @@
                 document.getElementById('fact-text').innerText = catFacts[currentFactIndex];
                 document.getElementById('claim-button').disabled = true;
                 document.getElementById('claim-button').innerText = "All Unlocked! 🌟";
-                startPartyEffect();
+                if (!partyIntervals.length) {
+                    startPartyEffect();
+                }
                 return;
             }
 
@@ -330,13 +375,15 @@
         }
 
         function updateProgress() {
-            document.getElementById('progress-count').innerText = unlockedFacts.length;
+            let total = unlockedFacts.length;
+            if (partyUnlocked) total += 1;
+            document.getElementById('progress-count').innerText = total;
         }
 
         function triggerWarning() {
             const warningScreen = document.getElementById('warning-screen');
             warningScreen.style.display = 'flex';
-            let timeLeft = 5;
+            let timeLeft = 20;
             
             const timer = setInterval(() => {
                 timeLeft--;
@@ -350,16 +397,26 @@
         }
 
         function startPartyEffect() {
+            document.getElementById('stop-party-btn').style.display = 'block';
             document.getElementById('cbox1').classList.add('dancing');
             document.getElementById('cbox2').classList.add('dancing');
             document.getElementById('cbox3').classList.add('dancing');
 
-            setInterval(() => {
+            if (!partyUnlocked) {
+                partyUnlocked = true;
+                localStorage.setItem('partyUnlocked', 'true');
+                const sBadge = document.getElementById('badge-special');
+                if (sBadge) sBadge.classList.add('unlocked');
+                updateProgress();
+            }
+
+            const flashInterval = setInterval(() => {
                 const colors = ['#1f110a', '#34d399', '#4b2e1e', '#6ee7b7', '#2b1810', '#a7f3d0'];
                 document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
             }, 150);
+            partyIntervals.push(flashInterval);
 
-            setInterval(() => {
+            const candyInterval = setInterval(() => {
                 const candies = ['🍬', '🍫', '🍭', '🍩', '🍪', '💚', '🤎'];
                 const candy = document.createElement('div');
                 candy.className = 'candy-emoji';
@@ -368,6 +425,21 @@
                 document.body.appendChild(candy);
                 setTimeout(() => candy.remove(), 3000);
             }, 100);
+            partyIntervals.push(candyInterval);
+        }
+
+        function stopParty() {
+            partyIntervals.forEach(clearInterval);
+            partyIntervals = [];
+            
+            document.getElementById('stop-party-btn').style.display = 'none';
+            document.getElementById('cbox1').classList.remove('dancing');
+            document.getElementById('cbox2').classList.remove('dancing');
+            document.getElementById('cbox3').classList.remove('dancing');
+            
+            document.body.style.backgroundColor = '#1f110a';
+            
+            loadRandomFact();
         }
 
         function playAudio(url) {
