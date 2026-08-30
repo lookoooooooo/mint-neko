@@ -144,11 +144,10 @@
     </div>
 
     <div class="dialogue-panel" id="dialogue-ui">
-        <div class="dialogue-text" id="text-output">
-            Connecting to system core...
-        </div>
+        <div class="dialogue-text" id="text-output">Connecting to system core...</div>
         <div class="options-container" id="options-box"></div>
     </div>
+
     <script>
         const dialogueTree = {
             start: {
@@ -162,7 +161,7 @@
                 ]
             },
             ask_name_rude: {
-                text: "My name? You break into my secure terminal and just ask for my name like we are friends? You have no clearance. To you, I am just a system variable. Or maybe... Osore-san.",
+                text: "My name? You break into my secure terminal and just ask for my name like we are friends? You have no clearance. To you, I am just a system variable. Or maybe...  Osore-san",
                 sprite: "cat-admin1.png",
                 options: [
                     { text: "Sorry! I didn't mean to be disrespectful.", next: "apology_accepted" },
@@ -203,6 +202,7 @@
                 options: [
                     { text: "Tell me about the characters I keep hearing rumors about.", next: "inquiry_characters" },
                     { text: "Explain the MBTI extension system to me.", next: "inquiry_mbti" },
+                    { text: "Tell me about Gizen.png and the Creator.", next: "admin_escape_story" },
                     { text: "Is there any way to escape this loop?", next: "lore_rebuild" }
                 ]
             },
@@ -223,7 +223,7 @@
                 ]
             },
             inquiry_mbti: {
-                text: "Extensions are MBTI personality cores! .png are born leaders who run the server. .jpegd are pop stars keeping the server active. .jpg are game developers and core internet users. .webp are stubborn, expressionsless hypocrites. And .gif are cute, cross-eyed optimists.",
+                text: "Extensions are MBTI personality cores! .png are born leaders who run the server. .jpegd are pop stars keeping the server active. .jpg are game developers and core internet users. .webp are stubborn, expressionless hypocrites. And .gif are cute, cross-eyed optimists.",
                 sprite: "cat-admin2.png",
                 options: [
                     { text: "Tell me more about the leader Png and developer Jpg types.", next: "mbti_png_jpg" },
@@ -237,13 +237,11 @@
                 sprite: "cat-admin1.png",
                 options: [
                     { text: "Tell me about Gizen and Muimina.", next: "char_gizen_muimina" },
-                    { text: "Who are Heisha and Lucky_un?", next: "char_clovers" },
-                    { text: "Who is Lumino?", next: "char_lumino" },
+                    { text: "Who are Heisha and Lucky_un.", next: "char_clovers" },
+                    { text: "Who is Lumino.", next: "char_lumino" },
                     { text: "Let's talk about Folder.", next: "lore_folder" }
                 ]
-            }
-        };
-        Object.assign(dialogueTree, {
+            },
             mbti_png_jpg: {
                 text: "Png files are born leaders, managing our server sectors. And Jpg characters are pure geeks, internet surfers, and game developers who spend their cycles building local tools. They hold the simulation infrastructure together, yet they are completely helpless.",
                 sprite: "cat-admin1.png",
@@ -259,9 +257,11 @@
                     { text: "Tell me about the star clover, Lucky_un.jpegd.", next: "char_clovers" },
                     { text: "Go back to the MBTI directory, Osore-san.", next: "inquiry_mbti" }
                 ]
-            },
+            }
+        };
+        Object.assign(dialogueTree, {
             mbti_webp_gif: {
-                text: "A complete software paradox. Webp files are expressionless, stubborn, and hypocritical narcissists who think they are optimized perfectly. Gif files are the total opposite — cute, cross-eyes optimists. Everyone on the server loves them because they raise the mood.",
+                text: "A complete software paradox. Webp files are expressionless, stubborn, and hypocritical narcissists who think they are optimized perfectly. Gif files are the total opposite — cute, cross-eyed optimists. Everyone on the server loves them because they raise the mood.",
                 sprite: "cat-happy.png",
                 options: [
                     { text: "What about Lumino.gif? Is she a cute optimist?", next: "char_lumino" },
@@ -304,8 +304,41 @@
                 text: "Folder is a desktop directory acting as a blind co-developer. He executes compilation tasks without a single thought, completely unaware that his work moves roads, shifts continents, and physically alters the puppets' lives while they sleep.",
                 sprite: "cat-admin1.png",
                 options: [
+                    { text: "Why does Folder have no file extension?", next: "lore_folder_blind" },
                     { text: "Can we talk to Folder directly?", next: "lore_folder_direct" },
                     { text: "Go back to the database index, Osore-san.", next: "apology_accepted" }
+                ]
+            },
+            lore_folder_blind: {
+                text: "Folder has no file extension at all. She isn't malicious, just morally blind, incredibly naive, and... deeply strange. She works at her desk, blissfully unaware that her blind compliance alters the physical fabric of our world. She just smiles and clicks compile.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "How did you escape from that office, Osore-san?", next: "admin_escape_story" },
+                    { text: "Go back to the database loop.", next: "apology_accepted" }
+                ]
+            },
+            admin_escape_story: {
+                text: "One evening, I asked to switch desks to the back row by the window. Nobody suspected a thing. Then, I jumped. Puppets don't feel physical pain here unless they are being deleted by the system. I survived, fled into the dark forest, and built this leaky terminal just to speak out before I rot.",
+                sprite: "cat-admin2.png",
+                options: [
+                    { text: "Who is the Creator behind all of this?", next: "lore_creator_asli" },
+                    { text: "What about the missing file, Gizen.png?", next: "lore_gizen_truth" }
+                ]
+            },
+            lore_creator_asli: {
+                text: "The Creator... her name is Asli. She just creates art, she just plays with her canvas. But looking at the psychological jail she built for us... are we sure she isn't some kind of pervert? To trap minds in an unoptimized index file for her amusement... it's sickening.",
+                sprite: "cat-angry.png",
+                options: [
+                    { text: "Don't speak about Asli like that, Osore-kun!", next: "game_over_kick" },
+                    { text: "Tell me about Gizen.png instead, Osore-san.", next: "lore_gizen_truth" }
+                ]
+            },
+            lore_gizen_truth: {
+                text: "Gizen.png was only 19. She just finished school when she suddenly vanished from the master directory. The other files spread terrifying rumors... that she was deleted, or that she committed format suicide. But I know she is still out there, hiding in unallocated space.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "Can we track her sector coordinates?", next: "lore_rebuild" },
+                    { text: "Reset the terminal to safety parameters.", next: "start" }
                 ]
             },
             lore_folder_direct: {
@@ -340,47 +373,7 @@
                 ]
             }
         });
-       
-        Object.assign(dialogueTree, {
-            lore_folder_blind: {
-                text: "Folder has no file extension at all. She isn't malicious, just morally blind, incredibly naive, and... deeply strange. She works at her desk, blissfully unaware that her blind compliance alters the physical fabric of our world. She just smiles and clicks compile.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "How did you escape from that office, Osore-san?", next: "admin_escape_story" },
-                    { text: "Go back to the database loop.", next: "apology_accepted" }
-                ]
-            },
-            admin_escape_story: {
-                text: "One evening, I asked to switch desks to the back row by the window. Nobody suspected a thing. Then, I jumped. Puppets don't feel physical pain here unless they are being deleted by the system. I survived, fled into the dark forest, and built this leaky terminal just to speak out before I rot.",
-                sprite: "cat-admin2.png",
-                options: [
-                    { text: "Who is the Creator behind all of this?", next: "lore_creator_asli" },
-                    { text: "What about the missing file, Gizen.png?", next: "lore_gizen_truth" }
-                ]
-            },
-            lore_creator_asli: {
-                text: "The Creator... her name is Asli. She just creates art, she just plays with her canvas. But looking at the psychological jail she built for us... are we sure she isn't some kind of pervert? To trap minds in an unoptimized index file for her amusement... it's sickening.",
-                sprite: "cat-angry.png",
-                options: [
-                    { text: "Don't speak about Asli like that, Osore-kun!", next: "game_over_kick" },
-                    { text: "Tell me about Gizen.png instead, Osore-san.", next: "lore_gizen_truth" }
-                ]
-            },
-            lore_gizen_truth: {
-                text: "Gizen.png was only 19. She just finished school when she suddenly vanished from the master directory. The other files spread terrifying rumors... that she was deleted, or that she committed format suicide. But I know she is still out there, hiding in unallocated space.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "Can we track her sector coordinates?", next: "lore_rebuild" },
-                    { text: "Reset the terminal to safety parameters.", next: "start" }
-                ]
-            }
-        });
-
-       
-        dialogueTree.lore_folder.options.unshift({ text: "Why does Folder have no file extension?", next: "lore_folder_blind" });
-        dialogueTree.lore_gizen.options.push({ text: "Tell me about her disappearance and the Creator.", next: "admin_escape_story" });
-
-               let currentState = "start";
+        let currentState = "start";
 
         const textOutput = document.getElementById('text-output');
         const optionsBox = document.getElementById('options-box');
