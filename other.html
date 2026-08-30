@@ -3,118 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games</title>
+    <title>Other Zone</title>
     <style>
+        * {
+            cursor: url('cursor1.png') 16 16, auto !important;
+        }
         body {
             background-color: #1f110a;
             color: #34d399;
             font-family: 'Courier New', Courier, monospace;
             padding: 20px;
             text-align: center;
-            margin: 0;
+            overflow-x: hidden;
             min-height: 100vh;
             position: relative;
-            overflow-x: hidden;
         }
-        .kaomoji-bg {
+        .bg-elements {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-content: space-around;
-            opacity: 0.15;
-            font-size: 1.8rem;
-            color: #fbbf24;
-            user-select: none;
+            z-index: 1;
+            overflow: hidden;
         }
-        .grid {
-            max-width: 900px;
-            margin: 40px auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        .falling-media {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 2px solid #34d399;
+            border-radius: 12px;
+            opacity: 0.15;
+            animation: fallAnimation 8s linear infinite;
+            image-rendering: pixelated;
+        }
+        .falling-sphere {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid #2b1810;
+            opacity: 0.2;
+            animation: fallAnimation 8s linear infinite;
+            box-shadow: inset -6px -6px 10px rgba(0,0,0,0.3);
+        }
+        .falling-emoji {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.25;
+            pointer-events: none;
+            animation: fallAnimation 8s linear infinite;
+        }
+        @keyframes fallAnimation {
+            0% { transform: translateY(-120px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.25; }
+            90% { opacity: 0.25; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+        .content-layer {
             position: relative;
             z-index: 10;
         }
-        .card {
-            background: #2b1810;
-            border: 3px solid #34d399;
-            border-radius: 15px;
-            padding: 25px;
+        .nav-links {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 260px;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
-        .title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #fbbf24;
-            margin-bottom: 10px;
-        }
-        .card-emoji-pic {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            user-select: none;
-        }
-        .btn {
-            display: block;
-            background: #fbbf24;
-            color: #1f110a;
-            border: 2px solid #fff;
+        .nav-button {
+            background: #4b2e1e;
+            color: #6ee7b7;
+            border: 3px dashed #34d399;
             padding: 10px 20px;
-            font-family: inherit;
             font-size: 1rem;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 12px;
             text-decoration: none;
-            width: 100%;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(52, 211, 153, 0.2);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .nav-button:hover {
+            transform: scale(1.05);
+            background: #3d2314;
+        }
+        h1 {
+            color: #6ee7b7;
+            text-shadow: 4px 4px #3d2314;
+            font-size: 3.5rem;
+            letter-spacing: 1px;
+        }
+        .hub-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 10px;
+        }
+        .hub-card {
+            background: #2b1810;
+            border: 4px dashed #34d399;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.1);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .hub-card:hover {
+            transform: scale(1.05) rotate(1deg);
+            border-color: #6ee7b7;
+            box-shadow: 0 0 25px rgba(110, 231, 183, 0.3);
+        }
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #6ee7b7;
+            margin-bottom: 10px;
+        }
+        .card-desc {
+            font-size: 0.95rem;
+            color: #a7f3d0;
+            line-height: 1.4;
         }
     </style>
 </head>
 <body>
 
-    <div class="kaomoji-bg">
-        <span>(◌⚈  ⚈◌)</span><span>🌿</span><span>(〃ω〃)</span><span>🍫</span>
-        <span>(*^ω^*)</span><span>(◕‿◕✿)</span><span>🌿</span><span>(｡♥‿♥｡)</span>
-        <span>🍫</span><span>(＾▽＾)</span><span>(¬‿¬)</span><span>🌿</span>
-        <span>(⊙_⊙)</span><span>🍫</span><span>(｡◕‿◕｡)</span>
+    <div class="bg-elements" id="bg-media-container"></div>
+
+    <div class="content-layer">
+        <div class="nav-links">
+            <a href="index.html" class="nav-button">HOME FACTS 📑</a>
+            <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
+            <a href="clicker.html" class="nav-button">MINT CLICKER 🪙</a>
+            <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
+        </div>
+
+        <h1>THE OTHER ZONE</h1>
+
+        <div class="hub-container">
+            <a href="caterpillar.html" class="hub-card">
+                <div class="card-icon">🐛</div>
+                <div class="card-title">Silly Caterpillar Zone</div>
+                <div class="card-desc">Explore the secret universe of the legendary mint-chocolate caterpillar. No butterflies allowed!</div>
+            </a>
+
+            <a href="gacha.html" class="hub-card">
+                <div class="card-icon">🎰</div>
+                <div class="card-title">Capsule Machine</div>
+                <div class="card-desc">Spend your leaves and coins on different rarity machines. Level up and open random 30% jackpot capsules!</div>
+            </a>
+
+            <a href="trust-cat.html" class="hub-card">
+                <div class="card-icon">🐱</div>
+                <div class="card-title">Trust Cat</div>
+                <div class="card-desc">Play a high-stakes mini-game with the mystical cat. Earn massive rewards or lose your stash!</div>
+            </a>
+            
+            <div class="hub-card" style="cursor: pointer;" onclick="triggerFullReset()">
+                <div class="card-icon">⚠️</div>
+                <div class="card-title">Global Reset Core</div>
+                <div class="card-desc">Wipe all system data, active achievements, earned clicker coins, and level statistics instantly.</div>
+            </div>
+        </div>
     </div>
 
-    <div class="grid">
-        <div class="card">
-            <div class="title">GACHA STUDIO</div>
-            <div class="card-emoji-pic">🎰</div>
-            <a href="gacha.html" class="btn">PLAY</a>
-        </div>
-        <div class="card">
-            <div class="title">CATERPILLAR</div>
-            <div class="card-emoji-pic">🐛</div>
-            <a href="caterpillar.html" class="btn">PLAY</a>
-        </div>
-        <div class="card">
-            <div class="title">MINT CHOCO ZONE</div>
-            <div class="card-emoji-pic">🍫🌿</div>
-            <a href="mint-choco.html" class="btn">ENTER</a>
-        </div>
-        <div class="card">
-            <div class="title">PC COMPUTER GAME</div>
-            <div class="card-emoji-pic">💻🐱</div>
-            <a href="trust-cat.html" class="btn">PLAY</a>
-        </div>
-        <div class="card">
-            <div class="title">CLICKER GAME</div>
-            <div class="card-emoji-pic">🖱️✨</div>
-            <a href="clicker.html" class="btn">PLAY</a>
-        </div>
-    </div>
+    <script>
+        const imageFiles = [
+            'cat1.jpg', 'cat2.jpg', 'cat3.jpg', 'cat.gif',
+            'mint1.jpg', 'mint2.jpg', 'choco1.jpg', 'choco2.jpg',
+            'caterpillar.png', 'dragon-caterpillar.jpg', 
+            'cursor1.png', 'cursor2.png', 'cursor3.jpg',
+            'helper.png', 'helper2.png'
+        ];
 
+        const hexColors = [
+            '#a7f3d0', '#6ee7b7', '#34d399', '#10b981', '#059669', '#047857',
+            '#06b6d4', '#0f766e', '#e6fffa', '#99f6e4', '#2dd4bf', '#115e59',
+            '#854d0e', '#78350f', '#451a03', '#1f110a', '#2b1810', '#b45309',
+            '#d97706', '#a16207', '#3e2723', '#d7ccc8', '#5d4037'
+        ];
+
+        const emojiPack = ['🛑', '🎉', '⚠', '📑', '🍫', '🪙', '🐛', '🏆', '🐾', '⚙', '⚠️', '🍬', '🍭', '🍩', '🍪', '✨', '👩‍💼', '👨‍💼'];
+
+        function createFallingChaos() {
+            const container = document.getElementById('bg-media-container');
+            if (!container) return;
+
+            const spawnType = Math.floor(Math.random() * 3);
+            let element;
+
+            if (spawnType === 0) {
+                element = document.createElement('img');
+                element.src = imageFiles[Math.floor(Math.random() * imageFiles.length)];
+                element.className = 'falling-media';
+                const size = Math.floor(Math.random() * 50) + 50;
+                element.style.width = size + 'px';
+                element.style.height = size + 'px';
+            } else if (spawnType === 1) {
+                element = document.createElement('div');
+                element.className = 'falling-sphere';
+                element.style.background = hexColors[Math.floor(Math.random() * hexColors.length)];
+                const size = Math.floor(Math.random() * 40) + 40;
+                element.style.width = size + 'px';
+                element.style.height = size + 'px';
+            } else {
+                element = document.createElement('div');
+                element.className = 'falling-emoji';
+                element.textContent = emojiPack[Math.floor(Math.random() * emojiPack.length)];
+            }
+
+            element.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 4 + 5;
+            element.style.animationDuration = duration + 's';
+
+            container.appendChild(element);
+
+            setTimeout(() => {
+                element.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createFallingChaos, 350);
+
+        function triggerFullReset() {
+            if (confirm("Are you sure you want to completely reset EVERYTHING?")) {
+                if (confirm("This will wipe all facts, clicker coins, and upgrades!!!")) {
+                    if (confirm("LAST WARNING! 100% SURE?")) {
+                        localStorage.clear();
+                        alert("All system data has been completely destroyed!");
+                        window.location.reload();
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>
