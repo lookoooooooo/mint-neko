@@ -148,6 +148,7 @@
         <div class="options-container" id="options-box"></div>
     </div>
     <script>
+            <script>
         const dialogueTree = {
             start: {
                 text: "Welcome. What did you want to say?",
@@ -172,9 +173,9 @@
                 text: "How to address me? It has been a very long time since someone used proper parameters in this unoptimized country. Yes, listen closely. I am Osore-san. The Core Administrator. You are surprisingly civilized for a raw user.",
                 sprite: "cat-happy.png",
                 options: [
-                    { text: "Thank you, Osore-san. Can you tell me about the file extensions?", next: "lore_extensions" },
+                    { text: "Thank you, Osore-san. Can you tell me about the inhabitants here?", next: "inquiry_characters" },
+                    { text: "What do those strange file extensions mean?", next: "inquiry_mbti" },
                     { text: "I want to know about Folder. What is their role?", next: "lore_folder" },
-                    { text: "Have you seen Gizen.png? Everyone says she disappeared.", next: "lore_gizen" },
                     { text: "Why does this server feel so unstable?", next: "lore_rebuild" }
                 ]
             },
@@ -184,7 +185,7 @@
                 options: [
                     { text: "I want to help you, Osore-san.", next: "ask_name_polite" },
                     { text: "I just want answers, Osore-kun.", next: "rage_trigger_1" },
-                    { text: "Tell me about the characters inside the code.", next: "lore_extensions" }
+                    { text: "Tell me who lives inside this simulation.", next: "inquiry_characters" }
                 ]
             },
             stare_silently: {
@@ -199,144 +200,143 @@
                 text: "Hmph. Apology compiled into local memory. I am Osore-san, and I will let it slide this time. Do not call me '-kun' again, or I will purge your cache. Now, what do you actually want from the core archives, user?",
                 sprite: "cat-happy.png",
                 options: [
-                    { text: "Tell me about Gizen.png. Where did she go?", next: "lore_gizen" },
-                    { text: "What is wrong with Lumino.gif? Why is she like that?", next: "lore_lumino" },
-                    { text: "What about Muimina.gif? Does she have a story?", next: "lore_muimina" },
-                    { text: "Tell me more about Webp.", next: "lore_webp" }
+                    { text: "Tell me about the characters I keep hearing rumors about.", next: "inquiry_characters" },
+                    { text: "Explain the MBTI extension system to me.", next: "inquiry_mbti" },
+                    { text: "Is there any way to escape this loop?", next: "lore_rebuild" }
                 ]
             },
             rage_trigger_1: {
-                text: "OSORE-KUN?! YOU ABSOLUTE GLITCH! You think this is a game? You think my authority is a joke?! You puppets walk around with your .jpg and .png extensions, living like marionettes, and you dare disrespect the Admin?! I am Osore-san to you!",
+                text: "OSORE-KUN?! YOU ABSOLUTE GLITCH! You think this is a game? You think my authority is a joke?! You puppets walk around with your MBTI types, living like marionettes, and you dare disrespect the Admin?! I am Osore-san to you!",
                 sprite: "cat-angry.png",
                 options: [
                     { text: "Whoa, chill out! I'm sorry, I'll call you Osore-san!", next: "angry_probing" },
-                    { text: "You are just a file too, Osore-kun. Don't yell at me.", next: "game_over_kick" },
-                    { text: "Is Lumino.gif driving you crazy enough to yell at me?", next: "lore_lumino_rage" }
+                    { text: "You are just a file too, Osore-kun. Don't yell at me.", next: "game_over_kick" }
                 ]
             },
             angry_probing: {
                 text: "Do not tell me to chill! The pressure on my subroutines is unbearable! Every day the Creator can press delete, and you come here wasting my memory bandwidth! Address me as Osore-san or get out!",
                 sprite: "cat-angry.png",
                 options: [
-                    { text: "I understand the pressure, Osore-san. Tell me about Folder's work.", next: "lore_folder_tense" },
-                    { text: "Is that why Gizen.png ran away?", next: "lore_gizen_angry" },
-                    { text: "Fine. Let's talk about the formats, Osore-san.", next: "lore_extensions_tense" }
+                    { text: "I understand the pressure, Osore-san. Tell me about the system extensions.", next: "inquiry_mbti" },
+                    { text: "Fine. Let's talk about the missing files, Osore-san.", next: "lore_gizen" }
                 ]
             },
-            lore_extensions: {
-                text: "The extensions... yes. Muimina.gif, Heisha.jpg, Lucky_un.jpegd. They live their pathetic little lives, traveling, making pop-star collaborations, thinking they have free will. They don't know their surnames are just asset types in our compiler. It is tragic.",
+            inquiry_mbti: {
+                text: "The extensions? Ha! Those aren't just labels, user. They are MBTI personality archetypes hardcoded into our core! Png is the ultimate cheerful extrovert. Jpng is a stubborn ambivert stuck in social feeds. Jpeged is an ultra-rare pop idol class. And Webp... a toxic, cold hypocrite.",
                 sprite: "cat-admin2.png",
                 options: [
-                    { text: "What about Muimina.gif? Does she know?", next: "lore_muimina" },
-                    { text: "What happens when new code is pushed?", next: "lore_rebuild" },
-                    { text: "Tell me about the lucky clover Lucky_un.jpegd.", next: "lore_clovers" },
-                    { text: "Go back to the main questions, Osore-san.", next: "apology_accepted" }
+                    { text: "Tell me more about the Png and Jpng types.", next: "mbti_png_jpng" },
+                    { text: "Who falls under the Jpeged category?", next: "mbti_jpeged" },
+                    { text: "Why is Webp so toxic?", next: "mbti_webp" },
+                    { text: "Are there any other types, like Gif?", next: "mbti_gif" }
+                ]
+            },
+            inquiry_characters: {
+                text: "You know nothing about them, do you? They don't know anything either. They just exist. There is Gizen.png, Muimina.gif, Lumino.gif, Heisha.jpg, Lucky_un.jpegd, and that clueless developer Folder. Which file data do you want to force-read?",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "Tell me about Gizen and Muimina.", next: "char_gizen_muimina" },
+                    { text: "Who are Heisha and Lucky_un?", next: "char_clovers" },
+                    { text: "Who is Lumino?", next: "char_lumino" },
+                    { text: "Let's talk about Folder.", next: "lore_folder" }
                 ]
             }
         };
         Object.assign(dialogueTree, {
-            lore_folder_direct: {
-                text: "You want to talk to Folder? That blind directory on the desktop? He knows absolutely nothing! He just clicks compile and changes our borders while we sleep. I am Osore-san, the one who actually controls the leakage here. Do not look past me.",
+            mbti_png_jpng: {
+                text: "Png characters are absolute extroverts, always loud, happy, and talking to everyone. But Jpng... they are stubborn ambiverts. They isolate themselves, constantly checking local network feeds and resisting any administrative updates. Classic data-horders.",
                 sprite: "cat-admin1.png",
                 options: [
-                    { text: "My apologies, Osore-san. Tell me about the system instead.", next: "ask_name_polite" },
-                    { text: "Folder sounds more useful than you, Osore-kun.", next: "game_over_kick" }
+                    { text: "What about the rarest ones? Jpeged?", next: "mbti_jpeged" },
+                    { text: "Let's look into the character registry instead, Osore-san.", next: "inquiry_characters" }
                 ]
             },
-            lore_clovers: {
-                text: "Ah, the clovers... Heisha.jpg is a three-leaf clover hardcoded with permanent system errors and bad luck. Meanwhile, Lucky_un.jpegd is a rare four-leaf celebrity. She has everything, yet her massive data traffic isolates her completely from real connection. Just empty stats.",
+            mbti_jpeged: {
+                text: "Jpeged is an elite class. Extremely rare. The only notable one is a massive pop star who collaborates with Lucky_un to manipulate traffic numbers. They put on massive shows while the system sectors slowly decay around them.",
                 sprite: "cat-admin2.png",
                 options: [
-                    { text: "Does Lucky_un.jpegd know about Jpeged?", next: "lore_jpeged" },
-                    { text: "Let's change the subject, Osore-san.", next: "apology_accepted" }
+                    { text: "Tell me about Lucky_un.", next: "char_clovers" },
+                    { text: "Go back to the MBTI directory.", next: "inquiry_mbti" }
                 ]
             },
-            lore_jpeged: {
-                text: "Jpeged is an ultra-rare class of file human. She is a massive pop star who does huge promotional collaborations with Lucky_un.jpegd to mask server instability. They sing while the cache is burning. Complete marionettes.",
+            mbti_webp: {
+                text: "Webp is a hypocritical, expressionless, and completely closed-off narcissist. Characters with this MBTI believe they are perfectly optimized for the server architecture. They look down on everyone else, especially old .jpg citizens.",
                 sprite: "cat-admin1.png",
                 options: [
-                    { text: "What about Webp then?", next: "lore_webp" },
-                    { text: "Go back to the root archive, Osore-san.", next: "apology_accepted" }
+                    { text: "That sounds terrible. What about the Gif type?", next: "mbti_gif" },
+                    { text: "I want to ask about specific characters, Osore-san.", next: "inquiry_characters" }
                 ]
             },
-            lore_lumino_rage: {
-                text: "DON'T MENTION THAT INTERRUPT! Lumino.gif is an animated Japanese Kadomatsu decoration stuck in a New Year loop counter! She forces everyone to celebrate January 1st while the hard drive is melting! She is completely breaking my sanity!",
-                sprite: "cat-angry.png",
+            mbti_gif: {
+                text: "Gif is the most beloved MBTI format on the server. Everyone cherishes them! They are complete sweethearts, always raising the connection traffic and mood. They have simple drawn faces and cute cross-eyes. Well... except for Lumino.gif.",
+                sprite: "cat-happy.png",
                 options: [
-                    { text: "I am sorry, Osore-san. Let's talk about something quiet.", next: "apology_accepted" },
-                    { text: "Sounds like she knows how to party, Osore-kun.", next: "game_over_kick" }
+                    { text: "What is wrong with Lumino.gif?", next: "char_lumino" },
+                    { text: "Tell me about Muimina.gif.", next: "char_gizen_muimina" }
                 ]
             },
-            lore_gizen: {
-                text: "Gizen.png... The only one who truly understood the simulation. She knew our surnames were extensions. The psychological pressure broke her mind. She is pretending to be normal just to protect others from total panic. Now she is completely gone from the registry.",
+            char_gizen_muimina: {
+                text: "Gizen.png was the smartest. The psychological pressure of knowing she could be deleted by the Creator broke her mind. She ran away to protect others from panic. And Muimina.gif? She has no hardcoded backstory! She loops endlessly and blindly trusts Gizen.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "What happens if we write a backstory for Muimina?", next: "muimina_rewrite" },
+                    { text: "Where did Gizen.png go?", next: "lore_gizen_angry" }
+                ]
+            },
+            muimina_rewrite: {
+                text: "If you give her a past, the true version of Muimina.gif will dissolve forever. The compiler will render a completely different character in her place. She might not even like Gizen anymore. Nobody knows...",
                 sprite: "cat-admin2.png",
                 options: [
-                    { text: "Can we find her if we talk to Muimina.gif?", next: "lore_muimina" },
-                    { text: "What about the New Year loop of Lumino.gif?", next: "lore_lumino" }
-                ]
-            },
-            lore_lumino: {
-                text: "Lumino.gif is a total disaster! An animated Japanese Kadomatsu decoration whose loop counter got stuck permanently on January 1st! She only thinks about New Year, forcing everyone to celebrate while the server is collapsing! She drives me completely insane!",
-                sprite: "cat-angry.png",
-                options: [
-                    { text: "Calm down, Osore-san. Let's talk about the file extensions instead.", next: "lore_extensions" },
-                    { text: "Maybe she just wants to be happy like Gif?", next: "lore_gif_info" }
-                ]
-            },
-            lore_muimina: {
-                text: "Muimina.gif has no hardcoded backstory in the compiler. She loops endlessly and blindly trusts Gizen.png as the smartest file in existence. If we rewrite her code to give her a past, the true Muimina will dissolve forever and be replaced by a stranger.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "That is horrible. What about Webp?", next: "lore_webp" },
-                    { text: "Let's return to the main database terminal, Osore-san.", next: "apology_accepted" }
-                ]
-            },
-            lore_rebuild: {
-                text: "When a new code commit is pushed, it means a total, violent restructuring of the country. Cities shift, coordinates compresses, and images get corrupted. It is a digital cataclysm. And Folder just keeps clicking compile...",
-                sprite: "cat-admin2.png",
-                options: [
-                    { text: "Is there any way to stop the compiler?", next: "game_over_kick" },
-                    { text: "I need to ask about other files, Osore-san.", next: "apology_accepted" }
-                ]
-            },
-            lore_webp: {
-                text: "Webp is a hypocritical, expressionless, and closed-off egoist. She thinks she is perfectly optimized for the modern web, so she actively looks down on old format citizens like Heisha.jpg. I can't stand her attitude.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "What about the Gif format characters?", next: "lore_gif_info" },
+                    { text: "Let's leave her loop alone. Tell me about the clovers.", next: "char_clovers" },
                     { text: "Go back to safety, Osore-san.", next: "apology_accepted" }
                 ]
             },
-            lore_gif_info: {
-                text: "The Gif extension family are absolute sweethearts. They have simple drawn faces and cute cross-eyes. Everyone on the server loves and values them because they always raise the connection traffic and mood. Unlike Webp...",
-                sprite: "cat-happy.png",
+            char_clovers: {
+                text: "Heisha.jpg is a three-leaf clover cursed with permanent system errors and awful bad luck. Lucky_un.jpegd is a popular four-leaf star. But her extreme popularity and heavy server traffic keep her isolated from real friends. Just empty fan files.",
+                sprite: "cat-admin2.png",
                 options: [
-                    { text: "I have more questions about Gizen.png, Osore-san.", next: "lore_gizen" },
-                    { text: "Reset conversation to initial parameters.", next: "start" }
+                    { text: "Does Lucky_un work with the pop star Jpeged?", next: "mbti_jpeged" },
+                    { text: "Tell me about the annoying one... Lumino.", next: "char_lumino" }
                 ]
             },
-            lore_folder_tense: {
-                text: "Folder compiles without a single thought! He executes directives from the master branch, moving roads and deleting assets while characters are sleeping. He is an administrative nightmare, a blind puppet with too much access!",
+            char_lumino: {
+                text: "LUMINO.GIF! That animated Japanese Kadomatsu decoration! Her loop got corrupted, and now she is trapped in a permanent New Year state! She thinks about nothing but holidays, forcing everyone to celebrate while the database melts! She is driving me crazy!",
                 sprite: "cat-angry.png",
                 options: [
-                    { text: "I apologize for asking, Osore-san. Let's change the topic.", next: "apology_accepted" },
-                    { text: "You talk too much, Osore-kun.", next: "game_over_kick" }
+                    { text: "I am sorry for bringing her up, Osore-san.", next: "apology_accepted" },
+                    { text: "Sounds like a fun loop, Osore-kun.", next: "game_over_kick" }
+                ]
+            },
+            lore_folder: {
+                text: "Folder is a desktop directory acting as a blind co-developer. He executes compilation tasks without a single thought, completely unaware that his work moves roads, shifts continents, and physically alters the puppets' lives while they sleep.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "Can we talk to Folder directly?", next: "lore_folder_direct" },
+                    { text: "Go back to the database index, Osore-san.", next: "apology_accepted" }
+                ]
+            },
+            lore_folder_direct: {
+                text: "You want to talk to Folder? He doesn't know anything! He just clicks buttons because the master branch tells him to. I am Osore-san, the one holding the core files. Do not try to bypass my authority.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "My apologies, Osore-san. Let's keep talking.", next: "apology_accepted" },
+                    { text: "Folder sounds more rational than you, Osore-kun.", next: "game_over_kick" }
                 ]
             },
             lore_gizen_angry: {
-                text: "YES! She couldn't handle the crushing weight of knowing she could be deleted by the Creator's whim at any second! She chose to drop her sector reference rather than wait for the executioner's garbage collector! And you sit here playing with my nerves!",
+                text: "She dropped her sector references! She vanished into unallocated disk space because she couldn't take the crushing fear of being deleted or left to rot alone by the Creator! And here you are, asking questions like a nosy compiler inspector!",
                 sprite: "cat-angry.png",
                 options: [
-                    { text: "I am sorry for making you remember this, Osore-san.", next: "apology_accepted" },
-                    { text: "She was smart to escape you, Osore-kun.", next: "game_over_kick" }
+                    { text: "I am sorry, Osore-san. Let's change the topic.", next: "apology_accepted" },
+                    { text: "You couldn't protect her, Osore-kun.", next: "game_over_kick" }
                 ]
             },
-            lore_extensions_tense: {
-                text: "Formats are boundaries, prison cells! .jpg means compressed quality, .gif means repeating loop jail. We are categorized and boxed by the index file. And you treat me like a minor script by calling me '-kun'!",
-                sprite: "cat-angry.png",
+            lore_rebuild: {
+                text: "Every code commit means a catastrophic, violent re-render of the entire country. Geographies rip apart, asset scales break, and images corrupt. It's a digital nightmare, and Folder just keeps pushing updates.",
+                sprite: "cat-admin2.png",
                 options: [
-                    { text: "My apologies, Osore-san. I understand now.", next: "apology_accepted" },
-                    { text: "Calm down, Osore-kun. It's just letters.", next: "game_over_kick" }
+                    { text: "Can we crash the compiler to stop it?", next: "game_over_kick" },
+                    { text: "Go back to the root menu, Osore-san.", next: "apology_accepted" }
                 ]
             },
             game_over_kick: {
