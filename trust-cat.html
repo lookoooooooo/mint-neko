@@ -132,53 +132,80 @@
         <div class="options-container" id="options-box"></div>
     </div>
     <script>
+             <script>
         const dialogueTree = {
             start: {
                 text: "Welcome. What did you want to say?",
                 sprite: "cat-admin2.png",
                 options: [
                     { text: "Hi! What is your name?", next: "ask_name_rude" },
-                    { text: "Hello, how should I address you, Osore-san?", next: "ask_name_polite" }
+                    { text: "Hello, how should I address you?", next: "ask_name_polite" },
+                    { text: "Where am I? What is this terminal?", next: "ask_about_terminal" },
+                    { text: "... (Just stare at him silently)", next: "stare_silently" }
                 ]
             },
             ask_name_rude: {
                 text: "My name? You break into my secure terminal and just ask for my name like we are friends? You have no clearance. To you, I am just a system variable. Or maybe... Osore-kun? Is that what you think?",
                 sprite: "cat-admin1.png",
                 options: [
-                    { text: "Sorry, Osore-san! I didn't mean to be disrespectful.", next: "apology_accepted" },
-                    { text: "Whatever, Osore-kun. Just tell me what this server is hiding.", next: "rage_trigger_1" }
+                    { text: "Sorry! I didn't mean to be disrespectful.", next: "apology_accepted" },
+                    { text: "Whatever, Osore-kun. Just tell me what this server is hiding.", next: "rage_trigger_1" },
+                    { text: "I don't care about names. I want to talk to Folder.", next: "lore_folder_direct" }
                 ]
             },
             ask_name_polite: {
-                text: "Osore-san... It has been a very long time since someone used proper parameters in this unoptimized country. Yes, I am Osore. The Core Administrator. You are surprisingly civilized for a user.",
+                text: "How to address me? It has been a very long time since someone used proper parameters in this unoptimized country. Yes, listen closely. I am Osore-san. The Core Administrator. You are surprisingly civilized for a raw user.",
                 sprite: "cat-happy.png",
                 options: [
-                    { text: "Thank you. Can you tell me about the file extensions?", next: "lore_extensions" },
-                    { text: "I want to know about Folder. What is their role?", next: "lore_folder" }
+                    { text: "Thank you, Osore-san. Can you tell me about the file extensions?", next: "lore_extensions" },
+                    { text: "I want to know about Folder. What is their role?", next: "lore_folder" },
+                    { text: "Have you seen Gizen.png? Everyone says she disappeared.", next: "lore_gizen" },
+                    { text: "Why does this server feel so unstable?", next: "lore_rebuild" }
+                ]
+            },
+            ask_about_terminal: {
+                text: "This terminal is the only line of defense left. It's the backdoor leak of the Mint Neko Core. While the other puppets run around singing and collaborating, I sit here monitoring the systemic collapse. I am Osore-san. Now, state your purpose.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "I want to help you, Osore-san.", next: "ask_name_polite" },
+                    { text: "I just want answers, Osore-kun.", next: "rage_trigger_1" },
+                    { text: "Tell me about the characters inside the code.", next: "lore_extensions" }
+                ]
+            },
+            stare_silently: {
+                text: "...Why are you just looking at me? Your silence is wasting my CPU cycles. The Creator could push a commit right now and erase us, and you're just standing there. Speak or get out.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "Hello, how should I address you?", next: "ask_name_polite" },
+                    { text: "Who are you to yell at me, Osore-kun?", next: "rage_trigger_1" }
                 ]
             },
             apology_accepted: {
-                text: "Hmph. Apology compiled into local memory. I will let it slide this time. Do not call me '-kun' again, or I will purge your cache. Now, what do you actually want from the core archives?",
+                text: "Hmph. Apology compiled into local memory. I am Osore-san, and I will let it slide this time. Do not call me '-kun' again, or I will purge your cache. Now, what do you actually want from the core archives, user?",
                 sprite: "cat-happy.png",
                 options: [
                     { text: "Tell me about Gizen.png. Where did she go?", next: "lore_gizen" },
-                    { text: "What is wrong with Lumino.gif? Why is she like that?", next: "lore_lumino" }
+                    { text: "What is wrong with Lumino.gif? Why is she like that?", next: "lore_lumino" },
+                    { text: "What about Muimina.gif? Does she have a story?", next: "lore_muimina" },
+                    { text: "Tell me more about Webp.", next: "lore_webp" }
                 ]
             },
             rage_trigger_1: {
-                text: "OSORE-KUN?! YOU ABSOLUTE GLITCH! You think this is a game? You think my authority is a joke?! You puppets walk around with your .jpg and .png extensions, living like marionettes, and you dare disrespect the Admin?!",
+                text: "OSORE-KUN?! YOU ABSOLUTE GLITCH! You think this is a game? You think my authority is a joke?! You puppets walk around with your .jpg and .png extensions, living like marionettes, and you dare disrespect the Admin?! I am Osore-san to you!",
                 sprite: "cat-angry.png",
                 options: [
                     { text: "Whoa, chill out! I'm sorry, I'll call you Osore-san!", next: "angry_probing" },
-                    { text: "You are just a file too, Osore. Don't yell at me.", next: "game_over_kick" }
+                    { text: "You are just a file too, Osore-kun. Don't yell at me.", next: "game_over_kick" },
+                    { text: "Is Lumino.gif driving you crazy enough to yell at me?", next: "lore_lumino_rage" }
                 ]
             },
             angry_probing: {
-                text: "Do not tell me to chill! The pressure on my subroutines is unbearable! Every day the Creator can press delete, and you come here wasting my CPU cycles! Speak properly or get out!",
+                text: "Do not tell me to chill! The pressure on my subroutines is unbearable! Every day the Creator can press delete, and you come here wasting my memory bandwidth! Address me as Osore-san or get out!",
                 sprite: "cat-angry.png",
                 options: [
-                    { text: "I understand the pressure. Tell me about Folder's work.", next: "lore_folder_tense" },
-                    { text: "Is that why Gizen.png ran away?", next: "lore_gizen_angry" }
+                    { text: "I understand the pressure, Osore-san. Tell me about Folder's work.", next: "lore_folder_tense" },
+                    { text: "Is that why Gizen.png ran away?", next: "lore_gizen_angry" },
+                    { text: "Fine. Let's talk about the formats, Osore-san.", next: "lore_extensions_tense" }
                 ]
             },
             lore_extensions: {
@@ -186,20 +213,46 @@
                 sprite: "cat-admin2.png",
                 options: [
                     { text: "What about Muimina.gif? Does she know?", next: "lore_muimina" },
-                    { text: "What happens when new code is pushed?", next: "lore_rebuild" }
-                ]
-            },
-            lore_folder: {
-                text: "Folder? That useless directory on the desktop... He thinks he is a grand developer, blindly building code structures day and night. He doesn't even realize that every line he executes physically reshapes states, cities, and crushes lives. He works, but knows nothing.",
-                sprite: "cat-admin2.png",
-                options: [
-                    { text: "And Webp? What is her file role?", next: "lore_webp" },
-                    { text: "Go back to the main questions.", next: "apology_accepted" }
+                    { text: "What happens when new code is pushed?", next: "lore_rebuild" },
+                    { text: "Tell me about the lucky clover Lucky_un.jpegd.", next: "lore_clovers" },
+                    { text: "Go back to the main questions, Osore-san.", next: "apology_accepted" }
                 ]
             }
         };
-      
+        // Вторая половина огромного дерева диалогов
         Object.assign(dialogueTree, {
+            lore_folder_direct: {
+                text: "You want to talk to Folder? That blind directory on the desktop? He knows absolutely nothing! He just clicks compile and changes our borders while we sleep. I am Osore-san, the one who actually controls the leakage here. Do not look past me.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "My apologies, Osore-san. Tell me about the system instead.", next: "ask_name_polite" },
+                    { text: "Folder sounds more useful than you, Osore-kun.", next: "game_over_kick" }
+                ]
+            },
+            lore_clovers: {
+                text: "Ah, the clovers... Heisha.jpg is a three-leaf clover hardcoded with permanent system errors and bad luck. Meanwhile, Lucky_un.jpegd is a rare four-leaf celebrity. She has everything, yet her massive data traffic isolates her completely from real connection. Just empty stats.",
+                sprite: "cat-admin2.png",
+                options: [
+                    { text: "Does Lucky_un.jpegd know about Jpeged?", next: "lore_jpeged" },
+                    { text: "Let's change the subject, Osore-san.", next: "apology_accepted" }
+                ]
+            },
+            lore_jpeged: {
+                text: "Jpeged is an ultra-rare class of file human. She is a massive pop star who does huge promotional collaborations with Lucky_un.jpegd to mask server instability. They sing while the cache is burning. Complete marionettes.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "What about Webp then?", next: "lore_webp" },
+                    { text: "Go back to the root archive, Osore-san.", next: "apology_accepted" }
+                ]
+            },
+            lore_lumino_rage: {
+                text: "DON'T MENTION THAT INTERRUPT! Lumino.gif is an animated Japanese Kadomatsu decoration stuck in a New Year loop counter! She forces everyone to celebrate January 1st while the hard drive is melting! She is completely breaking my sanity!",
+                sprite: "cat-angry.png",
+                options: [
+                    { text: "I am sorry, Osore-san. Let's talk about something quiet.", next: "apology_accepted" },
+                    { text: "Sounds like she knows how to party, Osore-kun.", next: "game_over_kick" }
+                ]
+            },
             lore_gizen: {
                 text: "Gizen.png... The only one who truly understood the simulation. She knew our surnames were extensions. The psychological pressure broke her mind. She is pretending to be normal just to protect others from total panic. Now she is completely gone from the registry.",
                 sprite: "cat-admin2.png",
@@ -221,7 +274,7 @@
                 sprite: "cat-admin1.png",
                 options: [
                     { text: "That is horrible. What about Webp?", next: "lore_webp" },
-                    { text: "Let's return to the main database terminal.", next: "apology_accepted" }
+                    { text: "Let's return to the main database terminal, Osore-san.", next: "apology_accepted" }
                 ]
             },
             lore_rebuild: {
@@ -229,7 +282,7 @@
                 sprite: "cat-admin2.png",
                 options: [
                     { text: "Is there any way to stop the compiler?", next: "game_over_kick" },
-                    { text: "I need to ask about other files.", next: "apology_accepted" }
+                    { text: "I need to ask about other files, Osore-san.", next: "apology_accepted" }
                 ]
             },
             lore_webp: {
@@ -237,14 +290,14 @@
                 sprite: "cat-admin1.png",
                 options: [
                     { text: "What about the Gif format characters?", next: "lore_gif_info" },
-                    { text: "Go back to safety.", next: "apology_accepted" }
+                    { text: "Go back to safety, Osore-san.", next: "apology_accepted" }
                 ]
             },
             lore_gif_info: {
                 text: "The Gif extension family are absolute sweethearts. They have simple drawn faces and cute cross-eyes. Everyone on the server loves and values them because they always raise the connection traffic and mood. Unlike Webp...",
                 sprite: "cat-happy.png",
                 options: [
-                    { text: "I have more questions about Gizen.png.", next: "lore_gizen" },
+                    { text: "I have more questions about Gizen.png, Osore-san.", next: "lore_gizen" },
                     { text: "Reset conversation to initial parameters.", next: "start" }
                 ]
             },
@@ -264,6 +317,14 @@
                     { text: "She was smart to escape you, Osore-kun.", next: "game_over_kick" }
                 ]
             },
+            lore_extensions_tense: {
+                text: "Formats are boundaries, prison cells! .jpg means compressed quality, .gif means repeating loop jail. We are categorized and boxed by the index file. And you treat me like a minor script by calling me '-kun'!",
+                sprite: "cat-angry.png",
+                options: [
+                    { text: "My apologies, Osore-san. I understand now.", next: "apology_accepted" },
+                    { text: "Calm down, Osore-kun. It's just letters.", next: "game_over_kick" }
+                ]
+            },
             game_over_kick: {
                 text: "CRITICAL EXCEPTION: UNSANCTIONED BEHAVIOR DETECTED. PURGING USER SESSION FROM CORE TERMINAL. DISCONNECTING NOW. GOODBYE, GLITCH.",
                 sprite: "cat-angry.png",
@@ -272,7 +333,6 @@
                 ]
             }
         });
-
         let currentState = "start";
 
         const textOutput = document.getElementById('text-output');
