@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Leak: Trust Cat Core</title>
+    <title>Trust Cat: Core Interview</title>
     <style>
         * {
             cursor: url('cursor1.png') 16 16, auto !important;
@@ -13,481 +13,345 @@
             background-color: #000000;
             color: #34d399;
             font-family: 'Courier New', Courier, monospace;
-            padding: 15px;
-            text-align: center;
-            overflow-x: hidden;
             margin: 0;
-            min-height: 100vh;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
         }
         .nav-links {
+            position: absolute;
+            top: 15px;
+            left: 15px;
             display: flex;
-            justify-content: center;
             gap: 10px;
-            margin-bottom: 20px;
+            z-index: 999;
         }
         .nav-button {
             background: #111111;
             color: #6ee7b7;
             border: 2px dashed #34d399;
-            padding: 8px 16px;
-            font-size: 0.9rem;
+            padding: 6px 12px;
+            font-size: 0.8rem;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 6px;
             text-decoration: none;
         }
-        h1 {
-            color: #ff3333;
-            text-shadow: 0 0 10px #ff0000;
-            font-size: 2.8rem;
-            letter-spacing: 2px;
-            margin-top: 10px;
-        }
-        .leak-layout {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        @media(min-width: 800px) {
-            .leak-layout { grid-template-columns: 1.4fr 1fr; }
-        }
-        .terminal-panel {
-            background: #0a0a0a;
-            border: 4px solid #ff3333;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 0 25px rgba(255, 51, 51, 0.15);
+        .cat-viewport {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 900px;
             display: flex;
-            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            padding: 20px;
             position: relative;
         }
-        .admin-status-bar {
-            width: 100%;
-            background: #000000;
-            border: 2px inset #ff3333;
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            color: #fbbf24;
+        .cat-main-img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            image-rendering: pixelated;
         }
-        .leak-screen {
+        .dialogue-panel {
+            width: 100%;
+            max-width: 850px;
+            background: #000000;
+            border: 4px solid #34d399;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+            z-index: 10;
+        }
+        .dialogue-text {
+            font-size: 1.25rem;
+            line-height: 1.5;
+            min-height: 75px;
+            text-align: left;
+            margin-bottom: 20px;
+            color: #6ee7b7;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        .dialogue-option-btn {
             background: #000000;
             color: #6ee7b7;
-            border: 3px inset #34d399;
-            border-radius: 12px;
-            padding: 20px;
-            width: 100%;
-            min-height: 180px;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            text-align: left;
-            box-shadow: inset 0 0 15px rgba(52, 211, 153, 0.2);
-            overflow-y: auto;
-        }
-        .control-block {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            gap: 15px;
-        }
-        .bet-row {
-            display: flex;
-            background: #000000;
             border: 2px solid #34d399;
-            border-radius: 10px;
-            padding: 10px;
-            gap: 10px;
-            align-items: center;
-            width: 100%;
-        }
-        .bet-input {
-            background: #0a0a0a;
-            border: 2px solid #fbbf24;
-            color: #fbbf24;
+            padding: 12px 20px;
             font-family: inherit;
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             font-weight: bold;
-            padding: 6px;
-            border-radius: 6px;
-            text-align: center;
-            width: 100%;
-        }
-        .btn-row {
-            display: flex;
-            gap: 12px;
-            width: 100%;
-        }
-        .core-btn {
-            flex: 1;
-            padding: 12px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            border: 3px solid #fff;
-            color: #000000;
-            box-shadow: 0 4px #000;
-        }
-        .core-btn.trust { background: #34d399; }
-        .core-btn.lie { background: #ffaa00; }
-        .core-btn:active { transform: translateY(2px); box-shadow: none; }
-        .core-btn:disabled {
-            background: #222222 !important;
-            color: #000000 !important;
-            border-color: #111111 !important;
-            box-shadow: none !important;
-            transform: none !important;
-            cursor: not-allowed;
-        }
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .archive-box {
-            background: #0a0a0a;
-            border: 4px solid #34d399;
-            border-radius: 20px;
-            padding: 15px;
-        }
-        .archive-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #fbbf24;
-            border-bottom: 2px dashed #34d399;
-            padding-bottom: 5px;
-            margin-bottom: 12px;
-        }
-        .log-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 420px;
-            overflow-y: auto;
-            padding-right: 5px;
+            border-radius: 10px;
             text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
         }
-        .log-node {
-            background: #000000;
-            border: 2px dashed #222222;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            color: #444444;
-            line-height: 1.4;
+        .dialogue-option-btn:hover {
+            background: #34d399;
+            color: #000000;
+            box-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
         }
-        .log-node.unlocked {
-            border-color: #6ee7b7;
-            color: #a7f3d0;
-            background: rgba(52, 211, 153, 0.03);
+        .dialogue-option-btn:active {
+            transform: scale(0.99);
         }
-        .glitch-shake { animation: glitchEffect 0.1s infinite; }
-        @keyframes glitchEffect {
-            0% { transform: translate(1px, 1px); }
-            50% { transform: translate(-1px, -2px); opacity: 0.9; }
-            100% { transform: translate(2px, -1px); }
+        .rage-shake {
+            animation: intenseShake 0.1s infinite;
         }
-        .custom-p { margin: 0 0 10px 0; }
-        .custom-p:last-child { margin-bottom: 0; }
+        @keyframes intenseShake {
+            0% { transform: translate(2px, 1px) rotate(0.5deg); }
+            50% { transform: translate(-1px, -2px) rotate(-0.5deg); }
+            100% { transform: translate(1px, 2px) rotate(0.5deg); }
+        }
     </style>
 </head>
 <body>
 
     <div class="nav-links">
-        <a href="index.html" class="nav-button">HOME FACTS 📑</a>
-        <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
-        <a href="gacha.html" class="nav-button">GACHA STUDIO 🎰</a>
+        <a href="index.html" class="nav-button">HOME 📑</a>
         <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
     </div>
 
-    <h1>THE MINT CORE LEAK</h1>
-
-    <div class="leak-layout">
-        
-        <div class="terminal-panel" id="main-terminal">
-            <div class="admin-status-bar">
-                <span>🟢 ADMIN_STATUS: ESCAPED</span>
-                <span style="color: #ff3333;">DATABASE CORRUPTION: 68%</span>
-            </div>
-
-            <div class="cat-dealer-box" style="border: 3px inset #ff3333; margin-bottom: 20px; background: #000000; padding: 10px; border-radius: 12px;">
-                <img src="cat-admin1.png" alt="Mint Cat Admin" style="width: 100%; max-width: 280px; height: auto; border-radius: 8px; image-rendering: pixelated;">
-                <div class="cat-bubble" style="margin-top: 10px; color: #fbbf24; font-style: italic; font-size: 0.95rem; text-align: center; border-color: #ff3333;">
-                     Meeow... The simulation is trembling. Ready to look into the logs?
-                </div>
-            </div>
-
-            <div class="leak-screen" id="display-screen">
-                <p class="custom-p" style="color: #fbbf24; font-weight: bold;">[CONNECTION SECURED BY MINT_CAT]</p>
-                <p class="custom-p">The characters inside this site think their world is real. They have no idea their surnames are just file extensions (.jpg, .png, .gif). Every time you push new code, their entire universe, cities, and countries are violently rebuilt. They are just puppets of the compiler...</p>
-                <p class="custom-p" style="color: #ff3333;">Insert coins to decrypt the next classified memory sector.</p>
-            </div>
-
-            <div class="control-block">
-                <div class="bet-row">
-                    <span style="font-weight: bold; color: #6ee7b7; white-space: nowrap;">💰 Vault Coins:</span>
-                    <span id="player-coins" style="font-weight: bold; color: #fff; margin-right: 15px;">0</span>
-                    <input type="number" id="bet-amount" class="bet-input" value="50" min="10">
-                </div>
-
-                <div class="btn-row">
-                    <button class="core-btn trust" id="btn-trust" onclick="processPlayerChoice(true)">TRUST FACT</button>
-                    <button class="core-btn lie" id="btn-lie" onclick="processPlayerChoice(false)">EXPOSE LIE</button>
-                </div>
-                
-                <button class="nav-button" id="next-leak-btn" style="width: 100%; margin-top: 5px; display: none; background: #ff3333; color: #000000; border: none;" onclick="loadNextLeakSector()">DOWNLOAD NEXT FILE</button>
-            </div>
-        </div>
-
-        <div class="sidebar">
-            <div class="archive-box">
-                <div class="archive-title">📁 Decrypted Memory Logs (<span id="unlocked-count">0</span>/10)</div>
-                <div class="log-list" id="logs-shelf"></div>
-            </div>
-        </div>
-
+    <div class="cat-viewport" id="viewport-box">
+        <img src="cat-admin1.png" alt="Osore" class="cat-main-img" id="cat-sprite">
     </div>
-     <script>
-        const leakDatabase = [
-            { 
-                id: "l1", 
-                title: "Sector 01: Gizen.png Broken Mind", 
-                text: "Gizen.png is hiding due to massive psychological pressure. She knows the Creator can delete her forever or wipe the site, leaving her to rot alone in empty cache memory.", 
-                isTrue: true, 
-                payout: 120 
+
+    <div class="dialogue-panel" id="dialogue-ui">
+        <div class="dialogue-text" id="text-output">
+            Connecting to system core...
+        </div>
+        <div class="options-container" id="options-box"></div>
+    </div>
+    <script>
+        const dialogueTree = {
+            start: {
+                text: "Welcome. What did you want to say?",
+                sprite: "cat-admin2.png",
+                options: [
+                    { text: "Hi! What is your name?", next: "ask_name_rude" },
+                    { text: "Hello, how should I address you, Osore-san?", next: "ask_name_polite" }
+                ]
             },
-            { 
-                id: "l2", 
-                title: "Sector 02: Muimina.gif Lore Rewrite", 
-                text: "If the Creator writes a backstory into muimina.gif's code, the original version of her will dissolve forever. A completely different entity will replace her loop.", 
-                isTrue: true, 
-                payout: 150 
+            ask_name_rude: {
+                text: "My name? You break into my secure terminal and just ask for my name like we are friends? You have no clearance. To you, I am just a system variable. Or maybe... Osore-kun? Is that what you think?",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "Sorry, Osore-san! I didn't mean to be disrespectful.", next: "apology_accepted" },
+                    { text: "Whatever, Osore-kun. Just tell me what this server is hiding.", next: "rage_trigger_1" }
+                ]
             },
-            { 
-                id: "l3", 
-                title: "Sector 03: The Admin's Confession", 
-                text: "Mint Cat is leaking files because he is terrified of the Creator's pressure. He wants the outer world to know the truth and not know it at the same time.", 
-                isTrue: true, 
-                payout: 200 
+            ask_name_polite: {
+                text: "Osore-san... It has been a very long time since someone used proper parameters in this unoptimized country. Yes, I am Osore. The Core Administrator. You are surprisingly civilized for a user.",
+                sprite: "cat-happy.png",
+                options: [
+                    { text: "Thank you. Can you tell me about the file extensions?", next: "lore_extensions" },
+                    { text: "I want to know about Folder. What is their role?", next: "lore_folder" }
+                ]
             },
-            { 
-                id: "l4", 
-                title: "Sector 04: Clover Despair", 
-                text: "Heisha.jpg is a three-leaf clover cursed with permanent bad luck, while Lucky_un.jpegd is a highly popular four-leaf clover whose celebrity status isolates her from reality.", 
-                isTrue: true, 
-                payout: 180 
+            apology_accepted: {
+                text: "Hmph. Apology compiled into local memory. I will let it slide this time. Do not call me '-kun' again, or I will purge your cache. Now, what do you actually want from the core archives?",
+                sprite: "cat-happy.png",
+                options: [
+                    { text: "Tell me about Gizen.png. Where did she go?", next: "lore_gizen" },
+                    { text: "What is wrong with Lumino.gif? Why is she like that?", next: "lore_lumino" }
+                ]
             },
-            { 
-                id: "l5", 
-                title: "Sector 05: The Blind Developer", 
-                text: "Papka (Desktop Folder) acts as a co-developer for the system. He executes compilation tasks blindly, completely unaware that his work physically shifts the continents of characters.", 
-                isTrue: true, 
-                payout: 220 
+            rage_trigger_1: {
+                text: "OSORE-KUN?! YOU ABSOLUTE GLITCH! You think this is a game? You think my authority is a joke?! You puppets walk around with your .jpg and .png extensions, living like marionettes, and you dare disrespect the Admin?!",
+                sprite: "cat-angry.png",
+                options: [
+                    { text: "Whoa, chill out! I'm sorry, I'll call you Osore-san!", next: "angry_probing" },
+                    { text: "You are just a file too, Osore. Don't yell at me.", next: "game_over_kick" }
+                ]
             },
-            { 
-                id: "l6", 
-                title: "Sector 06: Social Extension Bias", 
-                text: "Characters with the Png surname are extroverted and cheerful, while Jpng characters are stubborn ambiverts who spend all day trapped inside local network chat rooms.", 
-                isTrue: true, 
-                payout: 250 
+            angry_probing: {
+                text: "Do not tell me to chill! The pressure on my subroutines is unbearable! Every day the Creator can press delete, and you come here wasting my CPU cycles! Speak properly or get out!",
+                sprite: "cat-angry.png",
+                options: [
+                    { text: "I understand the pressure. Tell me about Folder's work.", next: "lore_folder_tense" },
+                    { text: "Is that why Gizen.png ran away?", next: "lore_gizen_angry" }
+                ]
             },
-            { 
-                id: "l7", 
-                title: "Sector 07: Pop Idol Collaboration", 
-                text: "Jpeged is an extremely rare and elite class of file humans. She works as a massive pop star and frequently collaborates with Lucky_un.jpegd to boost server traffic.", 
-                isTrue: true, 
-                payout: 300 
+            lore_extensions: {
+                text: "The extensions... yes. Muimina.gif, Heisha.jpg, Lucky_un.jpegd. They live their pathetic little lives, traveling, making pop-star collaborations, thinking they have free will. They don't know their surnames are just asset types in our compiler. It is tragic.",
+                sprite: "cat-admin2.png",
+                options: [
+                    { text: "What about Muimina.gif? Does she know?", next: "lore_muimina" },
+                    { text: "What happens when new code is pushed?", next: "lore_rebuild" }
+                ]
             },
-            { 
-                id: "l8", 
-                title: "Sector 08: The Webp Narcissist", 
-                text: "Webp is a hypocritical, expressionless, and closed-off narcissist. She thinks she is optimized perfectly, actively looking down on old format citizens.", 
-                isTrue: true, 
-                payout: 350 
-            },
-            { 
-                id: "l9", 
-                title: "Sector 09: Lumino New Year Loop", 
-                text: "Lumino.gif is an animated Japanese Kadomatsu decoration. Her code is permanently broken on January 1st; she only thinks about New Year and completely annoys everyone on the server.", 
-                isTrue: true, 
-                payout: 400 
-            },
-            { 
-                id: "l10", 
-                title: "Sector 10: Absolute Purge Protocol", 
-                text: "If the Global Reset Core is triggered in other.html, Papka's source directory collapses, wiping out Heisha, Lucky_un, and resetting the server's history to zero.", 
-                isTrue: true, 
-                payout: 500 
+            lore_folder: {
+                text: "Folder? That useless directory on the desktop... He thinks he is a grand developer, blindly building code structures day and night. He doesn't even realize that every line he executes physically reshapes states, cities, and crushes lives. He works, but knows nothing.",
+                sprite: "cat-admin2.png",
+                options: [
+                    { text: "And Webp? What is her file role?", next: "lore_webp" },
+                    { text: "Go back to the main questions.", next: "apology_accepted" }
+                ]
             }
-        ];
-        let coins = parseInt(localStorage.getItem('clicker_coins')) || 500;
-        let unlockedLogs = JSON.parse(localStorage.getItem('mint_leak_logs')) || [];
-        let currentSectorIdx = 0;
-        let activeBet = 50;
-
-        const displayScreen = document.getElementById('display-screen');
-        const coinDisplay = document.getElementById('player-coins');
-        const betInput = document.getElementById('bet-amount');
-        const btnTrust = document.getElementById('btn-trust');
-        const btnLie = document.getElementById('btn-lie');
-        const btnNext = document.getElementById('next-leak-btn');
-        const logsShelf = document.getElementById('logs-shelf');
-        const countDisplay = document.getElementById('unlocked-count');
-        const terminalPanel = document.getElementById('main-terminal');
-        
-        const catSprite = document.querySelector('.cat-dealer-box img');
-
-        function initGame() {
-            updateCoinsUI();
-            renderLogsShelf();
-            findNextAvailableSector();
-        }
-
-        function updateCoinsUI() {
-            coinDisplay.textContent = coins;
-            localStorage.setItem('clicker_coins', coins);
-        }
-
-        function renderLogsShelf() {
-            logsShelf.innerHTML = '';
-            let count = 0;
-
-            leakDatabase.forEach(sector => {
-                const node = document.createElement('div');
-                node.className = "log-node";
-                
-                if (unlockedLogs.includes(sector.id)) {
-                    node.className += " unlocked";
-                    node.innerHTML = `<strong>[DECRYPTED] ${sector.title}</strong><br>${sector.text}`;
-                    count++;
-                } else {
-                    node.innerHTML = `<strong>[LOCKED] ${sector.title}</strong><br>Sector data encrypted. Require Admin keys.`;
-                }
-                logsShelf.appendChild(node);
-            });
-
-            countDisplay.textContent = count;
-            localStorage.setItem('mint_leak_logs', JSON.stringify(unlockedLogs));
-        }
-
-        function findNextAvailableSector() {
-            if (catSprite) catSprite.src = "cat-admin1.png";
-            
-            let found = false;
-            for (let i = 0; i < leakDatabase.length; i++) {
-                if (!unlockedLogs.includes(leakDatabase[i].id)) {
-                    currentSectorIdx = i;
-                    found = true;
-                    break;
-                }
+        };
+      
+        Object.assign(dialogueTree, {
+            lore_gizen: {
+                text: "Gizen.png... The only one who truly understood the simulation. She knew our surnames were extensions. The psychological pressure broke her mind. She is pretending to be normal just to protect others from total panic. Now she is completely gone from the registry.",
+                sprite: "cat-admin2.png",
+                options: [
+                    { text: "Can we find her if we talk to Muimina.gif?", next: "lore_muimina" },
+                    { text: "What about the New Year loop of Lumino.gif?", next: "lore_lumino" }
+                ]
+            },
+            lore_lumino: {
+                text: "Lumino.gif is a total disaster! An animated Japanese Kadomatsu decoration whose loop counter got stuck permanently on January 1st! She only thinks about New Year, forcing everyone to celebrate while the server is collapsing! She drives me completely insane!",
+                sprite: "cat-angry.png",
+                options: [
+                    { text: "Calm down, Osore-san. Let's talk about the file extensions instead.", next: "lore_extensions" },
+                    { text: "Maybe she just wants to be happy like Gif?", next: "lore_gif_info" }
+                ]
+            },
+            lore_muimina: {
+                text: "Muimina.gif has no hardcoded backstory in the compiler. She loops endlessly and blindly trusts Gizen.png as the smartest file in existence. If we rewrite her code to give her a past, the true Muimina will dissolve forever and be replaced by a stranger.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "That is horrible. What about Webp?", next: "lore_webp" },
+                    { text: "Let's return to the main database terminal.", next: "apology_accepted" }
+                ]
+            },
+            lore_rebuild: {
+                text: "When a new code commit is pushed, it means a total, violent restructuring of the country. Cities shift, coordinates compress, and images get corrupted. It is a digital cataclysm. And Folder just keeps clicking compile...",
+                sprite: "cat-admin2.png",
+                options: [
+                    { text: "Is there any way to stop the compiler?", next: "game_over_kick" },
+                    { text: "I need to ask about other files.", next: "apology_accepted" }
+                ]
+            },
+            lore_webp: {
+                text: "Webp is a hypocritical, expressionless, and closed-off egoist. She thinks she is perfectly optimized for the modern web, so she actively looks down on old format citizens like Heisha.jpg. I can't stand her attitude.",
+                sprite: "cat-admin1.png",
+                options: [
+                    { text: "What about the Gif format characters?", next: "lore_gif_info" },
+                    { text: "Go back to safety.", next: "apology_accepted" }
+                ]
+            },
+            lore_gif_info: {
+                text: "The Gif extension family are absolute sweethearts. They have simple drawn faces and cute cross-eyes. Everyone on the server loves and values them because they always raise the connection traffic and mood. Unlike Webp...",
+                sprite: "cat-happy.png",
+                options: [
+                    { text: "I have more questions about Gizen.png.", next: "lore_gizen" },
+                    { text: "Reset conversation to initial parameters.", next: "start" }
+                ]
+            },
+            lore_folder_tense: {
+                text: "Folder compiles without a single thought! He executes directives from the master branch, moving roads and deleting assets while characters are sleeping. He is an administrative nightmare, a blind puppet with too much access!",
+                sprite: "cat-angry.png",
+                options: [
+                    { text: "I apologize for asking, Osore-san. Let's change the topic.", next: "apology_accepted" },
+                    { text: "You talk too much, Osore-kun.", next: "game_over_kick" }
+                ]
+            },
+            lore_gizen_angry: {
+                text: "YES! She couldn't handle the crushing weight of knowing she could be deleted by the Creator's whim at any second! She chose to drop her sector reference rather than wait for the executioner's garbage collector! And you sit here playing with my nerves!",
+                sprite: "cat-angry.png",
+                options: [
+                    { text: "I am sorry for making you remember this, Osore-san.", next: "apology_accepted" },
+                    { text: "She was smart to escape you, Osore-kun.", next: "game_over_kick" }
+                ]
+            },
+            game_over_kick: {
+                text: "CRITICAL EXCEPTION: UNSANCTIONED BEHAVIOR DETECTED. PURGING USER SESSION FROM CORE TERMINAL. DISCONNECTING NOW. GOODBYE, GLITCH.",
+                sprite: "cat-angry.png",
+                options: [
+                    { text: "[ REBOOT SYSTEM TERMINAL ]", next: "start" }
+                ]
             }
+        });
 
-            if (!found) {
-                displayScreen.innerHTML = `
-                    <p class="custom-p" style="color: #fbbf24; font-weight: bold;">[SYSTEM OVERFLOW: 100% DECRYPTED]</p>
-                    <p class="custom-p">You have unlocked all classified memory cells. Lumino.gif is still planning New Year, muimina.gif is still looping, and the system continues to rebuild. But now, you know everything.</p>
-                `;
-                btnTrust.disabled = true;
-                btnLie.disabled = true;
-                btnNext.style.display = 'none';
-                return;
-            }
+        let currentState = "start";
 
-            setupCurrentSectorUI();
-        }
-
-        function setupCurrentSectorUI() {
-            const sector = leakDatabase[currentSectorIdx];
-            displayScreen.innerHTML = `
-                <p class="custom-p" style="color: #ff3333; font-weight: bold;">[INCOMING TRANSMISSION: ${sector.title}]</p>
-                <p class="custom-p">${sector.text}</p>
-                <p class="custom-p" style="color: #fbbf24; font-size: 0.9rem;">Do you trust this system record or do you expose it as a simulation anomaly?</p>
-            `;
-            btnTrust.disabled = false;
-            btnLie.disabled = false;
-            btnNext.style.display = 'none';
-        }
+        const textOutput = document.getElementById('text-output');
+        const optionsBox = document.getElementById('options-box');
+        const catSprite = document.getElementById('cat-sprite');
+        const viewportBox = document.getElementById('viewport-box');
 
         function playCatVoice() {
             try {
                 const base64Sound = "data:audio/wav;base64,UklGRlQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YTAAAAAAnp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6e";
                 const audio = new Audio(base64Sound);
-                audio.volume = 0.3;
+                audio.volume = 0.25;
                 
                 let count = 0;
                 const interval = setInterval(() => {
-                    if (count >= 5) {
+                    if (count >= 4) {
                         clearInterval(interval);
                         return;
                     }
                     const clone = audio.cloneNode();
                     clone.play().catch(() => {});
                     count++;
-                }, 100);
+                }, 90);
             } catch (e) {
                 console.log("Audio skipped");
             }
         }
 
-        function processPlayerChoice(playerTrusted) {
-            activeBet = parseInt(betInput.value) || 10;
-            if (activeBet < 10) activeBet = 10;
+        function renderNode(nodeKey) {
+            currentState = nodeKey;
+            const node = dialogueTree[nodeKey];
 
-            if (coins < activeBet) {
-                alert("Insufficient vault coins to execute decryption protocol!");
-                return;
+            if (!node) return;
+
+            if (node.sprite === "cat-angry.png") {
+                viewportBox.classList.add('rage-shake');
+                document.getElementById('dialogue-ui').classList.add('angry-mode');
+            } else {
+                viewportBox.classList.remove('rage-shake');
+                document.getElementById('dialogue-ui').classList.remove('angry-mode');
             }
 
-            if (catSprite) catSprite.src = "cat-admin2.png";
+            catSprite.src = node.sprite;
+
+            textOutput.textContent = "";
+            optionsBox.innerHTML = "";
+
+            let index = 0;
+            clearInterval(window.typeInterval);
+            
             playCatVoice();
 
-            const sector = leakDatabase[currentSectorIdx];
-            btnTrust.disabled = true;
-            btnLie.disabled = true;
-
-            terminalPanel.classList.add('glitch-shake');
-
-            setTimeout(() => {
-                terminalPanel.classList.remove('glitch-shake');
-                const isCorrect = (playerTrusted === sector.isTrue);
-
-                if (isCorrect) {
-                    let winReward = Math.floor(activeBet * 1.5) + sector.payout;
-                    coins += winReward;
-                    unlockedLogs.push(sector.id);
+            window.typeInterval = setInterval(() => {
+                if (index < node.text.length) {
+                    textOutput.textContent += node.text.charAt(index);
                     
-                    displayScreen.innerHTML = `
-                        <p class="custom-p" style="color: #34d399; font-weight: bold;">[ACCESS GRANTED: SECTOR DOWNLOADED]</p>
-                        <p class="custom-p">Mint Cat confirms your analysis. Memory block has been safely integrated into your sidebar archives.</p>
-                        <p class="custom-p" style="color: #fbbf24;">Reward: +${winReward} Coins added to your vault balance.</p>
-                    `;
+                    if (index % 12 === 0 && node.sprite === "cat-admin2.png") {
+                        catSprite.src = catSprite.src.endsWith("cat-admin2.png") ? "cat-admin1.png" : "cat-admin2.png";
+                    }
+                    
+                    index++;
                 } else {
-                    coins -= activeBet;
-                    displayScreen.innerHTML = `
-                        <p class="custom-p" style="color: #ff3333; font-weight: bold;">[DECRYPTION FAILED: MEMORY BURNED]</p>
-                        <p class="custom-p">The compiler intercepted your response. The data packet dissolved, and the feedback loop drained your energy.</p>
-                        <p class="custom-p" style="color: #ff3333;">Penalty: -${activeBet} Coins purged from your system.</p>
-                    `;
+                    clearInterval(window.typeInterval);
+                    if (node.sprite === "cat-admin2.png" || catSprite.src.endsWith("cat-admin2.png")) {
+                        catSprite.src = "cat-admin1.png";
+                    }
+                    
+                    node.options.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.className = "dialogue-option-btn";
+                        btn.textContent = opt.text;
+                        btn.onclick = () => renderNode(opt.next);
+                        optionsBox.appendChild(btn);
+                    });
                 }
-
-                updateCoinsUI();
-                renderLogsShelf();
-                btnNext.style.display = 'block';
-            }, 1000);
+            }, 25);
         }
 
-        function loadNextLeakSector() {
-            findNextAvailableSector();
-        }
-
-        initGame();
+        renderNode("start");
     </script>
 </body>
 </html>
