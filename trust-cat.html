@@ -380,7 +380,7 @@
         dialogueTree.lore_folder.options.unshift({ text: "Why does Folder have no file extension?", next: "lore_folder_blind" });
         dialogueTree.lore_gizen.options.push({ text: "Tell me about her disappearance and the Creator.", next: "admin_escape_story" });
 
-        let currentState = "start";
+               let currentState = "start";
 
         const textOutput = document.getElementById('text-output');
         const optionsBox = document.getElementById('options-box');
@@ -422,7 +422,7 @@
                 document.getElementById('dialogue-ui').classList.remove('angry-mode');
             }
 
-            catSprite.src = node.sprite;
+            if (catSprite) catSprite.src = node.sprite;
 
             textOutput.textContent = "";
             optionsBox.innerHTML = "";
@@ -436,14 +436,14 @@
                 if (index < node.text.length) {
                     textOutput.textContent += node.text.charAt(index);
                     
-                    if (index % 12 === 0 && (node.sprite === "cat-admin2.png" || catSprite.src.endsWith("cat-admin2.png"))) {
+                    if (index % 12 === 0 && catSprite && (node.sprite === "cat-admin2.png" || catSprite.src.endsWith("cat-admin2.png"))) {
                         catSprite.src = catSprite.src.endsWith("cat-admin2.png") ? "cat-admin1.png" : "cat-admin2.png";
                     }
                     
                     index++;
                 } else {
                     clearInterval(window.typeInterval);
-                    if (node.sprite === "cat-admin2.png" || catSprite.src.endsWith("cat-admin2.png")) {
+                    if (catSprite && (node.sprite === "cat-admin2.png" || catSprite.src.endsWith("cat-admin2.png"))) {
                         catSprite.src = "cat-admin1.png";
                     }
                     
@@ -458,7 +458,11 @@
             }, 25);
         }
 
-        renderNode("start");
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                renderNode("start");
+            }, 200);
+        });
     </script>
 </body>
 </html>
