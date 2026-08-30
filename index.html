@@ -123,6 +123,7 @@
             border-radius: 25px;
             margin-top: 15px;
             box-shadow: 0 4px #0f0805;
+            cursor: pointer;
         }
         .claim-btn:active {
             transform: translateY(2px);
@@ -134,6 +135,7 @@
             border-color: #3d2314;
             box-shadow: none;
             transform: none;
+            cursor: default;
         }
         #warning-screen {
             position: fixed;
@@ -164,6 +166,7 @@
             display: none;
             z-index: 100001;
             box-shadow: 0 0 20px #ff0000;
+            cursor: pointer;
         }
         #achievement-popup {
             position: fixed;
@@ -237,6 +240,7 @@
             border-radius: 10px;
             margin-top: 20px;
             transition: all 0.2s;
+            cursor: pointer;
         }
         .reset-btn:hover {
             background: #ff3333;
@@ -255,206 +259,249 @@
         <div style="font-size: 1.6rem; margin-top: 20px; color: #fff; max-width: 700px; line-height: 1.4;">
             This site will flash rapid bright colors in a few seconds. If you have epilepsy or sensitivity to light, please leave now.
         </div>
-        <div style="font-size: 2rem; margin-top: 30px; color: #ffcc00;">PARTY STARTS IN: <span id="timer-count">20</span>s</div>
+        <div style="font-size: 2rem; margin-top: 30px; color: #ffcc00;">PARTY STARTS IN: <span id="timer-count">20</span> s</div>
     </div>
 
     <div class="nav-links">
         <a href="index.html" class="nav-button">HOME FACTS 📑</a>
         <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
-        <a href="clicker.html" class="nav-button">MINT CLICKER 🪙</a>
-        <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
+        <a href="caterpillar.html" class="nav-button">OTHER ZONE 🐛</a>
     </div>
 
-    <h1>MINT NEKO FACTS</h1>
+    <h1>Mint Neko Facts</h1>
 
     <div class="fact-container">
-        <div id="fact-num">Fact #--</div>
-        <div id="fact-text">Loading neko intelligence...</div>
+        <div id="fact-num">Fact #1</div>
+        <div id="fact-text">Loading cat intelligence...</div>
         <button class="claim-btn" id="claim-button" onclick="claimAchievement()">Claim Achievement 🏆</button>
-    </div>
-    
-    <div style="color: #6ee7b7; font-weight: bold; font-size: 1.1rem;">
-        Progress: <span id="progress-count">0</span> / 51 Achievements Collected
+        <button class="claim-btn" style="background: #4b2e1e; color: #6ee7b7;" onclick="nextFact()">Next Fact</button>
     </div>
 
     <div class="grid">
-        <div class="box" id="cbox1"><img src="cat1.jpg" alt="Mint Cat" class="top-focus"></div>
-        <div class="box" id="cbox2"><img src="cat2.jpg" alt="Neko Photo"></div>
-        <div class="box" id="cbox3"><img src="cat3.jpg" alt="Chocolate Cat"></div>
+        <div class="box">
+            <h3>Mint Cat</h3>
+            <img src="cat1.png" alt="Mint Cat" id="cat-img-1">
+        </div>
+        <div class="box">
+            <h3>Neko Photo</h3>
+            <img src="cat2.png" alt="Neko" id="cat-img-2">
+        </div>
+        <div class="box">
+            <h3>Chocolate Cat</h3>
+            <img src="cat3.png" alt="Chocolate Cat" id="cat-img-3" class="top-focus">
+        </div>
     </div>
 
     <div class="achievements-panel">
-        <div class="achievements-title">🐾 Your Saved Achievement Badges 🐾</div>
-        <div class="achievements-grid" id="badges-container"></div>
-        <button class="reset-btn" onclick="resetAchievements()">Reset Achievements ⚙️</button>
+        <div class="achievements-title">Progress: <span id="progress-text">0 / 51</span> Achievements Collected</div>
+        <div class="achievements-grid" id="achievements-box"></div>
+        <button class="reset-btn" onclick="resetAchievements()">Reset Achievements ⚙</button>
     </div>
     <script>
-        function loadRandomFact() {
-            if (unlockedFacts.length >= 50) {
-                currentFactIndex = Math.floor(Math.random() * 50);
-                document.getElementById('fact-num').innerText = `Fact #${currentFactIndex + 1}`;
-                document.getElementById('fact-text').innerText = catFacts[currentFactIndex];
-                document.getElementById('claim-button').disabled = true;
-                document.getElementById('claim-button').innerText = "All Unlocked! 🌟";
-                
-                if (!partyHasHappened && !partyIntervals.length) {
-                    triggerWarning();
-                }
-                return;
-            }
+        const catFacts = [
+            "Cats use their whiskers to check if they can fit through spaces.",
+            "A cat has 32 muscles in each outer ear.",
+            "Cats sleep for about 70% of their lives.",
+            "The first cat in space was a French cat named Felicette.",
+            "Cats can make over 100 different vocal sounds.",
+            "A cat's nose print is completely unique, like a human fingerprint.",
+            "Cats are near-sighted, but their peripheral and night vision are amazing.",
+            "Most cats are lactose intolerant and should not drink cow's milk.",
+            "Cats walk like camels and giraffes, moving both right legs then both left legs.",
+            "A group of cats is officially called a clowder.",
+            "Cats have 230 bones, while humans only have 206.",
+            "A cat's collarbone is not attached to its other bones.",
+            "Cats use their tails to maintain perfect balance when jumping.",
+            "Purring can mean a cat is happy, stressed, or trying to heal itself.",
+            "Cats sweat only through their paws.",
+            "A domestic cat can run at speeds of up to 30 miles per hour.",
+            "Cats have a third eyelid called the haw to protect their eyes.",
+            "The oldest known pet cat was found in a 9,500-year-old grave in Cyprus.",
+            "Cats can rotate their ears 180 degrees independently.",
+            "A cat's jaw cannot move sideways, so they cannot chew large pieces of food.",
+            "A cat can jump up to six times its height.",
+            "The wealthy cat Blackie inherited 7 million British pounds from his owner.",
+            "Cats have an extra organ called the Jacobson's organ to taste smells.",
+            "Male cats are more likely to be left-pawed, while females are right-pawed.",
+            "Cats don't have a sweet tooth and cannot taste sugary things.",
+            "A cat's heart beats two to three times faster than a human heart.",
+            "Black cats are considered good luck in Japan and parts of the UK.",
+            "Isaac Newton is often credited with inventing the cat door.",
+            "Cats grooming themselves helps regulate their body temperature.",
+            "A cat's pregnancy lasts for about 63 to 65 days.",
+            "Kittens lose their baby teeth just like human children do.",
+            "Cats prefer food that is at room temperature.",
+            "A cat's whiskers are roughly as wide as its body.",
+            "Cats have excellent hearing and can detect ultrasonic noises.",
+            "The claws on a cat's front paws are sharper than the back ones.",
+            "Cats rub against people to mark them with scent glands on their faces.",
+            "Ancient Egyptians shaved their eyebrows as a sign of mourning when a cat died.",
+            "A cat's brain is 90% biologically similar to a human brain.",
+            "Cats can dream just like humans during the REM sleep phase.",
+            "A cat's vision is restricted to shades of blue, green, and gray.",
+            "Stubbs the ginger cat was the honorary mayor of Talkeetna, Alaska for 20 years.",
+            "Cats have scent glands along their tails, forehead, lips, and chin.",
+            "A cat can spend up to a third of its waking hours grooming.",
+            "Kittens are born blind and deaf, opening eyes after 7 to 10 days.",
+            "Cats use their claws to stretch and exercise their muscles.",
+            "Indoor cats live significantly longer than outdoor cats on average.",
+            "A house cat is 95.6% genetically identical to a tiger.",
+            "Cats are crepuscular, meaning they are most active during dawn and dusk.",
+            "The sound of a purr has a frequency that can improve bone density.",
+            "Every cat is a master of finding the absolute warmest spot in a room."
+        ];
 
-            let availableIndexes = [];
+        let currentFactIndex = 0;
+        let unlockedAchievements = JSON.parse(localStorage.getItem('mint_neko_achieve')) || [];
+        let partyTimer = null;
+        let flashInterval = null;
+        let candyInterval = null;
+
+        function init() {
+            renderAchievementsGrid();
+            showFact(0);
+        }
+
+        function renderAchievementsGrid() {
+            const box = document.getElementById('achievements-box');
+            box.innerHTML = '';
+            
             for (let i = 0; i < 50; i++) {
-                if (!unlockedFacts.includes(i)) {
-                    availableIndexes.push(i);
-                }
+                const badge = document.createElement('div');
+                badge.className = 'badge' + (unlockedAchievements.includes(i) ? ' unlocked' : '');
+                badge.id = `badge-${i}`;
+                badge.textContent = `Badge #${i + 1}`;
+                box.appendChild(badge);
             }
 
-            currentFactIndex = availableIndexes[Math.floor(Math.random() * availableIndexes.length)];
-            document.getElementById('fact-num').innerText = `Fact #${currentFactIndex + 1}`;
-            document.getElementById('fact-text').innerText = catFacts[currentFactIndex];
-            document.getElementById('claim-button').disabled = false;
-            document.getElementById('claim-button').innerText = "Claim Achievement 🏆";
+            const specialBadge = document.createElement('div');
+            specialBadge.className = 'badge special' + (unlockedAchievements.includes(50) ? ' unlocked' : '');
+            specialBadge.id = 'badge-50';
+            specialBadge.textContent = 'Grand Party 👑';
+            box.appendChild(specialBadge);
+
+            document.getElementById('progress-text').textContent = `${unlockedAchievements.length} / 51`;
+        }
+
+        function showFact(index) {
+            currentFactIndex = index;
+            document.getElementById('fact-num').textContent = `Fact #${index + 1}`;
+            document.getElementById('fact-text').textContent = catFacts[index];
+            
+            const btn = document.getElementById('claim-button');
+            if (unlockedAchievements.includes(index)) {
+                btn.disabled = true;
+                btn.textContent = "Unlocked ✔";
+            } else {
+                btn.disabled = false;
+                btn.textContent = "Claim Achievement 🏆";
+            }
+        }
+
+        function nextFact() {
+            let nextIndex = (currentFactIndex + 1) % catFacts.length;
+            showFact(nextIndex);
         }
 
         function claimAchievement() {
-            if (!unlockedFacts.includes(currentFactIndex)) {
-                unlockedFacts.push(currentFactIndex);
-                localStorage.setItem('unlockedFacts', JSON.stringify(unlockedFacts));
-                
-                const badge = document.getElementById(`badge-${currentFactIndex}`);
-                if (badge) badge.classList.add('unlocked');
-                
-                playAudio('https://mixkit.co');
-                updateProgress();
-
-                if (unlockedFacts.length >= 50) {
-                    if (!partyHasHappened) {
-                        triggerWarning();
-                    } else {
-                        loadRandomFact();
-                    }
-                } else {
-                    loadRandomFact();
-                }
+            if (!unlockedAchievements.includes(currentFactIndex)) {
+                unlockedAchievements.push(currentFactIndex);
+                saveAndRefresh();
+                triggerPopup(`Unlocked Badge #${currentFactIndex + 1}!`);
+                checkSecretCondition();
             }
         }
 
-        function updateProgress() {
-            let total = unlockedFacts.length;
-            if (partyUnlocked) total += 1;
-            document.getElementById('progress-count').innerText = total;
+        function saveAndRefresh() {
+            localStorage.setItem('mint_neko_achieve', JSON.stringify(unlockedAchievements));
+            renderAchievementsGrid();
+            showFact(currentFactIndex);
         }
 
-        function triggerWarning() {
-            const warningScreen = document.getElementById('warning-screen');
-            warningScreen.style.display = 'flex';
-            let timeLeft = 20;
+        function triggerPopup(text) {
+            const popup = document.getElementById('achievement-popup');
+            popup.innerHTML = `New Achievement:<br>${text}`;
+            popup.style.right = '20px';
+            setTimeout(() => {
+                popup.style.right = '-350px';
+            }, 3000);
+        }
+
+        function checkSecretCondition() {
+            const hasAllFifty = catFacts.keys().every(i => unlockedAchievements.includes(i));
+            if (hasAllFifty && !unlockedAchievements.includes(50)) {
+                startSecretCountdown();
+            }
+        }
+
+        function startSecretCountdown() {
+            const warnScreen = document.getElementById('warning-screen');
+            const timerCount = document.getElementById('timer-count');
+            warnScreen.style.display = 'flex';
             
-            const timer = setInterval(() => {
+            let timeLeft = 20;
+            timerCount.textContent = timeLeft;
+
+            partyTimer = setInterval(() => {
                 timeLeft--;
-                document.getElementById('timer-count').innerText = timeLeft;
+                timerCount.textContent = timeLeft;
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    warningScreen.style.display = 'none';
-                    startPartyEffect();
+                    clearInterval(partyTimer);
+                    warnScreen.style.display = 'none';
+                    startCrazyParty();
                 }
             }, 1000);
         }
 
-        function showAchievementPopup() {
-            const popup = document.getElementById('achievement-popup');
-            popup.style.right = '20px';
-            
-            setTimeout(() => {
-                popup.style.right = '-350px';
-            }, 4000);
-        }
-
-        function startPartyEffect() {
-            document.getElementById('stop-party-btn').style.display = 'block';
-            document.getElementById('cbox1').classList.add('dancing');
-            document.getElementById('cbox2').classList.add('dancing');
-            document.getElementById('cbox3').classList.add('dancing');
-
-            if (!partyUnlocked) {
-                partyUnlocked = true;
-                localStorage.setItem('partyUnlocked', 'true');
-                const sBadge = document.getElementById('badge-special');
-                if (sBadge) sBadge.classList.add('unlocked');
-                updateProgress();
-                showAchievementPopup();
+        function startCrazyParty() {
+            if (!unlockedAchievements.includes(50)) {
+                unlockedAchievements.push(50);
+                saveAndRefresh();
             }
 
-            const flashInterval = setInterval(() => {
-                const colors = ['#1f110a', '#34d399', '#4b2e1e', '#6ee7b7', '#2b1810', '#a7f3d0'];
-                document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            }, 150);
-            partyIntervals.push(flashInterval);
+            document.getElementById('stop-party-btn').style.display = 'block';
 
-            const candyInterval = setInterval(() => {
-                const candies = ['🍬', '🍫', '🍭', '🍩', '🍪', '💚', '🤎'];
-                const candy = document.createElement('div');
-                candy.className = 'candy-emoji';
-                candy.innerText = candies[Math.floor(Math.random() * candies.length)];
-                candy.style.left = Math.random() * 100 + 'vw';
-                document.body.appendChild(candy);
-                setTimeout(() => candy.remove(), 3000);
+            document.getElementById('cat-img-1').classList.add('dancing');
+            document.getElementById('cat-img-2').classList.add('dancing');
+            document.getElementById('cat-img-3').classList.add('dancing');
+
+            flashInterval = setInterval(() => {
+                const colors = ['#ff0055', '#00ffcc', '#ffcc00', '#00ff00', '#9900ff', '#ff5500'];
+                document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
             }, 100);
-            partyIntervals.push(candyInterval);
+
+            candyInterval = setInterval(() => {
+                const candies = ['🍬', '🍭', '🍫', '🍩', '🍪', '🐱', '✨'];
+                const emoji = document.createElement('div');
+                emoji.className = 'candy-emoji';
+                emoji.textContent = candies[Math.floor(Math.random() * candies.length)];
+                emoji.style.left = Math.random() * 100 + 'vw';
+                document.body.appendChild(emoji);
+                setTimeout(() => emoji.remove(), 3000);
+            }, 100);
         }
 
         function stopParty() {
-            partyIntervals.forEach(clearInterval);
-            partyIntervals = [];
-            
-            document.querySelectorAll('.candy-emoji').forEach(el => el.remove());
-            
-            document.getElementById('stop-party-btn').style.display = 'none';
-            document.getElementById('cbox1').classList.remove('dancing');
-            document.getElementById('cbox2').classList.remove('dancing');
-            document.getElementById('cbox3').classList.remove('dancing');
-            
+            clearInterval(flashInterval);
+            clearInterval(candyInterval);
             document.body.style.backgroundColor = '#1f110a';
-            
-            partyHasHappened = true;
-            localStorage.setItem('partyHasHappened', 'true');
-            
-            loadRandomFact();
+            document.getElementById('stop-party-btn').style.display = 'none';
+
+            document.getElementById('cat-img-1').classList.remove('dancing');
+            document.getElementById('cat-img-2').classList.remove('dancing');
+            document.getElementById('cat-img-3').classList.remove('dancing');
         }
 
         function resetAchievements() {
-            if (confirm("Are you sure you want to reset your achievements?")) {
-                if (confirm("ARE YOU ABSOLUTELY SURE!??")) {
-                    if (confirm("ON 101% ?!")) {
-                        if (confirm("OH WELL, okay then...")) {
-                            alert("Don't blame me later!");
-                            
-                            localStorage.removeItem('unlockedFacts');
-                            localStorage.removeItem('partyUnlocked');
-                            localStorage.removeItem('partyHasHappened');
-                            
-                            unlockedFacts = [];
-                            partyUnlocked = false;
-                            partyHasHappened = false;
-                            
-                            initAchievements();
-                            loadRandomFact();
-                        }
-                    }
-                }
-            }
+            clearInterval(partyTimer);
+            stopParty();
+            document.getElementById('warning-screen').style.display = 'none';
+            localStorage.removeItem('mint_neko_achieve');
+            unlockedAchievements = [];
+            init();
         }
 
-        function playAudio(url) {
-            const audio = new Audio(url);
-            audio.play().catch(() => {});
-        }
-
-        window.onload = function() {
-            initAchievements();
-            loadRandomFact();
-        };
+        init();
     </script>
 </body>
 </html>
