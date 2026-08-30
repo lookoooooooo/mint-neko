@@ -435,7 +435,7 @@
         }
 
              function checkSecretCondition() {
-            const hasAllFifty = unlockedAchievements.length >= 50;
+            const hasAllFifty = catFacts.keys().every(i => unlockedAchievements.includes(i));
             if (hasAllFifty && !unlockedAchievements.includes(50)) {
                 startSecretCountdown();
             }
