@@ -3,139 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capsule Toy Machine</title>
+    <title>Mega Gacha Studio</title>
     <style>
         * {
             cursor: url('cursor1.png') 16 16, auto !important;
+            box-sizing: border-box;
         }
         body {
             background-color: #1f110a;
             color: #34d399;
             font-family: 'Courier New', Courier, monospace;
-            padding: 20px;
+            padding: 10px;
             text-align: center;
             overflow-x: hidden;
+            margin: 0;
+            min-height: 100vh;
         }
         .nav-links {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
         }
         .nav-button {
             background: #4b2e1e;
             color: #6ee7b7;
-            border: 3px dashed #34d399;
-            padding: 10px 20px;
-            font-size: 1rem;
+            border: 2px dashed #34d399;
+            padding: 8px 16px;
+            font-size: 0.9rem;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 8px;
             text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 4px 10px rgba(52, 211, 153, 0.2);
-            transition: transform 0.2s, background 0.2s;
         }
-        .nav-button:hover {
-            transform: scale(1.05);
-            background: #3d2314;
-        }
-        h1 {
-            color: #6ee7b7;
-            text-shadow: 4px 4px #3d2314;
-            font-size: 3.5rem;
-            letter-spacing: 1px;
-        }
-        .game-container {
-            max-width: 950px;
+        .game-layout {
+            max-width: 1100px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            padding: 10px;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
-        .panel {
+        @media(min-width: 768px) {
+            .game-layout { grid-template-columns: 1.2fr 1fr; }
+        }
+        .main-machine-panel {
             background: #2b1810;
-            border: 4px solid #34d399;
-            border-radius: 20px;
+            border: 5px solid #34d399;
+            border-radius: 24px;
             padding: 20px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            box-shadow: 0 0 25px rgba(52, 211, 153, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             position: relative;
         }
-        .panel-title {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #fbbf24;
-            margin-bottom: 15px;
-            border-bottom: 2px dashed #34d399;
-            padding-bottom: 8px;
-        }
-        .oven-box {
-            position: relative;
-            display: inline-block;
-            margin: 15px 0;
-        }
-        .alert-indicator {
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            font-size: 2.5rem;
-            animation: bounce 0.5s infinite alternate;
-            display: none;
-        }
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-10px); }
-        }
-        .machine-screen {
+        .machine-header {
+            width: 100%;
             background: #150b06;
             border: 3px inset #34d399;
-            height: 160px;
             border-radius: 12px;
-            margin: 15px 0;
+            padding: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .screen-container {
+            width: 100%;
+            height: 240px;
+            background: #000;
+            border: 4px inset #6ee7b7;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .screen-content {
+            font-size: 5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            width: 100%;
+            height: 100%;
         }
-        .machine-screen img {
-            max-width: 90%;
-            max-height: 90%;
+        .screen-content img {
+            max-width: 85%;
+            max-height: 85%;
             object-fit: contain;
             image-rendering: pixelated;
-            border-radius: 8px;
         }
-        .action-btn {
+        .color-preview {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            box-shadow: inset -10px -10px 15px rgba(0,0,0,0.4);
+        }
+        .selector-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        .arrow-btn {
+            background: #4b2e1e;
+            color: #34d399;
+            border: 3px solid #34d399;
+            font-size: 1.8rem;
+            font-weight: bold;
+            width: 60px;
+            height: 50px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .arrow-btn:active { transform: scale(0.95); }
+        .machine-info {
+            flex-grow: 1;
+            background: #150b06;
+            border: 2px dashed #6ee7b7;
+            padding: 8px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .crank-btn {
             background: #fbbf24;
             color: #1f110a;
-            border: 3px solid #fff;
-            padding: 12px 24px;
-            font-size: 1.1rem;
+            border: 4px solid #fff;
+            padding: 15px;
+            font-size: 1.4rem;
             font-weight: bold;
-            border-radius: 20px;
-            box-shadow: 0 4px #b45309;
-            cursor: pointer;
+            border-radius: 50px;
             width: 100%;
+            box-shadow: 0 6px #b45309;
+            cursor: pointer;
         }
-        .action-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px #b45309;
+        .crank-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 3px #b45309;
         }
-        .action-btn:disabled {
+        .crank-btn:disabled {
             background: #4b2e1e;
             color: #1f110a;
             border-color: #3d2314;
             box-shadow: none;
             transform: none;
-            cursor: default;
         }
-        .shake {
-            animation: shakeAnim 0.1s infinite;
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
-        @keyframes shakeAnim {
+        .sub-box {
+            background: #2b1810;
+            border: 4px solid #34d399;
+            border-radius: 20px;
+            padding: 15px;
+        }
+        .sub-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fbbf24;
+            border-bottom: 2px dashed #34d399;
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+        }
+        .grid-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 10px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .inv-card {
+            background: #150b06;
+            border: 2px solid #3d2314;
+            border-radius: 10px;
+            padding: 5px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 95px;
+        }
+        .inv-card.active { border-color: #34d399; }
+        .inv-card img { width: 50px; height: 50px; object-fit: contain; }
+        .inv-sphere { width: 45px; height: 40px; border-radius: 50%; border: 2px solid #fff; }
+        .inv-count {
+            position: absolute;
+            bottom: 2px; right: 4px;
+            background: #4b2e1e;
+            color: #6ee7b7;
+            font-size: 0.65rem;
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .sell-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .inv-card:hover .sell-overlay { display: flex; }
+        .sell-btn {
+            background: #ff3333;
+            color: #fff;
+            border: 1px solid #fff;
+            font-size: 0.65rem;
+            font-weight: bold;
+            padding: 3px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .wheel-container {
+            background: #150b06;
+            border: 3px inset #34d399;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .reset-corner-btn {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: none; border: none;
+            font-size: 1.2rem; cursor: pointer;
+            opacity: 0.5; transition: opacity 0.2s;
+        }
+        .reset-corner-btn:hover { opacity: 1; }
+        .shake-screen { animation: shake 0.1s infinite; }
+        @keyframes shake {
             0% { transform: translate(2px, 1px) rotate(0deg); }
-            50% { transform: translate(-1px, -2px) rotate(-2deg); }
-            100% { transform: translate(1px, 2px) rotate(2deg); }
+            50% { transform: translate(-1px, -2px) rotate(-1deg); }
+            100% { transform: translate(1px, 2px) rotate(1deg); }
         }
     </style>
 </head>
@@ -147,205 +260,319 @@
         <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
     </div>
 
-    <h1>Capsule Toy Machine</h1>
-
-    <div class="game-container" style="max-width: 1200px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+    <div class="game-layout">
         
-        <div class="panel">
-            <div class="panel-title">Baking Oven Income</div>
-            <div class="oven-box">
-                <div style="font-size: 5rem; margin: 10px 0;" id="oven-sprite"> oven </div>
-                <div class="alert-indicator" id="oven-alert">❗</div>
+        <div class="main-machine-panel">
+            <button class="reset-corner-btn" onclick="triggerSystemWipe()">⚙️</button>
+            
+            <div class="machine-header">
+                <span>🎰 GACHA CORE</span>
+                <span style="color: #fbbf24;">💰 <span id="coin-display">0</span></span>
             </div>
-            <div style="font-size: 1.1rem; margin-bottom: 15px;" id="oven-timer-text">Ready in: 60s</div>
-            <button class="action-btn" id="claim-oven-btn" disabled>Claim Income</button>
+
+            <div class="screen-container" id="screen-viewport">
+                <div class="screen-content" id="screen-output">📦</div>
+            </div>
+
+            <div class="selector-row">
+                <button class="arrow-btn" onclick="switchMachine(-1)">&lt;</button>
+                <div class="machine-info">
+                    <div id="mach-title" style="color: #fbbf24;">COMMON CAPSULE</div>
+                    <div id="mach-cost" style="font-size: 0.9rem; color: #a7f3d0; margin-top: 4px;">Cost: 30 Coins</div>
+                </div>
+                <button class="arrow-btn" onclick="switchMachine(1)">&gt;</button>
+            </div>
+
+            <button class="crank-btn" id="crank-trigger" onclick="executeRoll()">TURN CRANK</button>
         </div>
 
-        <div class="panel" style="grid-column: 1 / -1; display: flex; justify-content: center; gap: 10px; font-size: 1.8rem; font-weight: bold; background: #150b06; border: 3px solid #34d399; border-radius: 12px; padding: 10px;">
-            <span>💰 Balance: </span>
-            <span id="balance-count">0</span>
-        </div>
+        <div class="side-panel">
+            <div class="sub-box">
+                <div class="sub-title">🔮 Secret Wheel of Fortune</div>
+                <div class="wheel-container">
+                    <div style="text-align: left;">
+                        <div id="wheel-timer" style="font-weight: bold; color: #a7f3d0;">Next Spin: Ready</div>
+                        <div style="font-size: 0.75rem; color: #6ee7b7; margin-top: 2px;">Mystery box or huge cash drops</div>
+                    </div>
+                    <button class="action-btn" id="wheel-trigger" style="width: auto; padding: 8px 16px; margin: 0;" onclick="spinSecretWheel()">Spin Wheel</button>
+                </div>
+            </div>
 
-        <div class="panel">
-            <div class="panel-title" style="color: #a7f3d0;">Common Machine</div>
-            <div class="machine-screen" id="screen-box-1" style="font-size: 4rem;">🟢</div>
-            <div style="font-size: 1.1rem; margin-bottom: 15px; font-weight: bold; color: #a7f3d0;" id="rarity-text-1">Cost: 30 Coins</div>
-            <button class="action-btn" id="roll-btn-1" onclick="rollMachine(1)">Roll Common</button>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title" style="color: #3b82f6;">Rare Machine</div>
-            <div class="machine-screen" id="screen-box-2" style="font-size: 4rem;">🔵</div>
-            <div style="font-size: 1.1rem; margin-bottom: 15px; font-weight: bold; color: #3b82f6;" id="rarity-text-2">Cost: 70 Coins</div>
-            <button class="action-btn" id="roll-btn-2" onclick="rollMachine(2)">Roll Rare</button>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title" style="color: #fbbf24;">Legendary Machine</div>
-            <div class="machine-screen" id="screen-box-3" style="font-size: 4rem;">🟡</div>
-            <div style="font-size: 1.1rem; margin-bottom: 15px; font-weight: bold; color: #fbbf24;" id="rarity-text-3">Cost: 150 Coins</div>
-            <button class="action-btn" id="roll-btn-3" onclick="rollMachine(3)">Roll Legend</button>
-        </div>
-
-        <div class="panel" style="grid-column: 1 / -1;">
-            <div class="panel-title">Your Collection Progress</div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; margin-top: 15px;" id="inventory-grid"></div>
+            <div class="sub-box">
+                <div class="sub-title">🎒 Vault Collection (<span id="collected-stat">0</span>/38)</div>
+                <div class="grid-display" id="vault-inventory"></div>
+            </div>
         </div>
 
     </div>
     <script>
-        const commonItems = ['cat1.jpg', 'cat2.jpg', 'cat3.jpg'];
-        const rareItems = ['mint1.jpg', 'mint2.jpg', 'choco1.jpg', 'choco2.jpg'];
-        const legendItems = ['cat.gif', 'helper.png', 'helper2.png'];
-
-        let coins = parseInt(localStorage.getItem('clicker_coins')) || 200;
-        let unlockedGacha = JSON.parse(localStorage.getItem('gacha_collection')) || [];
+        const megaCollection = [
+            { id: 1, type: "img", file: "cat1.jpg", tag: "COMMON" },
+            { id: 2, type: "img", file: "cat2.jpg", tag: "COMMON" },
+            { id: 3, type: "img", file: "cat3.jpg", tag: "COMMON" },
+            { id: 4, type: "img", file: "mint1.jpg", tag: "RARE" },
+            { id: 5, type: "img", file: "mint2.jpg", tag: "RARE" },
+            { id: 6, type: "img", file: "choco1.jpg", tag: "RARE" },
+            { id: 7, type: "img", file: "choco2.jpg", tag: "RARE" },
+            { id: 8, type: "img", file: "cat.gif", tag: "LEGENDARY" },
+            { id: 9, type: "img", file: "caterpillar.png", tag: "LEGENDARY" },
+            { id: 10, type: "img", file: "dragon-caterpillar.jpg", tag: "LEGENDARY" },
+            { id: 11, type: "img", file: "cursor1.png", tag: "RARE" },
+            { id: 12, type: "img", file: "cursor2.png", tag: "RARE" },
+            { id: 13, type: "img", file: "cursor3.jpg", tag: "RARE" },
+            { id: 14, type: "img", file: "helper.png", tag: "LEGENDARY" },
+            { id: 15, type: "img", file: "helper2.png", tag: "LEGENDARY" },
+            { id: 16, type: "color", val: "#a7f3d0", tag: "COMMON" },
+            { id: 17, type: "color", val: "#6ee7b7", tag: "COMMON" },
+            { id: 18, type: "color", val: "#34d399", tag: "COMMON" },
+            { id: 19, type: "color", val: "#10b981", tag: "RARE" },
+            { id: 20, type: "color", val: "#059669", tag: "RARE" },
+            { id: 21, type: "color", val: "#047857", tag: "RARE" },
+            { id: 22, type: "color", val: "#06b6d4", tag: "COMMON" },
+            { id: 23, type: "color", val: "#0f766e", tag: "RARE" },
+            { id: 24, type: "color", val: "#e6fffa", tag: "COMMON" },
+            { id: 25, type: "color", val: "#99f6e4", tag: "COMMON" },
+            { id: 26, type: "color", val: "#2dd4bf", tag: "RARE" },
+            { id: 27, type: "color", val: "#115e59", tag: "RARE" },
+            { id: 28, type: "color", val: "#854d0e", tag: "COMMON" },
+            { id: 29, type: "color", val: "#78350f", tag: "RARE" },
+            { id: 30, type: "color", val: "#451a03", tag: "LEGENDARY" },
+            { id: 31, type: "color", val: "#1f110a", tag: "LEGENDARY" },
+            { id: 32, type: "color", val: "#2b1810", tag: "COMMON" },
+            { id: 33, type: "color", val: "#b45309", tag: "RARE" },
+            { id: 34, type: "color", val: "#d97706", tag: "RARE" },
+            { id: 35, type: "color", val: "#a16207", tag: "COMMON" },
+            { id: 36, type: "color", val: "#3e2723", tag: "RARE" },
+            { id: 37, type: "color", val: "#d7ccc8", tag: "COMMON" },
+            { id: 38, type: "color", val: "#5d4037", tag: "COMMON" },
+            { id: 39, type: "emoji", val: "🐱", tag: "COMMON" }, { id: 40, type: "emoji", val: "🐈", tag: "COMMON" },
+            { id: 41, type: "emoji", val: "🐯", tag: "RARE" }, { id: 42, type: "emoji", val: "🦁", tag: "RARE" },
+            { id: 43, type: "emoji", val: "🐆", tag: "LEGENDARY" }, { id: 44, type: "emoji", val: "🦊", tag: "COMMON" },
+            { id: 45, type: "emoji", val: "🦝", tag: "COMMON" }, { id: 46, type: "emoji", val: "🐰", tag: "COMMON" },
+            { id: 47, type: "emoji", val: "🐻", tag: "COMMON" }, { id: 48, type: "emoji", val: "🐼", tag: "RARE" },
+            { id: 49, type: "emoji", val: "🐨", tag: "RARE" }, { id: 50, type: "emoji", val: "🐵", tag: "COMMON" },
+            { id: 51, type: "emoji", val: "🐸", tag: "COMMON" }, { id: 52, type: "emoji", val: "🐉", tag: "LEGENDARY" },
+            { id: 53, type: "emoji", val: "🦕", tag: "LEGENDARY" }, { id: 54, type: "emoji", val: "🦖", tag: "LEGENDARY" },
+            { id: 55, type: "emoji", val: "🐋", tag: "RARE" }, { id: 56, type: "emoji", val: "🦈", tag: "RARE" },
+            { id: 57, type: "emoji", val: "🐙", tag: "COMMON" }, { id: 58, type: "emoji", val: "🐝", tag: "COMMON" },
+            { id: 59, type: "emoji", val: "🦋", tag: "LEGENDARY" }, { id: 60, type: "emoji", val: "🐞", tag: "COMMON" },
+            { id: 61, type: "emoji", val: "🍬", tag: "COMMON" }, { id: 62, type: "emoji", val: "🍭", tag: "COMMON" },
+            { id: 63, type: "emoji", val: "🍫", tag: "COMMON" }, { id: 64, type: "emoji", val: "🍩", tag: "COMMON" },
+            { id: 65, type: "emoji", val: "🍪", tag: "COMMON" }, { id: 66, type: "emoji", val: "🧁", tag: "COMMON" },
+            { id: 71, type: "emoji", val: "💎", tag: "LEGENDARY" }, { id: 72, type: "emoji", val: "🔮", tag: "LEGENDARY" },
+            { id: 73, type: "emoji", val: "👑", tag: "LEGENDARY" }, { id: 74, type: "emoji", val: "✨", tag: "COMMON" },
+            { id: 75, type: "emoji", val: "🌟", tag: "COMMON" }, { id: 76, type: "emoji", val: "☄️", tag: "RARE" },
+            { id: 77, type: "emoji", val: "🎨", tag: "RARE" }, { id: 78, type: "emoji", val: "🎭", tag: "RARE" },
+            { id: 79, type: "emoji", val: "🎮", tag: "RARE" }, { id: 80, type: "emoji", val: "🎸", tag: "COMMON" },
+            { id: 81, type: "emoji", val: "🎪", tag: "COMMON" }, { id: 82, type: "emoji", val: "🎟", tag: "COMMON" },
+            { id: 83, type: "emoji", val: "🛸", tag: "LEGENDARY" }, { id: 84, type: "emoji", val: "🚀", tag: "LEGENDARY" },
+            { id: 85, type: "emoji", val: "🌋", tag: "RARE" }, { id: 86, type: "emoji", val: "🪐", tag: "RARE" },
+            { id: 87, type: "emoji", val: "🌅", tag: "COMMON" }, { id: 88, type: "emoji", val: "🌌", tag: "RARE" },
+            { id: 89, type: "emoji", val: "🍀", tag: "COMMON" }, { id: 90, type: "emoji", val: "🌿", tag: "COMMON" },
+            { id: 91, type: "emoji", val: "🍄", tag: "COMMON" }, { id: 92, type: "emoji", val: "🌵", tag: "COMMON" },
+            { id: 93, type: "emoji", val: "🌸", tag: "COMMON" }, { id: 94, type: "emoji", val: "🌹", tag: "COMMON" },
+            { id: 95, type: "emoji", val: "🌻", tag: "COMMON" }, { id: 96, type: "emoji", val: "🍁", tag: "COMMON" },
+            { id: 97, type: "emoji", val: "🍇", tag: "COMMON" }, { id: 98, type: "emoji", val: "🍉", tag: "COMMON" },
+            { id: 100, type: "emoji", val: "🍍", tag: "COMMON" }, { id: 101, type: "emoji", val: "🍓", tag: "RARE" },
+            { id: 102, type: "emoji", val: "🍒", tag: "RARE" }
+        ];
+        let coins = parseInt(localStorage.getItem('clicker_coins')) || 300;
+        let inventory = JSON.parse(localStorage.getItem('studio_gacha_inv')) || {};
+        let currentMode = 0; 
         
-        let ovenTimeLeft = 60;
-        let ovenTimerInterval = null;
-        let isOvenReady = false;
+        let wheelTimeLeft = parseInt(localStorage.getItem('gacha_wheel_cooldown')) || 0;
+        let wheelTimer = null;
 
-        const balanceCount = document.getElementById('balance-count');
-        const inventoryGrid = document.getElementById('inventory-grid');
-        const ovenTimerText = document.getElementById('oven-timer-text');
-        const claimOvenBtn = document.getElementById('claim-oven-btn');
-        const ovenAlert = document.getElementById('oven-alert');
+        const modes = [
+            { title: "COMMON CAPSULE", cost: 30, emoji: "🟢", filter: "COMMON" },
+            { title: "RARE CAPSULE", cost: 70, emoji: "🔵", filter: "RARE" },
+            { title: "LEGENDARY CAPSULE", cost: 150, emoji: "🟡", filter: "LEGENDARY" }
+        ];
 
         function init() {
-            updateBalance();
-            renderInventory();
-            startOvenTimer();
+            updateDashboard();
+            renderVault();
+            if (wheelTimeLeft > 0) startWheelCountdown();
         }
 
-        function updateBalance() {
-            balanceCount.textContent = coins;
+        function updateDashboard() {
+            document.getElementById('coin-display').textContent = coins;
             localStorage.setItem('clicker_coins', coins);
-        }
-
-        function renderInventory() {
-            inventoryGrid.innerHTML = '';
             
-            const allItems = [
-                { list: commonItems, tag: 'COMMON', color: '#a7f3d0' },
-                { list: rareItems, tag: 'RARE', color: '#3b82f6' },
-                { list: legendItems, tag: 'LEGENDARY', color: '#fbbf24' }
-            ];
+            document.getElementById('mach-title').textContent = modes[currentMode].title;
+            document.getElementById('mach-cost').textContent = `Cost: ${modes[currentMode].cost} Coins`;
+            if (!document.getElementById('screen-viewport').classList.contains('shake-screen')) {
+                document.getElementById('screen-output').textContent = modes[currentMode].emoji;
+            }
 
-            allItems.forEach(group => {
-                group.list.forEach(file => {
-                    const box = document.createElement('div');
-                    box.style.cssText = `border: 3px dashed ${group.color}; background: #150b06; padding: 10px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;`;
-                    
-                    if (unlockedGacha.includes(file)) {
-                        const img = document.createElement('img');
-                        img.src = file;
-                        img.style.cssText = "width: 80px; height: 80px; object-fit: contain; image-rendering: pixelated;";
-                        box.appendChild(img);
-                    } else {
-                        const placeholder = document.createElement('div');
-                        placeholder.style.cssText = `width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #4b2e1e; font-weight: bold;`;
-                        placeholder.textContent = '?';
-                        box.appendChild(placeholder);
-                    }
-
-                    const label = document.createElement('div');
-                    label.style.cssText = `font-size: 0.7rem; font-weight: bold; margin-top: 5px; color: ${group.color};`;
-                    label.textContent = group.tag;
-                    box.appendChild(label);
-
-                    inventoryGrid.appendChild(box);
-                });
-            });
+            let ownedCount = Object.keys(inventory).length;
+            document.getElementById('collected-stat').textContent = ownedCount;
         }
 
-        function startOvenTimer() {
-            isOvenReady = false;
-            ovenTimeLeft = 60;
-            ovenAlert.style.display = 'none';
-            claimOvenBtn.disabled = true;
-            ovenTimerText.textContent = `Ready in: ${ovenTimeLeft}s`;
+        function switchMachine(dir) {
+            currentMode = (currentMode + dir + 3) % 3;
+            updateDashboard();
+        }
 
-            clearInterval(ovenTimerInterval);
-            ovenTimerInterval = setInterval(() => {
-                ovenTimeLeft--;
-                ovenTimerText.textContent = `Ready in: ${ovenTimeLeft}s`;
+        function renderVault() {
+            const grid = document.getElementById('vault-inventory');
+            grid.innerHTML = '';
 
-                if (ovenTimeLeft <= 0) {
-                    clearInterval(ovenTimerInterval);
-                    isOvenReady = true;
-                    ovenAlert.style.display = 'block';
-                    claimOvenBtn.disabled = false;
-                    ovenTimerText.textContent = "Baked! Collection Ready!";
+            megaCollection.forEach(item => {
+                const count = inventory[item.id] || 0;
+                if (count === 0) return;
+
+                const card = document.createElement('div');
+                card.className = "inv-card active";
+
+                if (item.type === "img") {
+                    const img = document.createElement('img');
+                    img.src = item.file;
+                    card.appendChild(img);
+                } else if (item.type === "color") {
+                    const sph = document.createElement('div');
+                    sph.className = "inv-sphere";
+                    sph.style.background = item.val;
+                    card.appendChild(sph);
+                } else {
+                    const em = document.createElement('div');
+                    em.style.fontSize = "2rem";
+                    em.textContent = item.val;
+                    card.appendChild(em);
+                }
+
+                const badge = document.createElement('div');
+                badge.className = "inv-count";
+                badge.textContent = `x${count}`;
+                card.appendChild(badge);
+
+                const overlay = document.createElement('div');
+                overlay.className = "sell-overlay";
+                
+                let payout = item.tag === "COMMON" ? 15 : (item.tag === "RARE" ? 40 : 90);
+                const btn = document.createElement('button');
+                btn.className = "sell-btn";
+                btn.textContent = `Sell (+${payout})`;
+                btn.onclick = () => sellItem(item.id, payout);
+                
+                overlay.appendChild(btn);
+                card.appendChild(overlay);
+                grid.appendChild(card);
+            });
+            localStorage.setItem('studio_gacha_inv', JSON.stringify(inventory));
+        }
+
+        function sellItem(id, payout) {
+            if (inventory[id] && inventory[id] > 0) {
+                inventory[id]--;
+                if (inventory[id] === 0) delete inventory[id];
+                coins += payout;
+                updateDashboard();
+                renderVault();
+            }
+        }
+
+        function executeRoll() {
+            const mode = modes[currentMode];
+            if (coins < mode.cost) {
+                alert("Insufficient coins!");
+                return;
+            }
+
+            coins -= mode.cost;
+            updateDashboard();
+
+            const viewport = document.getElementById('screen-viewport');
+            const output = document.getElementById('screen-output');
+            const crank = document.getElementById('crank-trigger');
+
+            crank.disabled = true;
+            viewport.classList.add('shake-screen');
+            output.textContent = "📦";
+
+            setTimeout(() => {
+                viewport.classList.remove('shake-screen');
+                crank.disabled = false;
+
+                const pool = megaCollection.filter(item => item.tag === mode.filter);
+                const prize = pool[Math.floor(Math.random() * pool.length)];
+
+                inventory[prize.id] = (inventory[prize.id] || 0) + 1;
+
+                if (prize.type === "img") {
+                    output.innerHTML = `<img src="${prize.file}" alt="Prize">`;
+                } else if (prize.type === "color") {
+                    output.innerHTML = `<div class="color-preview" style="background: ${prize.val};"></div>`;
+                } else {
+                    output.innerHTML = `<div style="font-size:5rem;">${prize.val}</div>`;
+                }
+
+                updateDashboard();
+                renderVault();
+            }, 1200);
+        }
+
+        function startWheelCountdown() {
+            const btn = document.getElementById('wheel-trigger');
+            btn.disabled = true;
+            
+            clearInterval(wheelTimer);
+            wheelTimer = setInterval(() => {
+                wheelTimeLeft--;
+                localStorage.setItem('gacha_wheel_cooldown', wheelTimeLeft);
+                
+                if (wheelTimeLeft <= 0) {
+                    clearInterval(wheelTimer);
+                    document.getElementById('wheel-timer').textContent = "Next Spin: Ready";
+                    btn.disabled = false;
+                } else {
+                    document.getElementById('wheel-timer').textContent = `Next Spin: ${wheelTimeLeft}s`;
                 }
             }, 1000);
         }
 
-        claimOvenBtn.addEventListener('click', () => {
-            if (!isOvenReady) return;
-            coins += 150;
-            updateBalance();
-            startOvenTimer();
-        });
-
-        function rollMachine(type) {
-            let cost, selectedList, tag, color, defaultEmoji, capsuleEmoji;
-            const screen = document.getElementById(`screen-box-${type}`);
-            const rarityLabel = document.getElementById(`rarity-text-${type}`);
-            const btn = document.getElementById(`roll-btn-${type}`);
-
-            if (type === 1) {
-                cost = 30; selectedList = commonItems; tag = "COMMON"; color = "#a7f3d0"; defaultEmoji = "🟢"; capsuleEmoji = "🍬";
-            } else if (type === 2) {
-                cost = 70; selectedList = rareItems; tag = "RARE"; color = "#3b82f6"; defaultEmoji = "🔵"; capsuleEmoji = "🍭";
-            } else {
-                cost = 150; selectedList = legendItems; tag = "LEGENDARY"; color = "#fbbf24"; defaultEmoji = "🟡"; capsuleEmoji = "✨";
-            }
-
-            if (coins < cost) {
-                rarityLabel.textContent = "No Coins!";
-                setTimeout(() => { rarityLabel.textContent = `Cost: ${cost} Coins`; }, 1500);
-                return;
-            }
-
-            coins -= cost;
-            updateBalance();
-
+        function spinSecretWheel() {
+            const output = document.getElementById('screen-output');
+            const btn = document.getElementById('wheel-trigger');
+            
             btn.disabled = true;
-            rarityLabel.textContent = "ROLLING...";
-            screen.innerHTML = capsuleEmoji;
-            screen.classList.add('shake');
-
+            output.textContent = "🔮";
+            
             setTimeout(() => {
-                screen.classList.remove('shake');
-                btn.disabled = false;
-                rarityLabel.textContent = `Cost: ${cost} Coins`;
-
-                const jackpotRoll = Math.random();
-                if (jackpotRoll <= 0.30) {
-                    const rewardCoins = Math.floor(Math.random() * 501) + 1000;
-                    coins += rewardCoins;
-                    updateBalance();
-                    screen.innerHTML = `<div style="text-align:center; font-size:1.1rem; font-weight:bold; color:#fbbf24;">💰<br>+${rewardCoins}</div>`;
-                    setTimeout(() => { screen.innerHTML = defaultEmoji; }, 3000);
-                    return;
+                const roll = Math.random();
+                if (roll < 0.4) {
+                    const cash = Math.floor(Math.random() * 401) + 200;
+                    coins += cash;
+                    output.innerHTML = `<div style="font-size:2.5rem; font-weight:bold; color:#fbbf24;">💰<br>+${cash}</div>`;
+                } else {
+                    const randItem = megaCollection[Math.floor(Math.random() * megaCollection.length)];
+                    inventory[randItem.id] = (inventory[randItem.id] || 0) + 1;
+                    
+                    if (randItem.type === "img") output.innerHTML = `<img src="${randItem.file}">`;
+                    else if (randItem.type === "color") output.innerHTML = `<div class="color-preview" style="background:${randItem.val};"></div>`;
+                    else output.innerHTML = `<div style="font-size:5rem;">${randItem.val}</div>`;
                 }
 
-                const wonFile = selectedList[Math.floor(Math.random() * selectedList.length)];
-                
-                if (!unlockedGacha.includes(wonFile)) {
-                    unlockedGacha.push(wonFile);
-                    localStorage.setItem('gacha_collection', JSON.stringify(unlockedGacha));
+                wheelTimeLeft = 180; 
+                startWheelCountdown();
+                updateDashboard();
+                renderVault();
+            }, 1000);
+        }
+
+        function triggerSystemWipe() {
+            if (confirm("🚨 BOOT SECTOR CORRUPTION DETECTED. Wipe full core storage?")) {
+                if (confirm("🚨 WARNING: This will destroy your clicker balance, achievements, and entire vault! Continue?")) {
+                    if (confirm("🚨 ARE YOU 100% ABSOLUTELY SURE? DATA LOSS IS PERMANENT!")) {
+                        localStorage.clear();
+                        alert("Core data purged. System rebooting...");
+                        window.location.reload();
+                    }
                 }
-
-                screen.innerHTML = `<img src="${wonFile}" alt="Won item">`;
-                renderInventory();
-
-                setTimeout(() => { screen.innerHTML = defaultEmoji; }, 4000);
-            }, 1200);
+            }
         }
 
         init();
     </script>
 </body>
 </html>
-
