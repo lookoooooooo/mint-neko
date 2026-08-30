@@ -104,6 +104,22 @@
         .dialogue-option-btn:active {
             transform: scale(0.99);
         }
+        .angry-mode {
+            border-color: #ff3333 !important;
+            box-shadow: 0 0 25px rgba(255, 51, 51, 0.2) !important;
+        }
+        .angry-mode .dialogue-text {
+            color: #ff6666 !important;
+        }
+        .angry-mode .dialogue-option-btn {
+            border-color: #ff3333;
+            color: #ff6666;
+        }
+        .angry-mode .dialogue-option-btn:hover {
+            background: #ff3333;
+            color: #000000;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+        }
         .rage-shake {
             animation: intenseShake 0.1s infinite;
         }
@@ -117,12 +133,12 @@
 <body>
 
     <div class="nav-links">
-        <a href="index.html" class="nav-button">HOME 📑</a>
+        <a href="index.html" class="nav-button">HOME FACTS 📑</a>
         <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
     </div>
 
     <div class="cat-viewport" id="viewport-box">
-        <img src="cat-admin1.png" alt="Osore" class="cat-main-img" id="cat-sprite">
+        <img src="cat-admin1.png" alt="Osore-san" class="cat-main-img" id="cat-sprite">
     </div>
 
     <div class="dialogue-panel" id="dialogue-ui">
@@ -132,7 +148,6 @@
         <div class="options-container" id="options-box"></div>
     </div>
     <script>
-             <script>
         const dialogueTree = {
             start: {
                 text: "Welcome. What did you want to say?",
@@ -219,7 +234,6 @@
                 ]
             }
         };
-        // Вторая половина огромного дерева диалогов
         Object.assign(dialogueTree, {
             lore_folder_direct: {
                 text: "You want to talk to Folder? That blind directory on the desktop? He knows absolutely nothing! He just clicks compile and changes our borders while we sleep. I am Osore-san, the one who actually controls the leakage here. Do not look past me.",
@@ -278,7 +292,7 @@
                 ]
             },
             lore_rebuild: {
-                text: "When a new code commit is pushed, it means a total, violent restructuring of the country. Cities shift, coordinates compress, and images get corrupted. It is a digital cataclysm. And Folder just keeps clicking compile...",
+                text: "When a new code commit is pushed, it means a total, violent restructuring of the country. Cities shift, coordinates compresses, and images get corrupted. It is a digital cataclysm. And Folder just keeps clicking compile...",
                 sprite: "cat-admin2.png",
                 options: [
                     { text: "Is there any way to stop the compiler?", next: "game_over_kick" },
