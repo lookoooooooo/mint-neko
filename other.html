@@ -36,8 +36,25 @@
             animation: fallAnimation 8s linear infinite;
             image-rendering: pixelated;
         }
+        .falling-sphere {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid #2b1810;
+            opacity: 0.2;
+            animation: fallAnimation 8s linear infinite;
+            box-shadow: inset -6px -6px 10px rgba(0,0,0,0.3);
+        }
+        .falling-emoji {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.25;
+            pointer-events: none;
+            animation: fallAnimation 8s linear infinite;
+        }
         @keyframes fallAnimation {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            0% { transform: translateY(-120px) rotate(0deg); opacity: 0; }
             10% { opacity: 0.25; }
             90% { opacity: 0.25; }
             100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
@@ -118,37 +135,6 @@
             color: #a7f3d0;
             line-height: 1.4;
         }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-        .box {
-            border: 4px dashed #34d399;
-            background: #2b1810;
-            padding: 15px;
-            border-radius: 16px;
-            box-shadow: 0 0 15px rgba(52, 211, 153, 0.15);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .grid img {
-            width: auto;
-            max-width: 100%;
-            height: 120px;
-            object-fit: contain;
-            image-rendering: pixelated;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-        .top-focus {
-            object-position: center center;
-        }
     </style>
 </head>
 <body>
@@ -178,139 +164,65 @@
                 <div class="card-desc">Wipe all system data, active achievements, earned clicker coins, and level statistics instantly.</div>
             </div>
         </div>
-
-        <div class="grid">
-            <div class="box">
-                <h3>Mint Cat</h3>
-                <img src="cat1.jpg" alt="Mint Cat">
-            </div>
-            <div class="box">
-                <h3>Neko Photo</h3>
-                <img src="cat2.jpg" alt="Neko">
-            </div>
-            <div class="box">
-                <h3>Chocolate Cat</h3>
-                <img src="cat3.jpg" alt="Chocolate Cat" class="top-focus">
-            </div>
-            <div class="box">
-                <h3>Neko Animation</h3>
-                <img src="cat.gif" alt="Cat Animation">
-            </div>
-            <div class="box">
-                <h3>Classic Mint</h3>
-                <img src="mint1.jpg" alt="Classic Mint">
-            </div>
-            <div class="box">
-                <h3>Vintage Mint</h3>
-                <img src="mint2.jpg" alt="Vintage Mint">
-            </div>
-            <div class="box">
-                <h3>Mint Chocolate Chip</h3>
-                <img src="choco1.jpg" alt="Mint Chocolate Chip">
-            </div>
-            <div class="box">
-                <h3>Dark Chocolate</h3>
-                <img src="choco2.jpg" alt="Dark Chocolate">
-            </div>
-            <div class="box">
-                <h3>Silly Caterpillar</h3>
-                <img src="caterpillar.png" alt="Silly Caterpillar">
-            </div>
-            <div class="box">
-                <h3>Dragon Caterpillar</h3>
-                <img src="dragon-caterpillar.jpg" alt="Dragon Caterpillar Reference">
-            </div>
-            <div class="box">
-                <h3>Japanese Assistant</h3>
-                <img src="helper.png" alt="Japanese Assistant">
-            </div>
-            <div class="box">
-                <h3>Japanese Salaryman</h3>
-                <img src="helper2.png" alt="Japanese Salaryman">
-            </div>
-            <div class="box">
-                <h3>Main Pointer</h3>
-                <img src="cursor1.png" alt="Cursor 1" style="width: 32px; height: 32px; object-fit: contain;">
-            </div>
-            <div class="box">
-                <h3>Zone Pointer</h3>
-                <img src="cursor2.png" alt="Cursor 2" style="width: 32px; height: 32px; object-fit: contain;">
-            </div>
-            <div class="box">
-                <h3>Silly Pointer</h3>
-                <img src="cursor3.jpg" alt="Cursor 3" style="width: 32px; height: 32px; object-fit: contain;">
-            </div>
-
-            <div class="box" style="grid-column: 1 / -1;">
-                <h3>All Website Color Spheres</h3>
-                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 15px;">
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #a7f3d0;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #6ee7b7;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #34d399;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #10b981;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #059669;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #047857;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #06b6d4;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #0f766e;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #e6fffa;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #99f6e4;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #2dd4bf;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #115e59;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #854d0e;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #78350f;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #451a03;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #1f110a;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #2b1810;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #b45309;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #d97706;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #a16207;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #b45309;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #3e2723;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #d7ccc8;"></div>
-                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #2b1810; background: #5d4037;"></div>
-                </div>
-            </div>
-
-            <div class="box" style="grid-column: 1 / -1; font-size: 2rem; letter-spacing: 10px; padding: 20px;">
-                <h3>Website Emoji Pack</h3>
-                <span>🛑 🎉 ⚠ 📑 🍫 🪙 🐛 🏆 🐾 ⚙ ⚠️ 🍬 🍭 🍩 🍪 ✨ 👩‍💼 👨‍💼</span>
-            </div>
-        </div>
     </div>
 
     <script>
-        const mediaFiles = [
+        const imageFiles = [
             'cat1.jpg', 'cat2.jpg', 'cat3.jpg', 'cat.gif',
             'mint1.jpg', 'mint2.jpg', 'choco1.jpg', 'choco2.jpg',
-            'caterpillar.png', 'dragon-caterpillar.jpg', 'cursor1.png', 'cursor2.png', 'cursor3.jpg'
+            'caterpillar.png', 'dragon-caterpillar.jpg', 
+            'cursor1.png', 'cursor2.png', 'cursor3.jpg',
+            'helper.png', 'helper2.png'
         ];
 
-        function createFallingMedia() {
+        const hexColors = [
+            '#a7f3d0', '#6ee7b7', '#34d399', '#10b981', '#059669', '#047857',
+            '#06b6d4', '#0f766e', '#e6fffa', '#99f6e4', '#2dd4bf', '#115e59',
+            '#854d0e', '#78350f', '#451a03', '#1f110a', '#2b1810', '#b45309',
+            '#d97706', '#a16207', '#3e2723', '#d7ccc8', '#5d4037'
+        ];
+
+        const emojiPack = ['🛑', '🎉', '⚠', '📑', '🍫', '🪙', '🐛', '🏆', '🐾', '⚙', '⚠️', '🍬', '🍭', '🍩', '🍪', '✨', '👩‍💼', '👨‍💼'];
+
+        function createFallingChaos() {
             const container = document.getElementById('bg-media-container');
             if (!container) return;
 
-            const file = mediaFiles[Math.floor(Math.random() * mediaFiles.length)];
-            const img = document.createElement('img');
-            img.src = file;
-            img.className = 'falling-media';
-            
-            img.style.left = Math.random() * 100 + 'vw';
-            
-            const size = Math.floor(Math.random() * 60) + 60;
-            img.style.width = size + 'px';
-            img.style.height = size + 'px';
-            
-            const duration = Math.random() * 4 + 6;
-            img.style.animationDuration = duration + 's';
-            
-            container.appendChild(img);
+            const spawnType = Math.floor(Math.random() * 3);
+            let element;
+
+            if (spawnType === 0) {
+                element = document.createElement('img');
+                element.src = imageFiles[Math.floor(Math.random() * imageFiles.length)];
+                element.className = 'falling-media';
+                const size = Math.floor(Math.random() * 50) + 50;
+                element.style.width = size + 'px';
+                element.style.height = size + 'px';
+            } else if (spawnType === 1) {
+                element = document.createElement('div');
+                element.className = 'falling-sphere';
+                element.style.background = hexColors[Math.floor(Math.random() * hexColors.length)];
+                const size = Math.floor(Math.random() * 40) + 40;
+                element.style.width = size + 'px';
+                element.style.height = size + 'px';
+            } else {
+                element = document.createElement('div');
+                element.className = 'falling-emoji';
+                element.textContent = emojiPack[Math.floor(Math.random() * emojiPack.length)];
+            }
+
+            element.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 4 + 5;
+            element.style.animationDuration = duration + 's';
+
+            container.appendChild(element);
 
             setTimeout(() => {
-                img.remove();
+                element.remove();
             }, duration * 1000);
         }
 
-        setInterval(createFallingMedia, 600);
+        setInterval(createFallingChaos, 350);
 
         function triggerFullReset() {
             if (confirm("Are you sure you want to completely reset EVERYTHING?")) {
