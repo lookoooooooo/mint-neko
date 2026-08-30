@@ -70,6 +70,15 @@
             font-size: 3.5rem;
             letter-spacing: 1px;
         }
+        .info-card {
+            max-width: 650px;
+            margin: 20px auto 30px auto;
+            background: #2b1810;
+            border: 4px dashed #34d399;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.1);
+        }
         .crawl-box {
             position: relative;
             width: 100%;
@@ -238,7 +247,13 @@
         <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE</a>
     </div>
 
-    <h1>Silly Dragon Sanctuary</h1>
+    <h1>Silly Caterpillar Sanctuary</h1>
+
+    <div class="info-card">
+        <h2>Reference & Species Info</h2>
+        <img src="dragon-caterpillar.jpg" alt="Sasakia Charonda Reference" style="max-width: 100%; height: auto; border: 3px solid #34d399; border-radius: 12px; margin-bottom: 15px;">
+        <p>This species is known for its unique face horns and vibrant green appearance. It is not actually a dragon, but the larva of the beautiful Japanese Emperor butterfly.</p>
+    </div>
 
     <div class="crawl-box">
         <img src="caterpillar.png" alt="Crawling Caterpillar" class="caterpillar-main-img" id="walker">
@@ -248,7 +263,7 @@
         <div id="event-banner">Pet is chilling...</div>
         
         <div class="caterpillar-frame">
-            <img src="caterpillar.png" alt="Dragon Caterpillar" class="pet-img" id="pet-avatar">
+            <img src="caterpillar.png" alt="Silly Caterpillar" class="pet-img" id="pet-avatar">
         </div>
 
         <div class="status-container">
@@ -305,7 +320,7 @@
                 petBtn.disabled = true;
                 scareBtn.disabled = true;
             } else if (!isEvolved) {
-                if (growth > 60) stageText.textContent = "Big Fat Dragon";
+                if (growth > 60) stageText.textContent = "Big Fat Caterpillar";
                 else if (growth > 30) stageText.textContent = "Active Caterpillar";
                 else stageText.textContent = "Baby Larva";
             }
