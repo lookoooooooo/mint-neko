@@ -7,6 +7,7 @@
     <style>
         * {
             cursor: url('cursor1.png') 16 16, auto !important;
+            box-sizing: border-box;
         }
         body {
             background-color: #1f110a;
@@ -169,6 +170,12 @@
                 <div class="card-title">Trust Cat</div>
                 <div class="card-desc">Play a high-stakes mini-game with the mystical cat. Earn massive rewards or lose your stash!</div>
             </a>
+
+            <a href="trust-cat.html" class="hub-card">
+                <div class="card-icon">💻</div>
+                <div class="card-title">PC Computer Game</div>
+                <div class="card-desc">Launch the terminal sequence workspace core directly to test your processing algorithms.</div>
+            </a>
             
             <div class="hub-card" style="cursor: pointer;" onclick="triggerFullReset()">
                 <div class="card-icon">⚠️</div>
@@ -184,7 +191,7 @@
             'mint1.jpg', 'mint2.jpg', 'choco1.jpg', 'choco2.jpg',
             'caterpillar.png', 'dragon-caterpillar.jpg', 
             'cursor1.png', 'cursor2.png', 'cursor3.jpg',
-            'helper.png', 'helper2.png'
+            'helper.png', 'helper2.png', 'map1.jpg', 'desktop-bg.jpg'
         ];
 
         const hexColors = [
@@ -194,7 +201,7 @@
             '#d97706', '#a16207', '#3e2723', '#d7ccc8', '#5d4037'
         ];
 
-        const emojiPack = ['🛑', '🎉', '⚠', '📑', '🍫', '🪙', '🐛', '🏆', '🐾', '⚙', '⚠️', '🍬', '🍭', '🍩', '🍪', '✨', '👩‍💼', '👨‍💼'];
+        const emojiPack = ['🛑', '🎉', '⚠', '📑', '🍫', '🪙', '🐛', '🏆', '🐾', '⚙', '⚠️', '🍬', '🍭', '🍩', '🍪', '✨', '👩‍💼', '👨‍💼', '(◌⚈  ⚈◌)', '(〃ω〃)', '(*^ω^*)', '(◕‿◕✿)'];
 
         function createFallingChaos() {
             const container = document.getElementById('bg-media-container');
@@ -223,8 +230,8 @@
                 element.textContent = emojiPack[Math.floor(Math.random() * emojiPack.length)];
             }
 
-            element.style.left = Math.random() * 100 + 'vw';
-            const duration = Math.random() * 4 + 5;
+            element.style.left = Math.random() * 95 + 'vw';
+            const duration = Math.random() * 4 + 6;
             element.style.animationDuration = duration + 's';
 
             container.appendChild(element);
@@ -234,19 +241,13 @@
             }, duration * 1000);
         }
 
-        setInterval(createFallingChaos, 350);
-
         function triggerFullReset() {
-            if (confirm("Are you sure you want to completely reset EVERYTHING?")) {
-                if (confirm("This will wipe all facts, clicker coins, and upgrades!!!")) {
-                    if (confirm("LAST WARNING! 100% SURE?")) {
-                        localStorage.clear();
-                        alert("All system data has been completely destroyed!");
-                        window.location.reload();
-                    }
-                }
-            }
+            localStorage.clear();
+            alert("All systems completely wiped!");
+            location.reload();
         }
+
+        setInterval(createFallingChaos, 350);
     </script>
 </body>
 </html>
