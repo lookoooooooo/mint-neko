@@ -6,7 +6,7 @@
     <title>Silly Caterpillar Sanctuary Max</title>
     <style>
         * {
-            cursor: url('cursor3.jpg') 16 16, auto !important;
+            cursor: url('cursor1.png') 16 16, auto !important;
         }
         body {
             background-color: #1f110a;
@@ -69,15 +69,6 @@
             text-shadow: 4px 4px #3d2314;
             font-size: 3.5rem;
             letter-spacing: 1px;
-        }
-        .info-card {
-            max-width: 650px;
-            margin: 20px auto 30px auto;
-            background: #2b1810;
-            border: 4px dashed #34d399;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 0 15px rgba(52, 211, 153, 0.1);
         }
         .crawl-box {
             position: relative;
@@ -149,21 +140,16 @@
             width: 150px;
             height: 150px;
             object-fit: contain;
-            transition: transform 0.1s ease, filter 0.5s ease;
+            transition: all 0.4s ease;
         }
-        .wiggle {
-            animation: wiggleAnim 0.2s ease infinite alternate;
-        }
-        .spin {
-            animation: spinAnim 0.4s ease;
-        }
+        .wiggle { animation: wiggleAnim 0.2s ease infinite alternate; }
+        .spin { animation: spinAnim 0.4s ease; }
         @keyframes wiggleAnim {
             from { transform: scale(1) rotate(-5deg); }
             to { transform: scale(1.1) rotate(5deg); }
         }
         @keyframes spinAnim {
             0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.3) rotate(180deg); }
             100% { transform: scale(1) rotate(360deg); }
         }
         .status-container {
@@ -193,6 +179,8 @@
         }
         #growth-bar { background: #34d399; width: 0%; }
         #mood-bar { background: #fbbf24; width: 100%; }
+        #clean-bar { background: #38bdf8; width: 100%; }
+        #sleep-bar { background: #a855f7; width: 100%; }
         .control-panel {
             display: flex;
             justify-content: center;
@@ -204,8 +192,8 @@
             background: #34d399;
             color: #1f110a;
             border: 3px solid #6ee7b7;
-            padding: 10px 20px;
-            font-size: 1rem;
+            padding: 10px 18px;
+            font-size: 0.95rem;
             font-weight: bold;
             border-radius: 20px;
             box-shadow: 0 4px #0f0805;
@@ -226,9 +214,17 @@
             font-size: 1.1rem;
             color: #fbbf24;
             font-weight: bold;
-            height: 25px;
+            height: 50px;
             margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+        .mut-cyber { filter: hue-rotate(290deg) saturate(3) drop-shadow(0 0 12px #ff00ff) !important; }
+        .mut-golden { filter: sepia(1) saturate(5) hue-rotate(15deg) drop-shadow(0 0 15px #ffcc00) !important; }
+        .mut-cosmic { filter: hue-rotate(160deg) invert(0.8) drop-shadow(0 0 12px #3b82f6) !important; }
+        .mut-radioactive { filter: hue-rotate(80deg) brightness(1.6) drop-shadow(0 0 15px #00ff00) !important; }
+        .mut-shadow { filter: grayscale(1) brightness(0.3) drop-shadow(0 0 10px #000) !important; }
     </style>
 </head>
 <body>
@@ -245,21 +241,19 @@
     <div class="nav-links">
         <a href="index.html" class="nav-button">HOME FACTS</a>
         <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE</a>
+        <a href="other.html" class="nav-button">OTHER ZONE</a>
     </div>
 
     <h1>Silly Caterpillar Sanctuary</h1>
-
-    <div class="info-card">
-        <h2>Reference & Species Info</h2>
-        <img src="dragon-caterpillar.jpg" alt="Sasakia Charonda Reference" style="max-width: 100%; height: auto; border: 3px solid #34d399; border-radius: 12px; margin-bottom: 15px;">
-        <p>This species is known for its unique face horns and vibrant green appearance. It is not actually a dragon, but the larva of the beautiful Japanese Emperor butterfly.</p>
-    </div>
 
     <div class="crawl-box">
         <img src="caterpillar.png" alt="Crawling Caterpillar" class="caterpillar-main-img" id="walker">
     </div>
 
     <div class="pet-container">
+        <div style="font-size: 1.3rem; font-weight: bold; color: #6ee7b7; margin-bottom: 10px;">
+            Wallet: <span id="wallet-count">0</span> 🌿 Leaves
+        </div>
         <div id="event-banner">Pet is chilling...</div>
         
         <div class="caterpillar-frame">
@@ -267,7 +261,7 @@
         </div>
 
         <div class="status-container">
-            <div class="bar-label">Growth Stage: <span id="stage-text">Baby Larva</span></div>
+            <div class="bar-label">Form: <span id="stage-text" style="color: #fbbf24;">Standard Larva</span></div>
             <div class="status-bar-container">
                 <div id="growth-bar" class="status-bar"></div>
             </div>
@@ -279,24 +273,30 @@
 
             <div class="bar-label">Hygiene:</div>
             <div class="status-bar-container">
-                <div id="clean-bar" class="status-bar" style="background: #38bdf8; width: 100%;"></div>
+                <div id="clean-bar" class="status-bar"></div>
             </div>
 
             <div class="bar-label">Sleep:</div>
             <div class="status-bar-container">
-                <div id="sleep-bar" class="status-bar" style="background: #a855f7; width: 100%;"></div>
+                <div id="sleep-bar" class="status-bar"></div>
             </div>
         </div>
 
-        <div class="control-panel">
-            <button class="control-btn" id="feed-btn">Feed Fresh Leaves</button>
-            <button class="control-btn" id="pet-btn">Pet Gently</button>
-            <button class="control-btn" id="clean-btn">Wash Caterpillar</button>
-            <button class="control-btn" id="sleep-btn">Put to Sleep</button>
-            <button class="control-btn" id="scare-btn">Boop Horns</button>
+        <div style="margin-top: 20px; border-top: 2px dashed #34d399; padding-top: 15px;">
+            <div class="bar-label" style="text-align: center; margin-bottom: 10px; color: #fbbf24;">ALCHEMY SHOP & ACTIONS</div>
+            <div class="control-panel">
+                <button class="control-btn" id="pet-btn">Pet (+5 Leaves)</button>
+                <button class="control-btn" id="clean-btn">Wash (+10 Leaves)</button>
+                <button class="control-btn" id="sleep-btn">Put to Sleep</button>
+                <button class="control-btn" id="scare-btn">Boop Horns</button>
+            </div>
+            <div class="control-panel" style="margin-top: 15px;">
+                <button class="control-btn" id="buy-mint" style="background: #a7f3d0;">Eat Mint Candy (Cost: 30 🌿)</button>
+                <button class="control-btn" id="buy-choco" style="background: #78350f; color: #fff;">Eat Choco Chip (Cost: 50 🌿)</button>
+                <button class="control-btn" id="buy-toxic" style="background: #22c55e;">Eat Toxic Sludge (Cost: 100 🌿)</button>
+            </div>
         </div>
     </div>
-
     <script>
         const phobiaScreen = document.getElementById('phobia-screen');
         const acceptBtn = document.getElementById('accept-btn');
@@ -308,130 +308,166 @@
         const sleepBar = document.getElementById('sleep-bar');
         const stageText = document.getElementById('stage-text');
         const eventBanner = document.getElementById('event-banner');
+        const walletCount = document.getElementById('wallet-count');
 
-        const feedBtn = document.getElementById('feed-btn');
         const petBtn = document.getElementById('pet-btn');
         const cleanBtn = document.getElementById('clean-btn');
         const sleepBtn = document.getElementById('sleep-btn');
         const scareBtn = document.getElementById('scare-btn');
+        const buyMint = document.getElementById('buy-mint');
+        const buyChoco = document.getElementById('buy-choco');
+        const buyToxic = document.getElementById('buy-toxic');
 
-        let growth = 0;
-        let mood = 100;
-        let clean = 100;
-        let sleep = 100;
-        let isEvolved = false;
+        let wallet = parseInt(localStorage.getItem('cat_wallet')) || 0;
+        let growth = parseInt(localStorage.getItem('cat_growth')) || 0;
+        let mood = parseInt(localStorage.getItem('cat_mood')) || 100;
+        let clean = parseInt(localStorage.getItem('cat_clean')) || 100;
+        let sleep = parseInt(localStorage.getItem('cat_sleep')) || 100;
+        let currentMutation = localStorage.getItem('cat_mutation') || 'none';
+        
+        let foodHistory = JSON.parse(localStorage.getItem('cat_food_history')) || [];
 
         acceptBtn.addEventListener('click', () => {
             phobiaScreen.style.display = 'none';
         });
 
+        function saveState() {
+            localStorage.setItem('cat_wallet', wallet);
+            localStorage.setItem('cat_growth', growth);
+            localStorage.setItem('cat_mood', mood);
+            localStorage.setItem('cat_clean', clean);
+            localStorage.setItem('cat_sleep', sleep);
+            localStorage.setItem('cat_mutation', currentMutation);
+            localStorage.setItem('cat_food_history', JSON.stringify(foodHistory));
+        }
+
         function updateUI() {
+            walletCount.textContent = wallet;
             growthBar.style.width = growth + '%';
             moodBar.style.width = mood + '%';
             cleanBar.style.width = clean + '%';
             sleepBar.style.width = sleep + '%';
 
-            if (growth >= 100 && !isEvolved) {
-                isEvolved = true;
-                stageText.textContent = "Imperial Butterfly";
-                eventBanner.textContent = "Evolution! It became a Butterfly!";
-                petAvatar.style.filter = "hue-rotate(120deg) drop-shadow(0 0 10px #34d399)";
-                feedBtn.disabled = true;
-                petBtn.disabled = true;
-                cleanBtn.disabled = true;
-                sleepBtn.disabled = true;
-                scareBtn.disabled = true;
-            } else if (!isEvolved) {
-                if (growth > 60) stageText.textContent = "Big Fat Caterpillar";
-                else if (growth > 30) stageText.textContent = "Active Caterpillar";
-                else stageText.textContent = "Baby Larva";
-
-                if (clean < 30) {
-                    petAvatar.style.filter = `hue-rotate(${growth * 2}deg) sepia(0.5) brightness(0.7)`;
-                } else {
-                    petAvatar.style.filter = `hue-rotate(${growth * 2}deg)`;
-                }
+            petAvatar.className = 'pet-img';
+            if (currentMutation !== 'none') {
+                petAvatar.classList.add('mut-' + currentMutation);
+                stageText.textContent = currentMutation.toUpperCase() + " FORM";
+            } else {
+                if (growth >= 100) stageText.textContent = "Eldritch Cocoon";
+                else if (growth > 60) stageText.textContent = "Chunky Larva";
+                else if (growth > 30) stageText.textContent = "Growing Larva";
+                else stageText.textContent = "Standard Larva";
+                
+                petAvatar.style.filter = `hue-rotate(${growth * 1.5}deg)`;
             }
         }
 
-        feedBtn.addEventListener('click', () => {
-            if (isEvolved) return;
+        function checkMutationLogic() {
+            if (currentMutation !== 'none') return;
+
+            const lastThree = foodHistory.slice(-3).join(',');
+            
+            if (lastThree === 'mint,mint,mint') {
+                currentMutation = 'cyber';
+                eventBanner.textContent = "SYSTEM OVERLOAD! Transformed into Cyber Form!";
+            } else if (lastThree === 'choco,choco,choco') {
+                currentMutation = 'golden';
+                eventBanner.textContent = "MIDAS TOUCH! Transformed into Golden Form!";
+            } else if (lastThree === 'mint,choco,toxic') {
+                currentMutation = 'cosmic';
+                eventBanner.textContent = "SPACE TIME RUPTURE! Transformed into Cosmic Form!";
+            } else if (lastThree === 'toxic,toxic,toxic') {
+                currentMutation = 'radioactive';
+                eventBanner.textContent = "MELTDOWN! Transformed into Radioactive Form!";
+            } else if (lastThree === 'choco,mint,choco' && mood < 20) {
+                currentMutation = 'shadow';
+                eventBanner.textContent = "DARKNESS CONSUMED! Transformed into Shadow Form!";
+            }
+            
+            if (currentMutation !== 'none') {
+                growth = 100;
+                saveState();
+                updateUI();
+            }
+        }
+
+        function feedItem(type, cost) {
+            if (wallet < cost) {
+                eventBanner.textContent = "Not enough Leaves!";
+                return;
+            }
             if (clean < 20) {
                 eventBanner.textContent = "Too dirty to eat! Wash it first!";
                 return;
             }
+
+            wallet -= cost;
+            clean = Math.max(0, clean - 20);
+            mood = Math.min(100, mood + 15);
+            growth = Math.min(100, growth + 10);
             
-            let gain = mood < 40 ? 4 : 8; 
-            growth = Math.min(100, growth + gain);
-            mood = Math.min(100, mood + 5);
-            clean = Math.max(0, clean - 15);
-            
-            eventBanner.textContent = mood < 40 ? "Chomp... (Sad, gained less weight)" : "Chomp chomp! Delicious leaves!";
+            foodHistory.push(type);
+            eventBanner.textContent = `Gulp! Ate ${type.toUpperCase()}. Sequence tracking...`;
             
             petAvatar.classList.add('wiggle');
             setTimeout(() => petAvatar.classList.remove('wiggle'), 600);
             
+            checkMutationLogic();
+            saveState();
             updateUI();
-        });
+        }
+
+        buyMint.addEventListener('click', () => feedItem('mint', 30));
+        buyChoco.addEventListener('click', () => feedItem('choco', 50));
+        buyToxic.addEventListener('click', () => feedItem('toxic', 100));
 
         petBtn.addEventListener('click', () => {
-            if (isEvolved) return;
-            mood = Math.min(100, mood + 20);
-            eventBanner.textContent = "Silly... :3";
-            
+            mood = Math.min(100, mood + 15);
+            wallet += 5;
+            eventBanner.textContent = "Silly... :3 You harvested 5 Leaves!";
             petAvatar.classList.add('spin');
             setTimeout(() => petAvatar.classList.remove('spin'), 400);
-            
+            saveState();
             updateUI();
         });
 
         cleanBtn.addEventListener('click', () => {
-            if (isEvolved) return;
             clean = 100;
-            eventBanner.textContent = "Sparkling clean now!";
+            wallet += 10;
+            eventBanner.textContent = "Sparkling clean! You harvested 10 Leaves!";
+            saveState();
             updateUI();
         });
 
         sleepBtn.addEventListener('click', () => {
-            if (isEvolved) return;
-            if (clean < 40) {
-                eventBanner.textContent = "Too dirty to sleep! Wash it first!";
+            if (clean < 40 || mood < 20) {
+                eventBanner.textContent = "Cannot sleep! Check stats!";
                 return;
             }
-            if (mood < 30) {
-                eventBanner.textContent = "Too hungry or sad to sleep!";
-                return;
-            }
-            
             sleep = 100;
-            mood = Math.min(100, mood + 10);
-            eventBanner.textContent = "Zzz... Sleeping peacefully.";
+            eventBanner.textContent = "Zzz... Resting peacefully.";
+            saveState();
             updateUI();
         });
 
         scareBtn.addEventListener('click', () => {
-            if (isEvolved) return;
-            mood = Math.max(0, mood - 30);
-            eventBanner.textContent = "Angry and Scared! Running away fast!";
-            
-            petAvatar.style.filter = `hue-rotate(0deg) saturate(3) drop-shadow(0 0 8px #ff3333)`;
+            mood = Math.max(0, mood - 40);
+            eventBanner.textContent = "Booped! Running away fast!";
             walker.classList.add('scared-crawl');
-            
-            setTimeout(() => {
-                walker.classList.remove('scared-crawl');
-                if (!isEvolved) updateUI();
-            }, 3500);
-            
+            setTimeout(() => walker.classList.remove('scared-crawl'), 3500);
+            saveState();
             updateUI();
         });
 
         setInterval(() => {
-            if (isEvolved) return;
             mood = Math.max(0, mood - 3);
             clean = Math.max(0, clean - 2);
             sleep = Math.max(0, sleep - 2);
+            saveState();
             updateUI();
-        }, 3000);
+        }, 4000);
+
+        updateUI();
     </script>
 </body>
 </html>
