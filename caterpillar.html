@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Silly Caterpillar Sanctuary Max</title>
+    <title>Mini-Games Zone</title>
     <style>
         * {
             cursor: url('cursor1.png') 16 16, auto !important;
+            box-sizing: border-box;
         }
         body {
             background-color: #1f110a;
@@ -15,459 +16,263 @@
             padding: 20px;
             text-align: center;
             overflow-x: hidden;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
         }
-        #phobia-screen {
+        #falling-container {
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000000;
-            color: #ff3333;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 999999;
-            padding: 40px;
-            box-sizing: border-box;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
         }
-        .phobia-btn {
-            background: #ff3333;
-            color: #000;
-            border: 2px solid #fff;
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 30px;
-            margin-top: 30px;
-            cursor: pointer;
+        .falling-item {
+            position: absolute;
+            top: -60px;
+            pointer-events: none;
+            animation: fall linear forwards;
+            user-select: none;
+        }
+        .falling-image {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-60px) rotate(0deg);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.85;
+            }
+            85% {
+                opacity: 0.85;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0;
+            }
         }
         .nav-links {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 30px;
-            flex-wrap: wrap;
+            position: relative;
+            z-index: 10;
         }
         .nav-button {
             background: #4b2e1e;
             color: #6ee7b7;
-            border: 3px dashed #34d399;
-            padding: 10px 20px;
-            font-size: 1rem;
+            border: 2px dashed #34d399;
+            padding: 8px 16px;
+            font-size: 0.9rem;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 8px;
             text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 4px 10px rgba(52, 211, 153, 0.2);
-            transition: transform 0.2s, background 0.2s;
         }
-        .nav-button:hover {
-            transform: scale(1.05);
-            background: #3d2314;
+        .nav-button.active-tab {
+            border-color: #fbbf24;
+            color: #fbbf24;
         }
-        h1 {
-            color: #6ee7b7;
-            text-shadow: 4px 4px #3d2314;
-            font-size: 3.5rem;
-            letter-spacing: 1px;
-        }
-        .crawl-box {
+        .games-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
             position: relative;
-            width: 100%;
-            height: 180px;
-            background: #150b06;
-            border: 3px solid #6ee7b7;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 20px;
+            z-index: 10;
         }
-        .caterpillar-main-img {
-            position: absolute;
-            bottom: 15px;
-            left: -140px;
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            animation: crawlLoop 10s linear infinite;
-        }
-        @keyframes crawlLoop {
-            0% { left: -140px; transform: scaleX(1) scaleY(1); }
-            5% { transform: scaleX(0.7) scaleY(1.2); }
-            10% { transform: scaleX(1.2) scaleY(0.8); }
-            15% { transform: scaleX(0.7) scaleY(1.2); }
-            20% { transform: scaleX(1.2) scaleY(0.8); }
-            25% { transform: scaleX(0.7) scaleY(1.2); }
-            30% { transform: scaleX(1.2) scaleY(0.8); }
-            35% { transform: scaleX(0.7) scaleY(1.2); }
-            40% { transform: scaleX(1.2) scaleY(0.8); }
-            45% { transform: scaleX(0.7) scaleY(1.2); }
-            50% { transform: scaleX(1.2) scaleY(0.8); }
-            55% { transform: scaleX(0.7) scaleY(1.2); }
-            60% { transform: scaleX(1.2) scaleY(0.8); }
-            65% { transform: scaleX(0.7) scaleY(1.2); }
-            70% { transform: scaleX(1.2) scaleY(0.8); }
-            75% { transform: scaleX(0.7) scaleY(1.2); }
-            80% { transform: scaleX(1.2) scaleY(0.8); }
-            85% { transform: scaleX(0.7) scaleY(1.2); }
-            90% { transform: scaleX(1.2) scaleY(0.8); }
-            95% { transform: scaleX(0.7) scaleY(1.2); }
-            100% { left: 105%; transform: scaleX(1) scaleY(1); }
-        }
-        .scared-crawl {
-            animation-duration: 3.5s !important;
-        }
-        .pet-container {
-            max-width: 600px;
-            margin: 30px auto;
+        .game-card {
             background: #2b1810;
-            border: 4px dashed #34d399;
+            border: 4px solid #34d399;
+            border-radius: 20px;
             padding: 25px;
-            border-radius: 24px;
-            box-shadow: 0 0 25px rgba(52, 211, 153, 0.15);
-        }
-        .caterpillar-frame {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #150b06;
-            border: 3px solid #6ee7b7;
-            border-radius: 50%;
-        }
-        .pet-img {
-            width: 150px;
-            height: 150px;
-            object-fit: contain;
-            transition: all 0.4s ease;
-        }
-        .wiggle { animation: wiggleAnim 0.2s ease infinite alternate; }
-        .spin { animation: spinAnim 0.4s ease; }
-        @keyframes wiggleAnim {
-            from { transform: scale(1) rotate(-5deg); }
-            to { transform: scale(1.1) rotate(5deg); }
-        }
-        @keyframes spinAnim {
-            0% { transform: scale(1) rotate(0deg); }
-            100% { transform: scale(1) rotate(360deg); }
-        }
-        .status-container {
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            width: 85%;
-            margin: 15px auto;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 350px;
         }
-        .bar-label {
-            font-size: 0.9rem;
-            text-align: left;
+        .card-title {
+            font-size: 1.4rem;
             font-weight: bold;
-            color: #a7f3d0;
-        }
-        .status-bar-container {
-            width: 100%;
-            background: #4b2e1e;
-            border: 2px solid #34d399;
-            height: 16px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .status-bar {
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-        #growth-bar { background: #34d399; width: 0%; }
-        #mood-bar { background: #fbbf24; width: 100%; }
-        #clean-bar { background: #38bdf8; width: 100%; }
-        #sleep-bar { background: #a855f7; width: 100%; }
-        .control-panel {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .control-btn {
-            background: #34d399;
-            color: #1f110a;
-            border: 3px solid #6ee7b7;
-            padding: 10px 18px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            border-radius: 20px;
-            box-shadow: 0 4px #0f0805;
-            cursor: pointer;
-        }
-        .control-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px #0f0805;
-        }
-        .control-btn:disabled {
-            background: #4b2e1e;
-            color: #2b1810;
-            border-color: #3d2314;
-            box-shadow: none;
-            transform: none;
-        }
-        #event-banner {
-            font-size: 1.1rem;
             color: #fbbf24;
-            font-weight: bold;
-            height: 50px;
-            margin: 10px 0;
+            border-bottom: 2px dashed #34d399;
+            width: 100%;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .card-display {
+            width: 100%;
+            height: 140px;
+            background: #000000;
+            border: 3px inset #6ee7b7;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
         }
-        .mut-cyber { filter: hue-rotate(290deg) saturate(3) drop-shadow(0 0 12px #ff00ff) !important; }
-        .mut-golden { filter: sepia(1) saturate(5) hue-rotate(15deg) drop-shadow(0 0 15px #ffcc00) !important; }
-        .mut-cosmic { filter: hue-rotate(160deg) invert(0.8) drop-shadow(0 0 12px #3b82f6) !important; }
-        .mut-radioactive { filter: hue-rotate(80deg) brightness(1.6) drop-shadow(0 0 15px #00ff00) !important; }
-        .mut-shadow { filter: grayscale(1) brightness(0.3) drop-shadow(0 0 10px #000) !important; }
+        .card-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+        .worm-view {
+            font-size: 4.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+        .action-link {
+            display: block;
+            background: #fbbf24;
+            color: #1f110a;
+            border: 3px solid #fff;
+            padding: 12px 24px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 15px;
+            text-decoration: none;
+            width: 100%;
+            box-shadow: 0 4px #b45309;
+        }
+        .action-link:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px #b45309;
+        }
     </style>
 </head>
 <body>
 
-    <div id="phobia-screen">
-        <div style="font-size: 3rem; font-weight: bold;">WARNING: CATERPILLAR AHEAD</div>
-        <div style="font-size: 1.5rem; margin-top: 25px; color: #fff; max-width: 700px; line-height: 1.5;">
-            This page contains close-up photos and animations of a real caterpillar. If you experience insect phobia or discomfort around caterpillars, please go back.
-        </div>
-        <button class="phobia-btn" id="accept-btn">I am not afraid, let me in!</button>
-        <a href="index.html" style="color: #aaa; margin-top: 20px; font-size: 1.1rem;">Take me back to safety</a>
-    </div>
+    <div id="falling-container"></div>
 
     <div class="nav-links">
-        <a href="index.html" class="nav-button">HOME FACTS</a>
-        <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE</a>
-        <a href="other.html" class="nav-button">OTHER ZONE</a>
+        <a href="index.html" class="nav-button">HOME FACTS 📑</a>
+        <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
+        <a href="gacha.html" class="nav-button">GACHA STUDIO 🎰</a>
+        <a href="trust-cat.html" class="nav-button">TRUST OSORE 🐱</a>
+        <a href="folder-work.html" class="nav-button">FOLDER WORKSTATION 📁</a>
+        <a href="other.html" class="nav-button active-tab">OTHER ZONE 🐛</a>
     </div>
 
-    <h1>Silly Caterpillar Sanctuary</h1>
+    <div class="games-grid">
 
-    <div class="crawl-box">
-        <img src="caterpillar.png" alt="Crawling Caterpillar" class="caterpillar-main-img" id="walker">
+        <div class="game-card">
+            <div class="card-title">🐛 OTHER ZONE</div>
+            <div class="card-display">
+                <div class="worm-view">🐛</div>
+            </div>
+            <a href="caterpillar.html" class="action-link">LAUNCH GAME</a>
+        </div>
+
+        <div class="game-card">
+            <div class="card-title">🎰 GACHA STUDIO</div>
+            <div class="card-display">
+                <img src="map1.jpg" alt="Gacha" class="card-img">
+            </div>
+            <a href="gacha.html" class="action-link">LAUNCH GAME</a>
+        </div>
+
+        <div class="game-card">
+            <div class="card-title">🐱 TRUST OSORE</div>
+            <div class="card-display">
+                <img src="cat-admin1.png" alt="Osore" class="card-img">
+            </div>
+            <a href="trust-cat.html" class="action-link">LAUNCH GAME</a>
+        </div>
+
+        <div class="game-card">
+            <div class="card-title">📁 FOLDER WORKSTATION</div>
+            <div class="card-display">
+                <img src="desktop-bg.jpg" alt="Workstation" class="card-img">
+            </div>
+            <a href="folder-work.html" class="action-link">LAUNCH GAME</a>
+        </div>
+
     </div>
 
-    <div class="pet-container">
-        <div style="font-size: 1.3rem; font-weight: bold; color: #6ee7b7; margin-bottom: 10px;">
-            Wallet: <span id="wallet-count">0</span> 🌿 Leaves
-        </div>
-        <div id="event-banner">Pet is chilling...</div>
-        
-        <div class="caterpillar-frame">
-            <img src="caterpillar.png" alt="Silly Caterpillar" class="pet-img" id="pet-avatar">
-        </div>
-
-        <div class="status-container">
-            <div class="bar-label">Form: <span id="stage-text" style="color: #fbbf24;">Standard Larva</span></div>
-            <div class="status-bar-container">
-                <div id="growth-bar" class="status-bar"></div>
-            </div>
-
-            <div class="bar-label">Happiness / Energy:</div>
-            <div class="status-bar-container">
-                <div id="mood-bar" class="status-bar"></div>
-            </div>
-
-            <div class="bar-label">Hygiene:</div>
-            <div class="status-bar-container">
-                <div id="clean-bar" class="status-bar"></div>
-            </div>
-
-            <div class="bar-label">Sleep:</div>
-            <div class="status-bar-container">
-                <div id="sleep-bar" class="status-bar"></div>
-            </div>
-        </div>
-
-        <div style="margin-top: 20px; border-top: 2px dashed #34d399; padding-top: 15px;">
-            <div class="bar-label" style="text-align: center; margin-bottom: 10px; color: #fbbf24;">ALCHEMY SHOP & ACTIONS</div>
-            <div class="control-panel">
-                <button class="control-btn" id="pet-btn">Pet (+5 Leaves)</button>
-                <button class="control-btn" id="clean-btn">Wash (+10 Leaves)</button>
-                <button class="control-btn" id="sleep-btn">Put to Sleep</button>
-                <button class="control-btn" id="scare-btn">Boop Horns</button>
-            </div>
-            <div class="control-panel" style="margin-top: 15px;">
-                <button class="control-btn" id="buy-mint" style="background: #a7f3d0;">Eat Mint Candy (Cost: 30 🌿)</button>
-                <button class="control-btn" id="buy-choco" style="background: #78350f; color: #fff;">Eat Choco Chip (Cost: 50 🌿)</button>
-                <button class="control-btn" id="buy-toxic" style="background: #22c55e;">Eat Toxic Sludge (Cost: 100 🌿)</button>
-            </div>
-        </div>
-    </div>
     <script>
-        const phobiaScreen = document.getElementById('phobia-screen');
-        const acceptBtn = document.getElementById('accept-btn');
-        const petAvatar = document.getElementById('pet-avatar');
-        const walker = document.getElementById('walker');
-        const growthBar = document.getElementById('growth-bar');
-        const moodBar = document.getElementById('mood-bar');
-        const cleanBar = document.getElementById('clean-bar');
-        const sleepBar = document.getElementById('sleep-bar');
-        const stageText = document.getElementById('stage-text');
-        const eventBanner = document.getElementById('event-banner');
-        const walletCount = document.getElementById('wallet-count');
-
-        const petBtn = document.getElementById('pet-btn');
-        const cleanBtn = document.getElementById('clean-btn');
-        const sleepBtn = document.getElementById('sleep-btn');
-        const scareBtn = document.getElementById('scare-btn');
-        const buyMint = document.getElementById('buy-mint');
-        const buyChoco = document.getElementById('buy-choco');
-        const buyToxic = document.getElementById('buy-toxic');
-
-        let wallet = parseInt(localStorage.getItem('cat_wallet')) || 0;
-        let growth = parseInt(localStorage.getItem('cat_growth')) || 0;
-        let mood = parseInt(localStorage.getItem('cat_mood')) || 100;
-        let clean = parseInt(localStorage.getItem('cat_clean')) || 100;
-        let sleep = parseInt(localStorage.getItem('cat_sleep')) || 100;
-        let currentMutation = localStorage.getItem('cat_mutation') || 'none';
+        const fallingContainer = document.getElementById('falling-container');
         
-        let foodHistory = JSON.parse(localStorage.getItem('cat_food_history')) || [];
+        const fConfig = {
+            images: [
+                'https://unsplash.com',
+                'https://unsplash.com',
+                'https://unsplash.com',
+                'https://unsplash.com'
+            ],
+            emojis: ['✨', '🌸', '💫', '🔮', '🌟', '🍒', '🧸', '🎀', '🐛'],
+            kaomoji: ['(◌⚈  ⚈◌)', '(〃ω〃)', '(*^ω^*)', '(◕‿◕✿)', '╰(*´︶`*)╯', '(｡♥‿♥｡)'],
+            words: ['Dream', 'Magic', 'Cosmic', 'Aesthetic', 'Serenity', 'Bliss', 'Ethereal'],
+            colors: ['#ff79c6', '#8be9fd', '#50fa7b', '#ffb86c', '#bd93f9', '#ff5555']
+        };
 
-        acceptBtn.addEventListener('click', () => {
-            phobiaScreen.style.display = 'none';
-        });
+        function spawnItem() {
+            const item = document.createElement('div');
+            item.className = 'falling-item';
+            
+            const types = ['image', 'emoji', 'kaomoji', 'word', 'circle'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            
+            let content = '';
+            let styleStr = '';
+            
+            if (type === 'image') {
+                const src = fConfig.images[Math.floor(Math.random() * fConfig.images.length)];
+                content = `<img src="${src}" class="falling-image">`;
+            } else if (type === 'emoji') {
+                content = fConfig.emojis[Math.floor(Math.random() * fConfig.emojis.length)];
+                styleStr += `font-size: ${Math.random() * 15 + 22}px;`;
+            } else if (type === 'kaomoji') {
+                content = fConfig.kaomoji[Math.floor(Math.random() * fConfig.kaomoji.length)];
+                styleStr += `font-size: ${Math.random() * 8 + 14}px; color: ${fConfig.colors[Math.floor(Math.random() * fConfig.colors.length)]}; font-weight: bold; white-space: nowrap;`;
+            } else if (type === 'word') {
+                content = fConfig.words[Math.floor(Math.random() * fConfig.words.length)];
+                styleStr += `font-size: ${Math.random() * 8 + 14}px; color: ${fConfig.colors[Math.floor(Math.random() * fConfig.colors.length)]}; font-weight: 600; letter-spacing: 1px; white-space: nowrap;`;
+            } else if (type === 'circle') {
+                const size = Math.random() * 25 + 10;
+                const color = fConfig.colors[Math.floor(Math.random() * fConfig.colors.length)];
+                styleStr += `width: ${size}px; height: ${size}px; background-color: ${color}; border-radius: 50%; opacity: 0.5; box-shadow: 0 0 10px ${color};`;
+            }
 
-        function saveState() {
-            localStorage.setItem('cat_wallet', wallet);
-            localStorage.setItem('cat_growth', growth);
-            localStorage.setItem('cat_mood', mood);
-            localStorage.setItem('cat_clean', clean);
-            localStorage.setItem('cat_sleep', sleep);
-            localStorage.setItem('cat_mutation', currentMutation);
-            localStorage.setItem('cat_food_history', JSON.stringify(foodHistory));
+            item.innerHTML = content;
+            if (styleStr) item.style.cssText = styleStr;
+
+            item.style.left = Math.random() * 95 + 'vw';
+            
+            const duration = Math.random() * 6 + 6;
+            item.style.animationDuration = duration + 's';
+            
+            const delay = Math.random() * 3;
+            item.style.animationDelay = '-' + delay + 's';
+
+            fallingContainer.appendChild(item);
+
+            setTimeout(() => {
+                item.remove();
+            }, (duration + delay) * 1000);
         }
 
-        function updateUI() {
-            walletCount.textContent = wallet;
-            growthBar.style.width = growth + '%';
-            moodBar.style.width = mood + '%';
-            cleanBar.style.width = clean + '%';
-            sleepBar.style.width = sleep + '%';
-
-            petAvatar.className = 'pet-img';
-            if (currentMutation !== 'none') {
-                petAvatar.classList.add('mut-' + currentMutation);
-                stageText.textContent = currentMutation.toUpperCase() + " FORM";
-            } else {
-                if (growth >= 100) stageText.textContent = "Eldritch Cocoon";
-                else if (growth > 60) stageText.textContent = "Chunky Larva";
-                else if (growth > 30) stageText.textContent = "Growing Larva";
-                else stageText.textContent = "Standard Larva";
-                
-                petAvatar.style.filter = `hue-rotate(${growth * 1.5}deg)`;
-            }
+        for (let i = 0; i < 25; i++) {
+            setTimeout(spawnItem, Math.random() * 2000);
         }
 
-        function checkMutationLogic() {
-            if (currentMutation !== 'none') return;
-
-            const lastThree = foodHistory.slice(-3).join(',');
-            
-            if (lastThree === 'mint,mint,mint') {
-                currentMutation = 'cyber';
-                eventBanner.textContent = "SYSTEM OVERLOAD! Transformed into Cyber Form!";
-            } else if (lastThree === 'choco,choco,choco') {
-                currentMutation = 'golden';
-                eventBanner.textContent = "MIDAS TOUCH! Transformed into Golden Form!";
-            } else if (lastThree === 'mint,choco,toxic') {
-                currentMutation = 'cosmic';
-                eventBanner.textContent = "SPACE TIME RUPTURE! Transformed into Cosmic Form!";
-            } else if (lastThree === 'toxic,toxic,toxic') {
-                currentMutation = 'radioactive';
-                eventBanner.textContent = "MELTDOWN! Transformed into Radioactive Form!";
-            } else if (lastThree === 'choco,mint,choco' && mood < 20) {
-                currentMutation = 'shadow';
-                eventBanner.textContent = "DARKNESS CONSUMED! Transformed into Shadow Form!";
-            }
-            
-            if (currentMutation !== 'none') {
-                growth = 100;
-                saveState();
-                updateUI();
-            }
-        }
-
-        function feedItem(type, cost) {
-            if (wallet < cost) {
-                eventBanner.textContent = "Not enough Leaves!";
-                return;
-            }
-            if (clean < 20) {
-                eventBanner.textContent = "Too dirty to eat! Wash it first!";
-                return;
-            }
-
-            wallet -= cost;
-            clean = Math.max(0, clean - 20);
-            mood = Math.min(100, mood + 15);
-            growth = Math.min(100, growth + 10);
-            
-            foodHistory.push(type);
-            eventBanner.textContent = `Gulp! Ate ${type.toUpperCase()}. Sequence tracking...`;
-            
-            petAvatar.classList.add('wiggle');
-            setTimeout(() => petAvatar.classList.remove('wiggle'), 600);
-            
-            checkMutationLogic();
-            saveState();
-            updateUI();
-        }
-
-        buyMint.addEventListener('click', () => feedItem('mint', 30));
-        buyChoco.addEventListener('click', () => feedItem('choco', 50));
-        buyToxic.addEventListener('click', () => feedItem('toxic', 100));
-
-        petBtn.addEventListener('click', () => {
-            mood = Math.min(100, mood + 15);
-            wallet += 5;
-            eventBanner.textContent = "Silly... :3 You harvested 5 Leaves!";
-            petAvatar.classList.add('spin');
-            setTimeout(() => petAvatar.classList.remove('spin'), 400);
-            saveState();
-            updateUI();
-        });
-
-        cleanBtn.addEventListener('click', () => {
-            clean = 100;
-            wallet += 10;
-            eventBanner.textContent = "Sparkling clean! You harvested 10 Leaves!";
-            saveState();
-            updateUI();
-        });
-
-        sleepBtn.addEventListener('click', () => {
-            if (clean < 40 || mood < 20) {
-                eventBanner.textContent = "Cannot sleep! Check stats!";
-                return;
-            }
-            sleep = 100;
-            eventBanner.textContent = "Zzz... Resting peacefully.";
-            saveState();
-            updateUI();
-        });
-
-        scareBtn.addEventListener('click', () => {
-            mood = Math.max(0, mood - 40);
-            eventBanner.textContent = "Booped! Running away fast!";
-            walker.classList.add('scared-crawl');
-            setTimeout(() => walker.classList.remove('scared-crawl'), 3500);
-            saveState();
-            updateUI();
-        });
-
-        setInterval(() => {
-            mood = Math.max(0, mood - 3);
-            clean = Math.max(0, clean - 2);
-            sleep = Math.max(0, sleep - 2);
-            saveState();
-            updateUI();
-        }, 4000);
-
-        updateUI();
+        setInterval(spawnItem, 450);
     </script>
 </body>
 </html>
