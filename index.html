@@ -258,21 +258,12 @@
 </head>
 <body>
 
-    <button id="stop-party-btn" onclick="stopParty()">STOP THE PARTY! 🛑</button>
-    <div id="achievement-popup">New Achievement:<br>Cat Party! 🎉</div>
-
-    <div id="warning-screen">
-        <div>⚠️ WARNING! FLASHING LIGHTS PARTY INBOUND! ⚠️</div>
-        <div style="font-size: 1.6rem; margin-top: 20px; color: #fff; max-width: 700px; line-height: 1.4;">
-            This site will flash rapid bright colors in a few seconds. If you have epilepsy or sensitivity to light, please leave now.
-        </div>
-        <div style="font-size: 2rem; margin-top: 30px; color: #ffcc00;">PARTY STARTS IN: <span id="timer-count">20</span> s</div>
-    </div>
+    <div id="achievement-popup">New Achievement:<br>Badge Unlocked! 🎉</div>
 
     <div class="nav-links">
         <a href="index.html" class="nav-button">HOME FACTS 📑</a>
         <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
-        <a href="caterpillar.html" class="nav-button">OTHER ZONE 🐛</a>
+        <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
     </div>
 
     <h1>Mint Neko Facts</h1>
@@ -300,7 +291,7 @@
     </div>
 
     <div class="achievements-panel">
-        <div class="achievements-title">Progress: <span id="progress-text">0 / 51</span> Achievements Collected</div>
+        <div class="achievements-title">Progress: <span id="progress-text">0 / 50</span> Achievements Collected</div>
         <div class="achievements-grid" id="achievements-box"></div>
         <button class="reset-btn" onclick="resetAchievements()">Reset Achievements ⚙</button>
     </div>
@@ -360,9 +351,6 @@
 
         let currentFactIndex = 0;
         let unlockedAchievements = JSON.parse(localStorage.getItem('mint_neko_achieve')) || [];
-        let partyTimer = null;
-        let flashInterval = null;
-        let candyInterval = null;
 
         function init() {
             renderAchievementsGrid();
@@ -381,13 +369,7 @@
                 box.appendChild(badge);
             }
 
-            const specialBadge = document.createElement('div');
-            specialBadge.className = 'badge special' + (unlockedAchievements.includes(50) ? ' unlocked' : '');
-            specialBadge.id = 'badge-50';
-            specialBadge.textContent = 'Grand Party 👑';
-            box.appendChild(specialBadge);
-
-            document.getElementById('progress-text').textContent = `${unlockedAchievements.length} / 51`;
+            document.getElementById('progress-text').textContent = `${unlockedAchievements.length} / 50`;
         }
 
         function showFact(index) {
@@ -415,7 +397,6 @@
                 unlockedAchievements.push(currentFactIndex);
                 saveAndRefresh();
                 triggerPopup(`Unlocked Badge #${currentFactIndex + 1}!`);
-                checkSecretCondition();
             }
         }
 
@@ -434,78 +415,7 @@
             }, 3000);
         }
 
-             function checkSecretCondition() {
-            const hasAllFifty = catFacts.keys().every(i => unlockedAchievements.includes(i));
-            if (hasAllFifty && !unlockedAchievements.includes(50)) {
-                startSecretCountdown();
-            }
-        }
-
-            }
-        }
-
-        function startSecretCountdown() {
-            const warnScreen = document.getElementById('warning-screen');
-            const timerCount = document.getElementById('timer-count');
-            warnScreen.style.display = 'flex';
-            
-            let timeLeft = 20;
-            timerCount.textContent = timeLeft;
-
-            partyTimer = setInterval(() => {
-                timeLeft--;
-                timerCount.textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(partyTimer);
-                    warnScreen.style.display = 'none';
-                    startCrazyParty();
-                }
-            }, 1000);
-        }
-
-        function startCrazyParty() {
-            if (!unlockedAchievements.includes(50)) {
-                unlockedAchievements.push(50);
-                saveAndRefresh();
-            }
-
-            document.getElementById('stop-party-btn').style.display = 'block';
-
-            document.getElementById('cat-img-1').classList.add('dancing');
-            document.getElementById('cat-img-2').classList.add('dancing');
-            document.getElementById('cat-img-3').classList.add('dancing');
-
-            flashInterval = setInterval(() => {
-                const colors = ['#ff0055', '#00ffcc', '#ffcc00', '#00ff00', '#9900ff', '#ff5500'];
-                document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            }, 100);
-
-            candyInterval = setInterval(() => {
-                const candies = ['🍬', '🍭', '🍫', '🍩', '🍪', '🐱', '✨'];
-                const emoji = document.createElement('div');
-                emoji.className = 'candy-emoji';
-                emoji.textContent = candies[Math.floor(Math.random() * candies.length)];
-                emoji.style.left = Math.random() * 100 + 'vw';
-                document.body.appendChild(emoji);
-                setTimeout(() => emoji.remove(), 3000);
-            }, 100);
-        }
-
-        function stopParty() {
-            clearInterval(flashInterval);
-            clearInterval(candyInterval);
-            document.body.style.backgroundColor = '#1f110a';
-            document.getElementById('stop-party-btn').style.display = 'none';
-
-            document.getElementById('cat-img-1').classList.remove('dancing');
-            document.getElementById('cat-img-2').classList.remove('dancing');
-            document.getElementById('cat-img-3').classList.remove('dancing');
-        }
-
         function resetAchievements() {
-            clearInterval(partyTimer);
-            stopParty();
-            document.getElementById('warning-screen').style.display = 'none';
             localStorage.removeItem('mint_neko_achieve');
             unlockedAchievements = [];
             init();
