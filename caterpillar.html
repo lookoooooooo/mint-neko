@@ -1,227 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Silly Caterpillar Sanctuary Max</title>
-    <style>
-        * {
-            cursor: url('cursor3.jpg') 16 16, auto !important;
-        }
-        body {
-            background-color: #1f110a;
-            color: #34d399;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 20px;
-            text-align: center;
-            overflow-x: hidden;
-        }
-        #phobia-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000000;
-            color: #ff3333;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 999999;
-            padding: 40px;
-            box-sizing: border-box;
-        }
-        .phobia-btn {
-            background: #ff3333;
-            color: #000;
-            border: 2px solid #fff;
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 30px;
-            margin-top: 30px;
-            cursor: pointer;
-        }
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        .nav-button {
-            background: #4b2e1e;
-            color: #6ee7b7;
-            border: 3px dashed #34d399;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 12px;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 4px 10px rgba(52, 211, 153, 0.2);
-            transition: transform 0.2s, background 0.2s;
-        }
-        .nav-button:hover {
-            transform: scale(1.05);
-            background: #3d2314;
-        }
-        h1 {
-            color: #6ee7b7;
-            text-shadow: 4px 4px #3d2314;
-            font-size: 3.5rem;
-            letter-spacing: 1px;
-        }
-        .crawl-box {
-            position: relative;
-            width: 100%;
-            height: 180px;
-            background: #150b06;
-            border: 3px solid #6ee7b7;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        .caterpillar-main-img {
-            position: absolute;
-            bottom: 15px;
-            left: -140px;
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            animation: crawlLoop 10s linear infinite;
-        }
-        @keyframes crawlLoop {
-            0% { left: -140px; transform: scaleX(1) scaleY(1); }
-            5% { transform: scaleX(0.7) scaleY(1.2); }
-            10% { transform: scaleX(1.2) scaleY(0.8); }
-            15% { transform: scaleX(0.7) scaleY(1.2); }
-            20% { transform: scaleX(1.2) scaleY(0.8); }
-            25% { transform: scaleX(0.7) scaleY(1.2); }
-            30% { transform: scaleX(1.2) scaleY(0.8); }
-            35% { transform: scaleX(0.7) scaleY(1.2); }
-            40% { transform: scaleX(1.2) scaleY(0.8); }
-            45% { transform: scaleX(0.7) scaleY(1.2); }
-            50% { transform: scaleX(1.2) scaleY(0.8); }
-            55% { transform: scaleX(0.7) scaleY(1.2); }
-            60% { transform: scaleX(1.2) scaleY(0.8); }
-            65% { transform: scaleX(0.7) scaleY(1.2); }
-            70% { transform: scaleX(1.2) scaleY(0.8); }
-            75% { transform: scaleX(0.7) scaleY(1.2); }
-            80% { transform: scaleX(1.2) scaleY(0.8); }
-            85% { transform: scaleX(0.7) scaleY(1.2); }
-            90% { transform: scaleX(1.2) scaleY(0.8); }
-            95% { transform: scaleX(0.7) scaleY(1.2); }
-            100% { left: 105%; transform: scaleX(1) scaleY(1); }
-        }
-        .scared-crawl {
-            animation-duration: 3.5s !important;
-        }
-        .pet-container {
-            max-width: 600px;
-            margin: 30px auto;
-            background: #2b1810;
-            border: 4px dashed #34d399;
-            padding: 25px;
-            border-radius: 24px;
-            box-shadow: 0 0 25px rgba(52, 211, 153, 0.15);
-        }
-        .caterpillar-frame {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #150b06;
-            border: 3px solid #6ee7b7;
-            border-radius: 50%;
-        }
-        .pet-img {
-            width: 150px;
-            height: 150px;
-            object-fit: contain;
-            transition: transform 0.1s ease, filter 0.5s ease;
-        }
-        .wiggle {
-            animation: wiggleAnim 0.2s ease infinite alternate;
-        }
-        .spin {
-            animation: spinAnim 0.4s ease;
-        }
-        @keyframes wiggleAnim {
-            from { transform: scale(1) rotate(-5deg); }
-            to { transform: scale(1.1) rotate(5deg); }
-        }
-        @keyframes spinAnim {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.3) rotate(180deg); }
-            100% { transform: scale(1) rotate(360deg); }
-        }
-        .status-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 85%;
-            margin: 15px auto;
-        }
-        .bar-label {
-            font-size: 0.9rem;
-            text-align: left;
-            font-weight: bold;
-            color: #a7f3d0;
-        }
-        .status-bar-container {
-            width: 100%;
-            background: #4b2e1e;
-            border: 2px solid #34d399;
-            height: 16px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .status-bar {
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-        #growth-bar { background: #34d399; width: 0%; }
-        #mood-bar { background: #fbbf24; width: 100%; }
-        .control-panel {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .control-btn {
-            background: #34d399;
-            color: #1f110a;
-            border: 3px solid #6ee7b7;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 20px;
-            box-shadow: 0 4px #0f0805;
-            cursor: pointer;
-        }
-        .control-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px #0f0805;
-        }
-        .control-btn:disabled {
-            background: #4b2e1e;
-            color: #2b1810;
-            border-color: #3d2314;
-            box-shadow: none;
-            transform: none;
-        }
-        #event-banner {
-            font-size: 1.1rem;
-            color: #fbbf24;
-            font-weight: bold;
-            height: 25px;
-            margin: 10px 0;
-        }
-    </style>
-</head>
 <body>
 
     <div id="phobia-screen">
@@ -241,14 +17,145 @@
     <h1>Silly Dragon Sanctuary</h1>
 
     <div class="crawl-box">
-        <img src="dragon-caterpillar.jpg" alt="Crawling Caterpillar" class="caterpillar-main-img" id="walker">
+        <img src="dragon-caterpillar" alt="Crawling Caterpillar" class="caterpillar-main-img" id="walker">
     </div>
 
     <div class="pet-container">
         <div id="event-banner">Pet is chilling...</div>
         
         <div class="caterpillar-frame">
-            <img src="dragon-caterpillar.jpg" alt="Dragon Caterpillar" class="pet-img" id="pet-avatar">
+            <img src="dragon-caterpillar" alt="Dragon Caterpillar" class="pet-img" id="pet-avatar">
+        </div>
+
+        <div class="status-container">
+            <div class="bar-label">Growth Stage: <span id="stage-text">Baby Larva</span></div>
+            <div class="status-bar-container">
+                <div id="growth-bar" class="status-bar"></div>
+            </div>
+
+            <div class="bar-label">Happiness / Energy:</div>
+            <div class="status-bar-container">
+                <div id="mood-bar" class="status-bar"></div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <button class="control-btn" id="feed-btn">Feed Fresh Leaves</button>
+            <button class="control-btn" id="pet-btn">Pet Gently</button>
+            <button class="control-btn" id="scare-btn">Boop Horns</button>
+        </div>
+    </div>
+
+    <script>
+        const phobiaScreen = document.getElementById('phobia-screen');
+        const acceptBtn = document.getElementById('accept-btn');
+        const petAvatar = document.getElementById('pet-avatar');
+        const walker = document.getElementById('walker');
+        const growthBar = document.getElementById('growth-bar');
+        const moodBar = document.getElementById('mood-bar');
+        const stageText = document.getElementById('stage-text');
+        const eventBanner = document.getElementById('event-banner');
+
+        const feedBtn = document.getElementById('feed-btn');
+        const petBtn = document.getElementById('pet-btn');
+        const scareBtn = document.getElementById('scare-btn');
+
+        let growth = 0;
+        let mood = 100;
+        let isEvolved = false;
+
+        acceptBtn.addEventListener('click', () => {
+            phobiaScreen.style.display = 'none';
+        });
+
+        function updateUI() {
+            growthBar.style.width = growth + '%';
+            moodBar.style.width = mood + '%';
+
+            if (growth >= 100 && !isEvolved) {
+                isEvolved = true;
+                stageText.textContent = "Imperial Butterfly";
+                eventBanner.textContent = "Evolution! It became a Butterfly!";
+                petAvatar.style.filter = "hue-rotate(120deg) drop-shadow(0 0 10px #34d399)";
+                feedBtn.disabled = true;
+                petBtn.disabled = true;
+                scareBtn.disabled = true;
+            } else if (!isEvolved) {
+                if (growth > 60) stageText.textContent = "Big Fat Dragon";
+                else if (growth > 30) stageText.textContent = "Active Caterpillar";
+                else stageText.textContent = "Baby Larva";
+            }
+        }
+
+        feedBtn.addEventListener('click', () => {
+            if (isEvolved) return;
+            growth = Math.min(100, growth + 15);
+            mood = Math.min(100, mood + 10);
+            eventBanner.textContent = "Chomp chomp! Delicious leaves!";
+            
+            petAvatar.classList.add('wiggle');
+            setTimeout(() => petAvatar.classList.remove('wiggle'), 600);
+            
+            updateUI();
+        });
+
+        petBtn.addEventListener('click', () => {
+            if (isEvolved) return;
+            mood = Math.min(100, mood + 20);
+            eventBanner.textContent = "The caterpillar wiggles happily!";
+            
+            petAvatar.classList.add('spin');
+            setTimeout(() => petAvatar.classList.remove('spin'), 400);
+            
+            updateUI();
+        });
+
+        scareBtn.addEventListener('click', () => {
+            if (isEvolved) return;
+            mood = Math.max(0, mood - 30);
+            eventBanner.textContent = "Scared! It runs away fast!";
+            
+            walker.classList.add('scared-crawl');
+            setTimeout(() => walker.classList.remove('scared-crawl'), 3500);
+            
+            updateUI();
+        });
+
+        setInterval(() => {
+            if (isEvolved) return;
+            mood = Math.max(0, mood - 2);
+            updateUI();
+        }, 2000);
+    </script>
+</body>
+</html>
+<body>
+
+    <div id="phobia-screen">
+        <div style="font-size: 3rem; font-weight: bold;">WARNING: CATERPILLAR AHEAD</div>
+        <div style="font-size: 1.5rem; margin-top: 25px; color: #fff; max-width: 700px; line-height: 1.5;">
+            This page contains close-up photos and animations of a real caterpillar. If you experience insect phobia or discomfort around caterpillars, please go back.
+        </div>
+        <button class="phobia-btn" id="accept-btn">I am not afraid, let me in!</button>
+        <a href="index.html" style="color: #aaa; margin-top: 20px; font-size: 1.1rem;">Take me back to safety</a>
+    </div>
+
+    <div class="nav-links">
+        <a href="index.html" class="nav-button">HOME FACTS</a>
+        <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE</a>
+    </div>
+
+    <h1>Silly Dragon Sanctuary</h1>
+
+    <div class="crawl-box">
+        <img src="caterpillar.png" alt="Crawling Caterpillar" class="caterpillar-main-img" id="walker">
+    </div>
+
+    <div class="pet-container">
+        <div id="event-banner">Pet is chilling...</div>
+        
+        <div class="caterpillar-frame">
+            <img src="caterpillar.png" alt="Dragon Caterpillar" class="pet-img" id="pet-avatar">
         </div>
 
         <div class="status-container">
