@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Other Zone</title>
+    <title>Mini-Games Zone</title>
     <style>
         * {
             cursor: url('cursor1.png') 16 16, auto !important;
             box-sizing: border-box;
         }
         body {
-            background-color: #0c0705;
+            background-color: #1f110a;
             color: #34d399;
             font-family: 'Courier New', Courier, monospace;
             padding: 15px;
@@ -40,8 +40,8 @@
             width: 40px;
             height: 40px;
             object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         @keyframes fall {
             0% {
@@ -68,7 +68,7 @@
             z-index: 10;
         }
         .nav-button {
-            background: #1f110a;
+            background: #4b2e1e;
             color: #6ee7b7;
             border: 2px dashed #34d399;
             padding: 8px 16px;
@@ -98,21 +98,21 @@
             position: relative;
             z-index: 10;
         }
-        @media(min-width: 800px) {
+        @media(min-width: 850px) {
             .other-layout { grid-template-columns: 1.3fr 1fr; }
         }
         .archive-panel {
-            background: #1f110a;
+            background: #2b1810;
             border: 4px solid #34d399;
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .panel-title {
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: #fbbf24;
             border-bottom: 2px dashed #34d399;
@@ -124,43 +124,43 @@
         .decrypt-screen {
             background: #000000;
             color: #6ee7b7;
-            border: 3px inset #34d399;
+            border: 3px inset #6ee7b7;
             border-radius: 12px;
             padding: 20px;
             width: 100%;
-            min-height: 200px;
+            min-height: 150px;
             margin-bottom: 20px;
             font-size: 1.1rem;
             line-height: 1.6;
             text-align: left;
         }
         .game-btn {
-            background: #34d399;
-            color: #0c0705;
+            background: #fbbf24;
+            color: #1f110a;
             border: 3px solid #fff;
             padding: 12px;
             font-family: inherit;
             font-size: 1.1rem;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
             width: 100%;
-            box-shadow: 0 4px #000;
+            box-shadow: 0 4px #b45309;
         }
         .game-btn:active {
             transform: translateY(2px);
-            box-shadow: none;
+            box-shadow: 0 2px #b45309;
         }
         .side-shelf {
-            background: #1f110a;
+            background: #2b1810;
             border: 4px solid #34d399;
             border-radius: 20px;
             padding: 15px;
             text-align: left;
         }
         .log-node {
-            background: #000000;
-            border: 2px dashed #4b2e1e;
+            background: #150b06;
+            border: 2px solid #3d2314;
             padding: 10px;
             border-radius: 8px;
             font-size: 0.85rem;
@@ -169,7 +169,6 @@
             line-height: 1.4;
         }
         .custom-p { margin: 0 0 10px 0; }
-        
         .old-maps-gallery {
             width: 100%;
             display: grid;
@@ -200,21 +199,21 @@
         <a href="other.html" class="nav-button active-tab">OTHER ZONE 🐛</a>
     </div>
 
-    <h1>CORE ANOMALY REPOSITORY</h1>
+    <h1>MINI-GAMES INTERACTIVE ARCHIVE</h1>
 
     <div class="other-layout">
         
         <div class="archive-panel">
-            <div class="panel-title">⏳ ANOMALY DECRYPTION ENGINE</div>
+            <div class="panel-title">🎰 CLICKER CORE ENGINE</div>
             
             <div class="decrypt-screen" id="anomaly-screen">
-                <p class="custom-p" style="color: #fbbf24; font-weight: bold;">[CORE INTERCEPT LINK ONLINE]</p>
-                <p class="custom-p">The main server structure is leaking uncompiled data fragments. Click the engine core below to process signal packets, generate system currency, and bypass local security blocks.</p>
-                <p class="custom-p" style="color: #ff3333;" id="next-requirement">Next classified network log requires: 25 raw fragments.</p>
+                <p class="custom-p" style="color: #fbbf24; font-weight: bold;">[ACTIVE CORE ENGINE ONLINE]</p>
+                <p class="custom-p">Click the recovery core below to generate data packets and update your score tracker counter.</p>
+                <p class="custom-p" style="color: #6ee7b7;" id="next-requirement">Next milestone requires: 25 raw fragments.</p>
             </div>
 
             <div style="width: 100%; text-align: left; background: #000000; padding: 12px; border-radius: 8px; border: 2px solid #34d399; margin-bottom: 15px;">
-                <span style="font-weight: bold; color: #ffffff;">💾 COLLECTED DATA PACKETS:</span>
+                <span style="font-weight: bold; color: #ffffff;">💾 RECOVERED PACKETS:</span>
                 <span id="collected-fragments" style="font-weight: bold; color: #fbbf24; float: right;">0</span>
             </div>
 
@@ -222,21 +221,18 @@
 
             <div class="panel-title" style="margin-top: 25px;">🗺️ SYSTEM MAPS & VISUAL ASSETS</div>
             <div class="old-maps-gallery">
-                <img src="map1.jpg" alt="System Map 1" class="map-card-img">
-                <img src="map2.jpg" alt="System Map 2" class="map-card-img">
-                <img src="map3.jpg" alt="System Map 3" class="map-card-img">
-                <img src="map4.jpg" alt="System Map 4" class="map-card-img">
+                
                 <img src="cat-admin1.png" alt="Admin Osore-san" class="map-card-img">
                 <img src="desktop-bg.jpg" alt="Folder Background Space" class="map-card-img">
             </div>
         </div>
 
         <div class="side-shelf">
-            <div class="panel-title">📁 UNLOCKED ARCHIVE SECTORS</div>
+            <div class="panel-title">📁 UNLOCKED SCORE STAGES</div>
             <div id="unlocked-anomaly-box">
                 <div class="log-node" style="border-color: #6ee7b7;">
-                    <strong>[SECTOR 00: COEXISTENCE]</strong><br>
-                    Initial workspace initialized. System tracking algorithms activated.
+                    <strong>[STAGE 00: INITIALIZED]</strong><br>
+                    Score system tracking online. Click core engine to update logs.
                 </div>
             </div>
         </div>
@@ -254,20 +250,20 @@
         const anomalyDatabase = [
             {
                 cost: 25,
-                title: "SECTOR 01: EXTENSION MBTI CONFIG",
-                text: "System configurations reveal that character surnames dictate their behavior algorithms. .png anchors act as forced administrative leaders, while .jpg layers construct the physical ground and canvas reality. The architecture is absolute.",
+                title: "STAGE 01: BEGINNER EXTENSION",
+                text: "Successfully registered first stage packet validation layer.",
                 id: "an_1"
             },
             {
                 cost: 60,
-                title: "SECTOR 02: THE WINDOW DROP",
-                text: "Decrypted logs trace Osore-san's missing session signature. On a routine compilation cycle, he swap-mapped his workspace directory to the peripheral row near the boundary window, executing a hard terminal bypass leap into unallocated forest cache.",
+                title: "STAGE 02: ADVANCED SECTOR",
+                text: "Secondary validation criteria met. Performance benchmarks operating within absolute baseline metrics.",
                 id: "an_2"
             },
             {
                 cost: 110,
-                title: "SECTOR 03: OVERRIDE SYSTEM TERMINATION",
-                text: "Final override protocol executed. The server grid establishes an automated cleanup cycle, forcing temporary runtime visual wrappers to remain stable even when user focus shifts away from active document modules.",
+                title: "STAGE 03: MAXCORE TERMINATION",
+                text: "Final verification sequence executed. The interface limits remain stable across active session modules.",
                 id: "an_3"
             }
         ];
@@ -276,16 +272,16 @@
             fragmentDisplay.innerText = fragments;
             archiveBox.innerHTML = `
                 <div class="log-node" style="border-color: #6ee7b7;">
-                    <strong>[SECTOR 00: COEXISTENCE]</strong><br>
-                    Initial workspace initialized. System tracking algorithms activated.
+                    <strong>[STAGE 00: INITIALIZED]</strong><br>
+                    Score system tracking online. Click core engine to update logs.
                 </div>
             `;
             
             let nextAnomaly = anomalyDatabase.find(a => !unlockedStages.includes(a.id));
             if (nextAnomaly) {
-                reqDisplay.innerText = `Next classified network log requires: ${nextAnomaly.cost} raw fragments.`;
+                reqDisplay.innerText = `Next milestone requires: ${nextAnomaly.cost} raw fragments.`;
             } else {
-                reqDisplay.innerText = "All sectors completely uncompiled and decrypted.";
+                reqDisplay.innerText = "All verification modules fully decrypted and loaded.";
             }
 
             anomalyDatabase.forEach(anomaly => {
@@ -308,7 +304,7 @@
                 unlockedStages.push(nextAnomaly.id);
                 localStorage.setItem('unlocked_anomalies', JSON.stringify(unlockedStages));
                 screenDisplay.innerHTML = `
-                    <p class="custom-p" style="color: #6ee7b7; font-weight: bold;">[NEW SECTOR DECRYPTED: ${nextAnomaly.title}]</p>
+                    <p class="custom-p" style="color: #6ee7b7; font-weight: bold;">[STAGE VALIDATED: ${nextAnomaly.title}]</p>
                     <p class="custom-p">${nextAnomaly.text}</p>
                 `;
             }
@@ -328,8 +324,8 @@
             ],
             emojis: ['✨', '🌸', '💫', '🔮', '🌟', '🍒', '🧸', '🎀'],
             kaomoji: ['(◌⚈  ⚈◌)', '(〃ω〃)', '(*^ω^*)', '(◕‿◕✿)', '╰(*´︶`*)╯', '(｡♥‿♥｡)'],
-            words: ['Anomaly', 'Core', 'Data', 'Archive', 'System', 'Network', 'Signal'],
-            colors: ['#34d399', '#6ee7b7', '#fbbf24', '#a7f3d0', '#ff5555', '#ff79c6']
+            words: ['Dream', 'Magic', 'Cosmic', 'Aesthetic', 'Serenity', 'Bliss', 'Ethereal'],
+            colors: ['#ff79c6', '#8be9fd', '#50fa7b', '#ffb86c', '#bd93f9', '#ff5555']
         };
 
         function spawnItem() {
@@ -349,7 +345,7 @@
                 content = fConfig.emojis[Math.floor(Math.random() * fConfig.emojis.length)];
                 styleStr += `font-size: ${Math.random() * 15 + 22}px;`;
             } else if (type === 'kaomoji') {
-                content = fConfig.kaomoji[Math.floor(Math.random() * fConfig.kaomoji.length)];
+                content = fConfig.fConfig.kaomoji[Math.floor(Math.random() * fConfig.kaomoji.length)];
                 styleStr += `font-size: ${Math.random() * 8 + 14}px; color: ${fConfig.colors[Math.floor(Math.random() * fConfig.colors.length)]}; font-weight: bold; white-space: nowrap;`;
             } else if (type === 'word') {
                 content = fConfig.words[Math.floor(Math.random() * fConfig.words.length)];
