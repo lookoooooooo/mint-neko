@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Other Aesthetic Zone</title>
+    <title>Other Zone</title>
     <style>
         * {
             cursor: url('cursor1.png') 16 16, auto !important;
@@ -34,6 +34,7 @@
             border-radius: 12px;
             opacity: 0.15;
             animation: fallAnimation 8s linear infinite;
+            image-rendering: pixelated;
         }
         @keyframes fallAnimation {
             0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
@@ -137,7 +138,7 @@
             <a href="caterpillar.html" class="hub-card">
                 <div class="card-icon">🐛</div>
                 <div class="card-title">Silly Caterpillar Zone</div>
-                <div class="card-desc">Explore the secret aesthetic universe of the legendary mint-chocolate caterpillar. No butterflies allowed!</div>
+                <div class="card-desc">Explore the secret universe of the legendary mint-chocolate caterpillar. No butterflies allowed!</div>
             </a>
             
             <div class="hub-card" style="cursor: pointer;" onclick="triggerFullReset()">
@@ -147,10 +148,11 @@
             </div>
         </div>
     </div>
+
     <script>
         const mediaFiles = [
-            'cat1.jpg', 'cat2.jpg', 'cat3.jpg', 'cat.gif',
-            'mint1.jpg', 'mint2.jpg', 'choco1.jpg', 'choco2.jpg'
+            'cat1.jpg', 'cat2.jpg', 'cat3.jpg', 
+            'caterpillar.png', 'dragon-caterpillar.jpg', 'cursor1.png'
         ];
 
         function createFallingMedia() {
