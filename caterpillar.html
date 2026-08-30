@@ -38,6 +38,7 @@
             font-weight: bold;
             border-radius: 30px;
             margin-top: 30px;
+            cursor: pointer;
         }
         .nav-links {
             display: flex;
@@ -68,15 +69,6 @@
             text-shadow: 4px 4px #3d2314;
             font-size: 3.5rem;
             letter-spacing: 1px;
-        }
-        .info-card {
-            max-width: 650px;
-            margin: 20px auto 30px auto;
-            background: #2b1810;
-            border: 4px dashed #34d399;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 0 15px rgba(52, 211, 153, 0.1);
         }
         .crawl-box {
             position: relative;
@@ -208,6 +200,7 @@
             font-weight: bold;
             border-radius: 20px;
             box-shadow: 0 4px #0f0805;
+            cursor: pointer;
         }
         .control-btn:active {
             transform: translateY(2px);
@@ -232,247 +225,131 @@
 <body>
 
     <div id="phobia-screen">
-        <div style="font-size: 3rem; font-weight: bold;">⚠️ WARNING: CATERPILLAR AHEAD ⚠️</div>
+        <div style="font-size: 3rem; font-weight: bold;">WARNING: CATERPILLAR AHEAD</div>
         <div style="font-size: 1.5rem; margin-top: 25px; color: #fff; max-width: 700px; line-height: 1.5;">
             This page contains close-up photos and animations of a real caterpillar. If you experience insect phobia or discomfort around caterpillars, please go back.
         </div>
-        <button class="phobia-btn" onclick="acceptWarning()">I'm not afraid, let me in! 🐛</button>
-        <a href="other.html" style="color: #aaa; margin-top: 20px; font-size: 1.1rem;">Take me back to safety</a>
+        <button class="phobia-btn" id="accept-btn">I am not afraid, let me in!</button>
+        <a href="index.html" style="color: #aaa; margin-top: 20px; font-size: 1.1rem;">Take me back to safety</a>
     </div>
 
     <div class="nav-links">
-        <a href="index.html" class="nav-button">HOME FACTS 📑</a>
-        <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
-        <a href="clicker.html" class="nav-button">MINT CLICKER 🪙</a>
-        <a href="other.html" class="nav-button">OTHER ZONE 👑</a>
+        <a href="index.html" class="nav-button">HOME FACTS</a>
+        <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE</a>
     </div>
 
-    <h1>SILLY CATERPILLAR</h1>
+    <h1>Silly Dragon Sanctuary</h1>
 
-    <div class="info-card">
-        <div class="crawl-box" id="info-crawl-container">
-            <img src="caterpillar.png" alt="Silly Caterpillar Biology" class="caterpillar-main-img" id="crawling-bug" onclick="scareCaterpillar(event)">
-        </div>
-        <div style="font-size: 1.6rem; color: #6ee7b7; font-weight: bold; margin-bottom: 10px;">About Sasakia Charonda 🐛</div>
-        <div style="font-size: 1.05rem; color: #a7f3d0; line-height: 1.5; text-align: left;">
-            This creature is famous for its silly, cat-like face mask and tiny dragon horns. It uses these horns to blend in perfectly with the leaves of Chinese Hackberry trees. It strictly feeds on minty greens and changes its color to a chocolate brown shade to hibernate during cold winters!
-        </div>
+    <div class="crawl-box">
+        <img src="dragon-caterpillar.jpg" alt="Crawling Caterpillar" class="caterpillar-main-img" id="walker">
     </div>
+
     <div class="pet-container">
-        <div style="font-size: 1.8rem; font-weight: bold; color: #6ee7b7; border-bottom: 2px dashed #34d399; padding-bottom: 10px; margin-bottom: 15px;">🐛 Caterpillar Life Simulator 🧪</div>
-        <div id="pet-stage" style="font-size: 1.3rem; color: #6ee7b7; font-weight: bold;">Stage: Tiny Green Ninja 🍃</div>
-        <div style="font-size: 1.2rem; margin-top: 5px; color: #a7f3d0;">Weight: <span id="weight-display">1</span>g</div>
+        <div id="event-banner">Pet is chilling...</div>
         
-        <div id="event-banner">Caterpillar is feeling great! :3</div>
-
         <div class="caterpillar-frame">
-            <img src="caterpillar.png" alt="Silly Caterpillar" id="pet-avatar" class="pet-img" onclick="petCaterpillar(event)">
-            <div id="text-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden;"></div>
+            <img src="dragon-caterpillar.jpg" alt="Dragon Caterpillar" class="pet-img" id="pet-avatar">
         </div>
 
         <div class="status-container">
-            <div class="bar-label">Caterpillar Growth:</div>
+            <div class="bar-label">Growth Stage: <span id="stage-text">Baby Larva</span></div>
             <div class="status-bar-container">
-                <div class="status-bar" id="growth-bar"></div>
+                <div id="growth-bar" class="status-bar"></div>
             </div>
-            
-            <div class="bar-label">Caterpillar Mood:</div>
+
+            <div class="bar-label">Happiness / Energy:</div>
             <div class="status-bar-container">
-                <div class="status-bar" id="mood-bar"></div>
+                <div id="mood-bar" class="status-bar"></div>
             </div>
         </div>
 
         <div class="control-panel">
-            <button class="control-btn" id="feed-btn" onclick="feedCaterpillar()">Feed Mint Leaf 🍃</button>
-            <button class="control-btn" id="play-btn" onclick="playWithCaterpillar()">Pet Horns 🧸</button>
-            <button class="control-btn" id="sleep-btn" onclick="putToSleep()">Put to Sleep 💤</button>
+            <button class="control-btn" id="feed-btn">Feed Fresh Leaves</button>
+            <button class="control-btn" id="pet-btn">Pet Gently</button>
+            <button class="control-btn" id="scare-btn">Boop Horns</button>
         </div>
     </div>
 
     <script>
-        let weight = 1;
+        const phobiaScreen = document.getElementById('phobia-screen');
+        const acceptBtn = document.getElementById('accept-btn');
+        const petAvatar = document.getElementById('pet-avatar');
+        const walker = document.getElementById('walker');
+        const growthBar = document.getElementById('growth-bar');
+        const moodBar = document.getElementById('mood-bar');
+        const stageText = document.getElementById('stage-text');
+        const eventBanner = document.getElementById('event-banner');
+
+        const feedBtn = document.getElementById('feed-btn');
+        const petBtn = document.getElementById('pet-btn');
+        const scareBtn = document.getElementById('scare-btn');
+
+        let growth = 0;
         let mood = 100;
-        let isMaxed = false;
-        let isSleeping = false;
-        let isCranky = false;
+        let isEvolved = false;
 
-        function acceptWarning() {
-            document.getElementById('phobia-screen').style.display = 'none';
-        }
+        acceptBtn.addEventListener('click', () => {
+            phobiaScreen.style.display = 'none';
+        });
 
-        function scareCaterpillar(event) {
-            playAudio();
-            
-            const bug = document.getElementById('crawling-bug');
-            bug.classList.add('scared-crawl');
-            
-            const container = document.getElementById('info-crawl-container');
-            const anger = document.createElement('div');
-            anger.innerText = '💢';
-            anger.style.position = 'absolute';
-            anger.style.fontSize = '1.8rem';
-            anger.style.left = event.offsetX + 'px';
-            anger.style.top = event.offsetY + 'px';
-            anger.style.pointerEvents = 'none';
-            anger.style.transition = 'all 0.5s ease-out';
-            
-            container.appendChild(anger);
-            
-            setTimeout(() => {
-                anger.style.transform = 'scale(1.4) translateY(-20px)';
-                anger.style.opacity = '0';
-            }, 10);
-            
-            setTimeout(() => anger.remove(), 500);
-            setTimeout(() => bug.classList.remove('scared-crawl'), 1500);
-        }
+        function updateUI() {
+            growthBar.style.width = growth + '%';
+            moodBar.style.width = mood + '%';
 
-        function updatePet() {
-            document.getElementById('weight-display').innerText = weight;
-            
-            let growthPercentage = (weight / 450) * 100;
-            if (growthPercentage > 100) growthPercentage = 100;
-            document.getElementById('growth-bar').style.width = growthPercentage + '%';
-            document.getElementById('mood-bar').style.width = mood + '%';
-
-            const avatar = document.getElementById('pet-avatar');
-            const stageText = document.getElementById('pet-stage');
-
-            if (weight < 100) {
-                stageText.innerText = "Stage: Tiny Green Ninja 🍃";
-                avatar.style.filter = "none";
-            } else if (weight >= 100 && weight < 280) {
-                stageText.innerText = "Stage: Minty Cinnamon Roll 🥯";
-                avatar.style.filter = "hue-rotate(60deg) saturate(1.2)";
-            } else if (weight >= 280 && weight < 430) {
-                stageText.innerText = "Stage: Winter Chocolate Bar 🍫";
-                avatar.style.filter = "sepia(0.8) hue-rotate(-30deg) saturate(1.5) brightness(0.6)";
-            } else if (weight >= 430) {
-                stageText.innerText = "Stage: Queen of Silly Caterpillars 👑";
-                avatar.style.filter = "hue-rotate(140deg) saturate(2) brightness(1.1)";
-                if (!isMaxed) {
-                    isMaxed = true;
-                    document.getElementById('feed-btn').disabled = true;
-                    document.getElementById('play-btn').disabled = true;
-                    document.getElementById('sleep-btn').disabled = true;
-                    document.getElementById('event-banner').innerText = "ALL HAIL THE QUEEN! 👑";
-                    alert("Congratulations! You raised the Ultimate Silly Caterpillar! She is now the Queen! 👑💚");
-                }
+            if (growth >= 100 && !isEvolved) {
+                isEvolved = true;
+                stageText.textContent = "Imperial Butterfly";
+                eventBanner.textContent = "Evolution! It became a Butterfly!";
+                petAvatar.style.filter = "hue-rotate(120deg) drop-shadow(0 0 10px #34d399)";
+                feedBtn.disabled = true;
+                petBtn.disabled = true;
+                scareBtn.disabled = true;
+            } else if (!isEvolved) {
+                if (growth > 60) stageText.textContent = "Big Fat Dragon";
+                else if (growth > 30) stageText.textContent = "Active Caterpillar";
+                else stageText.textContent = "Baby Larva";
             }
         }
 
-        function feedCaterpillar() {
-            if (isSleeping || isMaxed) return;
+        feedBtn.addEventListener('click', () => {
+            if (isEvolved) return;
+            growth = Math.min(100, growth + 15);
+            mood = Math.min(100, mood + 10);
+            eventBanner.textContent = "Chomp chomp! Delicious leaves!";
             
-            if (isCranky) {
-                document.getElementById('event-banner').innerText = "She refuses to eat! Pet her horns first!";
-                playAudio();
-                return;
-            }
-
-            let moodMultiplier = mood > 50 ? 1 : 0.5;
-            let gain = Math.floor((Math.random() * 6 + 6) * moodMultiplier);
-            weight = Math.min(450, weight + gain);
-
-            if (Math.random() < 0.25) {
-                isCranky = true;
-                document.getElementById('event-banner').innerText = "Caterpillar is cranky and wants attention! 💢";
-            } else {
-                document.getElementById('event-banner').innerText = `Yum! +${gain}g gained! 🍃`;
-            }
-
-            const avatar = document.getElementById('pet-avatar');
-            avatar.classList.add('wiggle');
-            setTimeout(() => avatar.classList.remove('wiggle'), 200);
-
-            updatePet();
-            playAudio();
-        }
-
-        function playWithCaterpillar() {
-            if (isSleeping || isMaxed) return;
-
-            mood = Math.min(100, mood + 30);
-            isCranky = false;
-            document.getElementById('event-banner').innerText = "She loves being pet! Mood restored! ✨";
-
-            const avatar = document.getElementById('pet-avatar');
-            avatar.classList.add('spin');
-            setTimeout(() => avatar.classList.remove('spin'), 400);
-
-            updatePet();
-            playAudio();
-        }
-
-        function putToSleep() {
-            if (isSleeping || isMaxed) return;
-
-            isSleeping = true;
-            document.getElementById('feed-btn').disabled = true;
-            document.getElementById('play-btn').disabled = true;
-            document.getElementById('sleep-btn').disabled = true;
-            document.getElementById('event-banner').innerText = "Zzz... Sleeping on a minty pillow... 💤";
-
-            let sleepTicks = 0;
-            const sleepInterval = setInterval(() => {
-                sleepTicks++;
-                triggerTextEffect('Zzz...');
-                if (sleepTicks >= 5) {
-                    clearInterval(sleepInterval);
-                    isSleeping = false;
-                    document.getElementById('feed-btn').disabled = false;
-                    document.getElementById('play-btn').disabled = false;
-                    document.getElementById('sleep-btn').disabled = false;
-                    weight = Math.min(450, weight + 25);
-                    mood = 100;
-                    document.getElementById('event-banner').innerText = "Woke up fully rested! Mega growth bonus +25g! 🌟";
-                    updatePet();
-                }
-            }, 800);
+            petAvatar.classList.add('wiggle');
+            setTimeout(() => petAvatar.classList.remove('wiggle'), 600);
             
-            playAudio();
-        }
+            updateUI();
+        });
 
-        function petCaterpillar(event) {
-            playAudio();
-            triggerTextEffect('Silly... :3', event.offsetX, event.offsetY);
-        }
-
-        function triggerTextEffect(text, x, y) {
-            const container = document.getElementById('text-layer');
-            const t = document.createElement('div');
-            t.innerText = text;
-            t.style.position = 'absolute';
-            t.style.color = '#6ee7b7';
-            t.style.fontWeight = 'bold';
-            t.style.fontSize = '1.3rem';
-            t.style.left = (x !== undefined ? x : Math.random() * 100 + 30) + 'px';
-            t.style.top = (y !== undefined ? y : Math.random() * 100 + 30) + 'px';
-            t.style.transition = 'all 0.6s ease-out';
+        petBtn.addEventListener('click', () => {
+            if (isEvolved) return;
+            mood = Math.min(100, mood + 20);
+            eventBanner.textContent = "The caterpillar wiggles happily!";
             
-            container.appendChild(t);
+            petAvatar.classList.add('spin');
+            setTimeout(() => petAvatar.classList.remove('spin'), 400);
+            
+            updateUI();
+        });
 
-            setTimeout(() => {
-                t.style.transform = 'translateY(-50px) scale(1.1)';
-                t.style.opacity = '0';
-            }, 10);
-
-            setTimeout(() => t.remove(), 600);
-        }
-
-        function playAudio() {
-            const audio = new Audio('https://mixkit.co');
-            audio.play().catch(() => {});
-        }
+        scareBtn.addEventListener('click', () => {
+            if (isEvolved) return;
+            mood = Math.max(0, mood - 30);
+            eventBanner.textContent = "Scared! It runs away fast!";
+            
+            walker.classList.add('scared-crawl');
+            setTimeout(() => walker.classList.remove('scared-crawl'), 3500);
+            
+            updateUI();
+        });
 
         setInterval(() => {
-            if (!isMaxed && !isSleeping) {
-                mood = Math.max(0, mood - 4);
-                updatePet();
-            }
-        }, 1000);
-
-        window.onload = updatePet;
+            if (isEvolved) return;
+            mood = Math.max(0, mood - 2);
+            updateUI();
+        }, 2000);
     </script>
 </body>
 </html>
