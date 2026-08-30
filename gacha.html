@@ -329,9 +329,25 @@
                 <div class="vault-grid" id="inventory-grid-display"></div>
             </div>
         </div>
-
-    </div>
+        <!-- Neko Trader Counter -->
+        <div class="panel" style="grid-column: 1 / -1; background: #1a0f09; border-color: #ffaa00;">
+            <div class="panel-title" style="color: #ffaa00;">🐾 NEKO TRADER MARKETPLACE</div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 10px;">
+                <div style="font-size: 4rem;">🐱</div>
+                <div style="text-align: left; max-width: 500px;">
+                    <div id="trader-dialogue" style="font-style: italic; color: #fcd34d; margin-bottom: 8px;">Meeow! Give me a second to open my bag...</div>
+                    <div id="booster-status" style="font-size: 0.85rem; color: #a7f3d0; font-weight: bold;">Catalyst Status: Dormant</div>
+                </div>
+                <div id="trader-offer-item" style="background:#150b06; border:3px double #ffaa00; width:80px; height:80px; display:flex; align-items:center; justify-content:center;"></div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="action-btn" id="trader-deal-btn" style="background:#ffaa00;" onclick="executeTraderDeal()">Accept Deal</button>
+                <button class="action-btn" style="background:#0f766e; color:#fff;" onclick="buyLuckBooster()">Buy Luck Catalyst (300 🪙)</button>
+                <button class="action-btn" style="background:#4b2e1e; color:#6ee7b7;" onclick="refreshTraderDeal()">Next Offer</button>
+            </div>
+        </div>
     <script>
+            <script>
         const emojiChapter = [
             { id: "e1", val: "🐱", tag: "COMMON", payout: 25 },
             { id: "e2", val: "🐈", tag: "COMMON", payout: 25 },
@@ -372,7 +388,7 @@
             { id: "e37", val: "🐯", tag: "RARE", payout: 100 },
             { id: "e38", val: "🦁", tag: "RARE", payout: 100 },
             { id: "e39", val: "🐼", tag: "RARE", payout: 100 },
-            { id: "e40", val: "Ko", tag: "RARE", payout: 100 },
+            { id: "e40", val: "🐨", tag: "RARE", payout: 100 },
             { id: "e41", val: "🐋", tag: "RARE", payout: 100 },
             { id: "e42", val: "🦈", tag: "RARE", payout: 100 },
             { id: "e43", val: "🍨", tag: "RARE", payout: 100 },
@@ -398,7 +414,6 @@
             { id: "e63", val: "🛸", tag: "LEGENDARY", payout: 250 },
             { id: "e64", val: "🚀", tag: "LEGENDARY", payout: 250 }
         ];
-
         const colorChapter = [
             { id: "c1", val: "#a7f3d0", tag: "COMMON", payout: 25 },
             { id: "c2", val: "#6ee7b7", tag: "COMMON", payout: 25 },
@@ -449,9 +464,82 @@
         
         let giftTimeLeft = parseInt(localStorage.getItem('chronicles_gift_time')) || 120;
         let giftInterval = null;
+
+        let traderDealType = "buy"; 
+        let traderTargetItem = null;
+        let traderPrice = 0;
+        let luckBoosterActive = false;
+
+        function refreshTraderDeal() {
+            const pool = getActivePool();
+            traderTargetItem = pool[Math.floor(Math.random() * pool.length)];
+            traderDealType = Math.random() > 0.5 ? "buy" : "sell";
+
+            if (traderDealType === "buy") {
+                traderPrice = Math.floor(traderTargetItem.payout * 1.5);
+                document.getElementById('trader-dialogue').textContent = "Meeow! I brought a rare item from far away. Want to buy it?";
+                document.getElementById('trader-deal-btn').textContent = `Buy Item (Cost: ${traderPrice} 🪙)`;
+            } else {
+                traderPrice = Math.floor(traderTargetItem.payout * 1.8);
+                document.getElementById('trader-dialogue').textContent = "Purr... I desperately need this item for my collection! I'll pay top coin!";
+                document.getElementById('trader-deal-btn').textContent = `Sell Item (Get: ${traderPrice} 🪙)`;
+            }
+
+            const offerBox = document.getElementById('trader-offer-item');
+            offerBox.innerHTML = '';
+            if (activeChapter === 0) {
+                offerBox.textContent = traderTargetItem.val;
+                offerBox.style.fontSize = "2rem";
+            } else if (activeChapter === 1) {
+                offerBox.innerHTML = `<div class="color-circle" style="background: ${traderTargetItem.val}; width: 50px; height: 50px;"></div>`;
+            } else {
+                offerBox.innerHTML = `<img src="${traderTargetItem.val}" style="width: 50px; height: 50px; object-fit: contain;">`;
+            }
+        }
+
+        function executeTraderDeal() {
+            if (!traderTargetItem) return;
+
+            if (traderDealType === "buy") {
+                if (coins < traderPrice) {
+                    alert("Not enough coins!");
+                    return;
+                }
+                coins -= traderPrice;
+                storageInv[traderTargetItem.id] = (storageInv[traderTargetItem.id] || 0) + 1;
+                alert("Deal complete! Item added to inventory.");
+            } else {
+                if (!storageInv[traderTargetItem.id] || storageInv[traderTargetItem.id] <= 0) {
+                    alert("You don't own this item to sell it!");
+                    return;
+                }
+                storageInv[traderTargetItem.id]--;
+                if (storageInv[traderTargetItem.id] === 0) delete storageInv[traderTargetItem.id];
+                coins += traderPrice;
+                alert(`Deal complete! Gained ${traderPrice} coins!`);
+            }
+            updateGlobalUI();
+            refreshTraderDeal();
+        }
+
+        function buyLuckBooster() {
+            if (coins < 300) {
+                alert("Not enough coins for Luck Catalyst!");
+                return;
+            }
+            if (luckBoosterActive) {
+                alert("Luck Catalyst is already active!");
+                return;
+            }
+            coins -= 300;
+            luckBoosterActive = true;
+            document.getElementById('booster-status').textContent = "🍀 Catalyst Active (Double Legend Drop Chance!)";
+            updateGlobalUI();
+        }
         function init() {
             updateGlobalUI();
             startGiftCountdown();
+            refreshTraderDeal();
         }
 
         function getActivePool() {
@@ -465,6 +553,7 @@
             activeChapter = idx;
             document.getElementById(`chap-btn-${activeChapter}`).classList.add('active');
             updateGlobalUI();
+            refreshTraderDeal();
         }
 
         function updateGlobalUI() {
@@ -538,7 +627,7 @@
         function announceRarity(tag) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(tag.toLowerCase());
+                const utterance = new SpeechSynthesisUtterance(tag.toLowerCase() + " item");
                 utterance.lang = 'en-US';
                 utterance.rate = 1.1;
                 window.speechSynthesis.speak(utterance);
@@ -554,8 +643,15 @@
             coins -= cost;
             updateGlobalUI();
 
-            const pool = getActivePool().filter(item => item.tag === filterTag);
-            if (pool.length === 0) return;
+            const fullPool = getActivePool();
+            let rollPool = fullPool.filter(item => item.tag === filterTag);
+
+            if (machIdx === 1 && Math.random() < 0.05) {
+                rollPool = fullPool.filter(item => item.tag === "RARE");
+                filterTag = "RARE (LUCKY DROP!)";
+            }
+
+            if (rollPool.length === 0) return;
 
             const box = document.getElementById(`roulette-box-${machIdx}`);
             const view = document.getElementById(`view-${machIdx}`);
@@ -570,7 +666,7 @@
             let currentSelection = null;
 
             const interval = setInterval(() => {
-                currentSelection = pool[Math.floor(Math.random() * pool.length)];
+                currentSelection = fullPool[Math.floor(Math.random() * fullPool.length)];
                 
                 if (activeChapter === 0) {
                     view.innerHTML = currentSelection.val;
@@ -586,10 +682,29 @@
                     box.classList.remove('spin-shake');
                     btn.disabled = false;
 
+                    if (machIdx === 1 && Math.random() < 0.03) {
+                        const megaJackpot = Math.floor(Math.random() * 501) + 1000;
+                        coins += megaJackpot;
+                        announce.textContent = "💰 SUPER COIN JACKPOT!";
+                        view.innerHTML = `<div style="font-size:2rem; font-weight:bold; color:#fbbf24;">+${megaJackpot}</div>`;
+                        announceRarity("Jackpot");
+                        updateGlobalUI();
+                        return;
+                    }
+
+                    currentSelection = rollPool[Math.floor(Math.random() * rollPool.length)];
                     storageInv[currentSelection.id] = (storageInv[currentSelection.id] || 0) + 1;
-                    announce.textContent = `${filterTag}!`;
                     
-                    announceRarity(filterTag);
+                    if (activeChapter === 0) {
+                        view.innerHTML = currentSelection.val;
+                    } else if (activeChapter === 1) {
+                        view.innerHTML = `<div class="color-circle" style="background: ${currentSelection.val};"></div>`;
+                    } else {
+                        view.innerHTML = `<img src="${currentSelection.val}">`;
+                    }
+
+                    announce.textContent = `${filterTag}!`;
+                    announceRarity(filterTag.split(' ')[0]);
                     updateGlobalUI();
                 }
             }, 80);
@@ -621,9 +736,6 @@
         }
 
         function claimTimeGift() {
-            const view = document.getElementById('view-1');
-            const announce = document.getElementById('announce-1');
-            
             let bonus = Math.floor(Math.random() * 201) + 150;
             coins += bonus;
             
@@ -640,7 +752,7 @@
 
         function executeSystemPurge() {
             if (confirm("🚨 ALERT: Terminal request to execute destructive core memory wipe?")) {
-                if (confirm("🚨 LAST WARNING: This actions kills saved statistics, clicker progress, inventory, and coins. Proceed?")) {
+                if (confirm("🚨 WARNING: This actions kills saved statistics, clicker progress, inventory, and coins. Proceed?")) {
                     if (confirm("🚨 DATA PURGE FINAL AUTHORIZATION: Confirm 100% loss?")) {
                         localStorage.clear();
                         alert("Purging complete. System rebooting.");
