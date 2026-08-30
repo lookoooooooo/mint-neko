@@ -434,10 +434,13 @@
             }, 3000);
         }
 
-        function checkSecretCondition() {
-            const hasAllFifty = catFacts.keys().every(i => unlockedAchievements.includes(i));
+             function checkSecretCondition() {
+            const hasAllFifty = unlockedAchievements.length >= 50;
             if (hasAllFifty && !unlockedAchievements.includes(50)) {
                 startSecretCountdown();
+            }
+        }
+
             }
         }
 
