@@ -67,6 +67,12 @@
         .desktop-icon:hover {
             background: rgba(110, 231, 183, 0.15);
         }
+        .emoji-icon {
+            font-size: 45px;
+            margin-bottom: 4px;
+            display: inline-block;
+            user-select: none;
+        }
         .icon-label {
             font-size: 0.75rem;
             font-weight: bold;
@@ -198,16 +204,18 @@
             border-radius: 4px;
             width: 100%;
         }
-</style>
+    </style>
 </head>
 <body>
-<div class="nav-links">
+
+    <div class="nav-links">
         <a href="index.html" class="nav-button">HOME FACTS 📑</a>
         <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
         <a href="gacha.html" class="nav-button">GACHA STUDIO 🎰</a>
         <a href="trust-cat.html" class="nav-button">TRUST OSORE 🐱</a>
         <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
     </div>
+
     <div class="desktop-environment" id="desktop" style="background-image: url('desktop-bg.jpg');">
         
         <div class="desktop-icon" style="top: 20px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-files')">
@@ -232,7 +240,7 @@
         </div>
         <div class="os-window" id="win-files" style="width: 440px; height: 350px; top: 80px; left: 160px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-files')">
-                <span>📁 Folder_Contents.</span>
+                <span>📁 Folder_Contents.jpg</span>
                 <button class="window-close-btn" onclick="closeOSWindow('win-files')">X</button>
             </div>
             <div class="window-body" style="background-image: url('Note pad template.jpg'); background-size: cover; background-color: rgba(0,0,0,0.7); background-blend-mode: darken;">
@@ -244,6 +252,7 @@
                 <div id="file-content-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #34d399; min-height: 100px; display: none; white-space: pre-wrap;"></div>
             </div>
         </div>
+
         <div class="os-window" id="win-trash" style="width: 440px; height: 350px; top: 120px; left: 200px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-trash')">
                 <span>🗑️ Trash</span>
@@ -256,6 +265,7 @@
                 <div id="trash-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #ff3333; min-height: 80px; display: none; white-space: pre-wrap; color: #ff8888;"></div>
             </div>
         </div>
+
         <div class="os-window" id="win-paint" style="width: 440px; height: 380px; top: 60px; left: 280px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-paint')">
                 <span>🎨 Paint</span>
@@ -272,6 +282,7 @@
                 <canvas id="paintCanvas" class="paint-canvas" width="395" height="250"></canvas>
             </div>
         </div>
+
         <div class="os-window" id="win-browser" style="width: 520px; height: 450px; top: 40px; left: 340px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-browser')">
                 <span>🌐 Web Navigator</span>
@@ -294,6 +305,7 @@
                 </div>
             </div>
         </div>
+
         <div class="os-window" id="win-settings" style="width: 400px; height: 450px; top: 160px; left: 400px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-settings')">
                 <span>⚙️ Settings</span>
@@ -336,81 +348,14 @@
                         <input type="password" class="settings-input" id="decryptionPassword" placeholder="Enter password...">
                         <button class="os-btn" onclick="checkDecryptionKey()">Unlock</button>
                     </div>
-                    <div id="passwordHint" style="color: #ffaa00; font-size: 0.75rem; margin-top: 4px;">Hint: Trash file giGI19.txt contains indications.</div>
+                    <div id="passwordHint" style="color: #ffaa00; font-size: 0.75rem; margin-top: 4px;">Hint: Trash file giGI19.txt contains the memory note.</div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <style>
-        .emoji-icon {
-            font-size: 45px;
-            margin-bottom: 4px;
-            display: inline-block;
-            user-select: none;
-        }
-    </style>
     <script>
         let netPulses = 0;
         let extAppsInstalled = 0;
-
-        function registerNetPulse() {
-            netPulses++;
-            document.getElementById('net-score').innerText = netPulses;
-            if (netPulses >= 10) {
-                document.getElementById('dl-reward-btn').style.display = 'inline-block';
-            }
-        }
-
-        function downloadWebGameApp() {
-            if (netPulses < 10) return;
-            netPulses -= 10;
-            document.getElementById('net-score').innerText = netPulses;
-            if (netPulses < 10) {
-                document.getElementById('dl-reward-btn').style.display = 'none';
-            }
-            extAppsInstalled++;
-            
-            const desktop = document.getElementById('desktop');
-            const appEl = document.createElement('div');
-            appEl.className = 'desktop-icon';
-            appEl.style.top = (60 + (extAppsInstalled * 35)) + 'px';
-            appEl.style.left = (180 + (extAppsInstalled * 35)) + 'px';
-            appEl.setAttribute('onmousedown', 'initIconDrag(event, this)');
-            
-            appEl.innerHTML = `
-                <div class="emoji-icon">🎮</div>
-                <div class="icon-label">WebGame Pack ${extAppsInstalled}</div>
-            `;
-            desktop.appendChild(appEl);
-            alert('New tactical application successfully initialized and deployed to local desktop storage!');
-        }
-
-        function changeDesktopBg() {
-            const mode = document.getElementById('bgSelect').value;
-            const d = document.getElementById('desktop');
-            if (mode === 'default') {
-                d.style.backgroundImage = "url('desktop-bg.jpg')";
-                d.style.backgroundSize = "cover";
-            }
-            if (mode === 'matrix') {
-                d.style.backgroundImage = "linear-gradient(rgba(0, 50, 0, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 50, 0, 0.3) 1px, transparent 1px)";
-                d.style.backgroundSize = "20px 20px";
-                d.style.backgroundColor = "#000a02";
-            }
-            if (mode === 'cyber') {
-                d.style.backgroundImage = "radial-gradient(circle at center, #1b0d2a 0%, #05020a 100%)";
-                d.style.backgroundSize = "auto";
-            }
-        }
-
-        function navigateBrowser(page) {
-            if (page === 'home') {
-                document.getElementById('browserAddress').innerText = 'folder://network_home';
-            }
-        }
-    </script>
-    <script>
         let activeDragIcon = null;
         let activeDragWindow = null;
         let offsetX = 0;
@@ -480,7 +425,7 @@
         function readTrashFile() {
             const viewer = document.getElementById('trash-viewer');
             viewer.style.display = 'block';
-            viewer.innerText = "CONTENT DECRYPTED: Access Key found inside system nodes -> 'giGI19_PASS_2026'";
+            viewer.innerText = "I can't keep this number in my head, I will delete myself soon...\n\n[MEM_NOTE]: 5422";
         }
 
         function applySettings() {
@@ -497,10 +442,66 @@
 
         function checkDecryptionKey() {
             const pass = document.getElementById('decryptionPassword').value;
-            if (pass === 'giGI19_PASS_2026') {
+            if (pass === '5422') {
                 alert('ACCESS GRANTED: Root filesystem decrypted.');
             } else {
                 alert('ACCESS DENIED: Invalid key string.');
+            }
+        }
+
+        function registerNetPulse() {
+            netPulses++;
+            document.getElementById('net-score').innerText = netPulses;
+            if (netPulses >= 10) {
+                document.getElementById('dl-reward-btn').style.display = 'inline-block';
+            }
+        }
+
+        function downloadWebGameApp() {
+            if (netPulses < 10) return;
+            netPulses -= 10;
+            document.getElementById('net-score').innerText = netPulses;
+            if (netPulses < 10) {
+                document.getElementById('dl-reward-btn').style.display = 'none';
+            }
+            extAppsInstalled++;
+            
+            const desktop = document.getElementById('desktop');
+            const appEl = document.createElement('div');
+            appEl.className = 'desktop-icon';
+            appEl.style.top = (60 + (extAppsInstalled * 35)) + 'px';
+            appEl.style.left = (180 + (extAppsInstalled * 35)) + 'px';
+            appEl.setAttribute('onmousedown', 'initIconDrag(event, this)');
+            
+            appEl.innerHTML = `
+                <div class="emoji-icon">🎮</div>
+                <div class="icon-label">WebGame Pack ${extAppsInstalled}</div>
+            `;
+            desktop.appendChild(appEl);
+            alert('New tactical application successfully initialized and deployed to local desktop storage!');
+        }
+
+        function changeDesktopBg() {
+            const mode = document.getElementById('bgSelect').value;
+            const d = document.getElementById('desktop');
+            if (mode === 'default') {
+                d.style.backgroundImage = "url('desktop-bg.jpg')";
+                d.style.backgroundSize = "cover";
+            }
+            if (mode === 'matrix') {
+                d.style.backgroundImage = "linear-gradient(rgba(0, 50, 0, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 50, 0, 0.3) 1px, transparent 1px)";
+                d.style.backgroundSize = "20px 20px";
+                d.style.backgroundColor = "#000a02";
+            }
+            if (mode === 'cyber') {
+                d.style.backgroundImage = "radial-gradient(circle at center, #1b0d2a 0%, #05020a 100%)";
+                d.style.backgroundSize = "auto";
+            }
+        }
+
+        function navigateBrowser(page) {
+            if (page === 'home') {
+                document.getElementById('browserAddress').innerText = 'folder://network_home';
             }
         }
 
