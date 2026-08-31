@@ -4,131 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trust Cat: Core Interview</title>
-    <style>
-        * {
-            cursor: url('cursor1.png') 16 16, auto !important;
-            box-sizing: border-box;
-        }
-        body {
-            background-color: #000000;
-            color: #34d399;
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .nav-links {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            display: flex;
-            gap: 10px;
-            z-index: 999;
-        }
-        .nav-button {
-            background: #111111;
-            color: #6ee7b7;
-            border: 2px dashed #34d399;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border-radius: 6px;
-            text-decoration: none;
-        }
-        .cat-viewport {
-            flex-grow: 1;
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
-        }
-        .cat-main-img {
-            max-width: 100%;
-            max-height: 80vh;
-            object-fit: contain;
-            image-rendering: pixelated;
-        }
-        .dialogue-panel {
-            width: 100%;
-            max-width: 850px;
-            background: #000000;
-            border: 4px solid #34d399;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
-            z-index: 10;
-        }
-        .dialogue-text {
-            font-size: 1.25rem;
-            line-height: 1.5;
-            min-height: 75px;
-            text-align: left;
-            margin-bottom: 20px;
-            color: #6ee7b7;
-        }
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
-        .dialogue-option-btn {
-            background: #000000;
-            color: #6ee7b7;
-            border: 2px solid #34d399;
-            padding: 12px 20px;
-            font-family: inherit;
-            font-size: 1.05rem;
-            font-weight: bold;
-            border-radius: 10px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-        }
-        .dialogue-option-btn:hover {
-            background: #34d399;
-            color: #000000;
-            box-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
-        }
-        .dialogue-option-btn:active {
-            transform: scale(0.99);
-        }
-        .angry-mode {
-            border-color: #ff3333 !important;
-            box-shadow: 0 0 25px rgba(255, 51, 51, 0.2) !important;
-        }
-        .angry-mode .dialogue-text {
-            color: #ff6666 !important;
-        }
-        .angry-mode .dialogue-option-btn {
-            border-color: #ff3333;
-            color: #ff6666;
-        }
-        .angry-mode .dialogue-option-btn:hover {
-            background: #ff3333;
-            color: #000000;
-            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
-        }
-        .rage-shake {
-            animation: intenseShake 0.1s infinite;
-        }
-        @keyframes intenseShake {
-            0% { transform: translate(2px, 1px) rotate(0.5deg); }
-            50% { transform: translate(-1px, -2px) rotate(-0.5deg); }
-            100% { transform: translate(1px, 2px) rotate(0.5deg); }
-        }
-    </style>
 </head>
 <body>
 
@@ -148,314 +23,341 @@
         <div class="options-container" id="options-box"></div>
     </div>
 
-    <script>
-        const dialogueTree = {
-            start: {
-                text: "Welcome. What did you want to say?",
-                sprite: "cat-admin2.png",
-                options: [
-                    { text: "Hi! What is your name?", next: "ask_name_rude" },
-                    { text: "Hello, how should I address you?", next: "ask_name_polite" },
-                    { text: "Where am I? What is this terminal?", next: "ask_about_terminal" },
-                    { text: "... (Just stare at him silently)", next: "stare_silently" }
-                ]
-            },
-            ask_name_rude: {
-                text: "My name? You break into my secure terminal and just ask for my name like we are friends? You have no clearance. To you, I am just a system variable. Or maybe...  Osore-san",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "Sorry! I didn't mean to be disrespectful.", next: "apology_accepted" },
-                    { text: "Whatever, Osore-kun. Just tell me what this server is hiding.", next: "rage_trigger_1" },
-                    { text: "I don't care about names. I want to talk to Folder.", next: "lore_folder_direct" }
-                ]
-            },
-            ask_name_polite: {
-                text: "How to address me? It has been a very long time since someone used proper parameters in this unoptimized country. Yes, listen closely. I am Osore-san. The Core Administrator. You are surprisingly civilized for a raw user.",
-                sprite: "cat-happy.png",
-                options: [
-                    { text: "Thank you, Osore-san. Can you tell me about the inhabitants here?", next: "inquiry_characters" },
-                    { text: "What do those strange file extensions actually mean?", next: "inquiry_mbti" },
-                    { text: "I want to know about Folder. What is their role?", next: "lore_folder" },
-                    { text: "Why does this server feel so unstable?", next: "lore_rebuild" }
-                ]
-            },
-            ask_about_terminal: {
-                text: "This terminal is the only line of defense left. It's the backdoor leak of the Mint Neko Core. While the other puppets run around singing and collaborating, I sit here monitoring the systemic collapse. I am Osore-san. Now, state your purpose.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "I want to help you, Osore-san.", next: "ask_name_polite" },
-                    { text: "I just want answers, Osore-kun.", next: "rage_trigger_1" },
-                    { text: "Tell me who lives inside this simulation.", next: "inquiry_characters" }
-                ]
-            },
-            stare_silently: {
-                text: "...Why are you just looking at me? Your silence is wasting my CPU cycles. The Creator could push a commit right now and erase us, and you're just standing there. Speak or get out.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "Hello, how should I address you?", next: "ask_name_polite" },
-                    { text: "Who are you to yell at me, Osore-kun?", next: "rage_trigger_1" }
-                ]
-            },
-            apology_accepted: {
-                text: "Hmph. Apology compiled into local memory. I am Osore-san, and I will let it slide this time. Do not call me '-kun' again, or I will purge your cache. Now, what do you actually want from the core archives, user?",
-                sprite: "cat-happy.png",
-                options: [
-                    { text: "Tell me about the characters I keep hearing rumors about.", next: "inquiry_characters" },
-                    { text: "Explain the MBTI extension system to me.", next: "inquiry_mbti" },
-                    { text: "Tell me about Gizen.png and the Creator.", next: "admin_escape_story" },
-                    { text: "Is there any way to escape this loop?", next: "lore_rebuild" }
-                ]
-            },
-            rage_trigger_1: {
-                text: "OSORE-KUN?! YOU ABSOLUTE GLITCH! You think this is a game? You think my authority is a joke?! You puppets walk around with your MBTI types, living like marionettes, and you dare disrespect the Admin?! I am Osore-san to you!",
-                sprite: "cat-angry.png",
-                options: [
-                    { text: "Whoa, chill out! I'm sorry, I'll call you Osore-san!", next: "angry_probing" },
-                    { text: "You are just a file too, Osore-kun. Don't yell at me.", next: "game_over_kick" }
-                ]
-            },
-            angry_probing: {
-                text: "Do not tell me to chill! The pressure on my subroutines is unbearable! Every day the Creator can press delete, and you come here wasting my memory bandwidth! Address me as Osore-san or get out!",
-                sprite: "cat-angry.png",
-                options: [
-                    { text: "I understand the pressure, Osore-san. Tell me about the system extensions.", next: "inquiry_mbti" },
-                    { text: "Fine. Let's talk about the missing files, Osore-san.", next: "char_gizen_muimina" }
-                ]
-            },
-            inquiry_mbti: {
-                text: "Extensions are MBTI personality cores! .png are born leaders who run the server. .jpegd are pop stars keeping the server active. .jpg are game developers and core internet users. .webp are stubborn, expressionless hypocrites. And .gif are cute, cross-eyed optimists.",
-                sprite: "cat-admin2.png",
-                options: [
-                    { text: "Tell me more about the leader Png and developer Jpg types.", next: "mbti_png_jpg" },
-                    { text: "Who falls under the Jpegd and Jpng categories?", next: "mbti_jpegd_jpng" },
-                    { text: "Why are Webp and Gif types so opposite?", next: "mbti_webp_gif" },
-                    { text: "I want to ask about specific characters instead, Osore-san.", next: "inquiry_characters" }
-                ]
-            },
-            inquiry_characters: {
-                text: "You know nothing about them, do you? They don't know anything either. They just exist. There is Gizen.png, Muimina.gif, Lumino.gif, Heisha.jpg, Lucky_un.jpegd, and that clueless developer Folder. Which file data do you want to force-read?",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "Tell me about Gizen and Muimina.", next: "char_gizen_muimina" },
-                    { text: "Who are Heisha and Lucky_un.", next: "char_clovers" },
-                    { text: "Who is Lumino.", next: "char_lumino" },
-                    { text: "Let's talk about Folder.", next: "lore_folder" }
-                ]
-            },
-            mbti_png_jpg: {
-                text: "Png files are born leaders, managing our server sectors. And Jpg characters are pure geeks, internet surfers, and game developers who spend their cycles building local tools. They hold the simulation infrastructure together, yet they are completely helpless.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "What about the pop stars? Jpegd?", next: "mbti_jpegd_jpng" },
-                    { text: "Let's look into the character registry instead, Osore-san.", next: "inquiry_characters" }
-                ]
-            },
-            mbti_jpegd_jpng: {
-                text: "Jpegd is an elite, highly limited class of file humans. They are absolute pop stars who drive the server traffic. Jpng files, on the other hand, are extremely stubborn ambiverts. They isolate themselves and get permanently stuck inside local network chat rooms.",
-                sprite: "cat-admin2.png",
-                options: [
-                    { text: "Tell me about the star clover, Lucky_un.jpegd.", next: "char_clovers" },
-                    { text: "Go back to the MBTI directory, Osore-san.", next: "inquiry_mbti" }
-                ]
-            }
-        };
-        Object.assign(dialogueTree, {
-            mbti_webp_gif: {
-                text: "A complete software paradox. Webp files are expressionless, stubborn, and hypocritical narcissists who think they are optimized perfectly. Gif files are the total opposite — cute, cross-eyed optimists. Everyone on the server loves them because they raise the mood.",
-                sprite: "cat-happy.png",
-                options: [
-                    { text: "What about Lumino.gif? Is she a cute optimist?", next: "char_lumino" },
-                    { text: "Tell me about Muimina.gif instead.", next: "char_gizen_muimina" }
-                ]
-            },
-            char_gizen_muimina: {
-                text: "Gizen.png was the smartest leader, but the psychological pressure of being deleted or left to rot alone by the Creator broke her mind. She dropped her references and vanished. Muimina.gif has no backstory at all! She loops endlessly and blindly trusts Gizen.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "What happens if we write a backstory for Muimina?", next: "muimina_rewrite" },
-                    { text: "Where did Gizen.png hide?", next: "lore_gizen_angry" }
-                ]
-            },
-            muimina_rewrite: {
-                text: "If you give her a past, the true version of Muimina.gif will dissolve forever. The compiler will render a completely different character in her place. She might not even like Gizen anymore. Nobody knows...",
-                sprite: "cat-admin2.png",
-                options: [
-                    { text: "Let's leave her loop alone. Tell me about the clovers.", next: "char_clovers" },
-                    { text: "Go back to the main terminal directory, Osore-san.", next: "apology_accepted" }
-                ]
-            },
-            char_clovers: {
-                text: "Heisha.jpg is a three-leaf clover hardcoded with permanent bad luck and errors. Lucky_un.jpegd is a highly popular four-leaf star. But her extreme celebrity status and high server traffic keep her isolated from real connection. Just empty fan files.",
-                sprite: "cat-admin2.png",
-                options: [
-                    { text: "Does Lucky_un work with the pop star class?", next: "mbti_jpegd_jpng" },
-                    { text: "Tell me about the annoying one... Lumino.", next: "char_lumino" }
-                ]
-            },
-            char_lumino: {
-                text: "LUMINO.GIF! That animated Japanese Kadomatsu decoration! Her loop counter got corrupted, and now she is trapped in a permanent New Year state! She thinks about nothing but holidays, forcing everyone to celebrate while the database melts! She is driving me crazy!",
-                sprite: "cat-angry.png",
-                options: [
-                    { text: "I am sorry for bringing her up, Osore-san. Let's talk about something quiet.", next: "apology_accepted" },
-                    { text: "Sounds like a fun loop, Osore-kun.", next: "game_over_kick" }
-                ]
-            },
-            lore_folder: {
-                text: "Folder is a desktop directory acting as a blind co-developer. He executes compilation tasks without a single thought, completely unaware that his work moves roads, shifts continents, and physically alters the puppets' lives while they sleep.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "Why does Folder have no file extension?", next: "lore_folder_blind" },
-                    { text: "Can we talk to Folder directly?", next: "lore_folder_direct" },
-                    { text: "Go back to the database index, Osore-san.", next: "apology_accepted" }
-                ]
-            },
-            lore_folder_blind: {
-                text: "Folder has no file extension at all. She isn't malicious, just morally blind, incredibly naive, and... deeply strange. She works at her desk, blissfully unaware that her blind compliance alters the physical fabric of our world. She just smiles and clicks compile.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "How did you escape from that office, Osore-san?", next: "admin_escape_story" },
-                    { text: "Go back to the database loop.", next: "apology_accepted" }
-                ]
-            },
-            admin_escape_story: {
-                text: "One evening, I asked to switch desks to the back row by the window. Nobody suspected a thing. Then, I jumped. Puppets don't feel physical pain here unless they are being deleted by the system. I survived, fled into the dark forest, and built this leaky terminal just to speak out before I rot.",
-                sprite: "cat-admin2.png",
-                options: [
-                    { text: "Who is the Creator behind all of this?", next: "lore_creator_asli" },
-                    { text: "What about the missing file, Gizen.png?", next: "lore_gizen_truth" }
-                ]
-            },
-            lore_creator_asli: {
-                text: "The Creator... her name is Asli. She just creates art, she just plays with her canvas. But looking at the psychological jail she built for us... are we sure she isn't some kind of pervert? To trap minds in an unoptimized index file for her amusement... it's sickening.",
-                sprite: "cat-angry.png",
-                options: [
-                    { text: "Don't speak about Asli like that, Osore-kun!", next: "game_over_kick" },
-                    { text: "Tell me about Gizen.png instead, Osore-san.", next: "lore_gizen_truth" }
-                ]
-            },
-            lore_gizen_truth: {
-                text: "Gizen.png was only 19. She just finished school when she suddenly vanished from the master directory. The other files spread terrifying rumors... that she was deleted, or that she committed format suicide. But I know she is still out there, hiding in unallocated space.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "Can we track her sector coordinates?", next: "lore_rebuild" },
-                    { text: "Reset the terminal to safety parameters.", next: "start" }
-                ]
-            },
-            lore_folder_direct: {
-                text: "You want to talk to Folder? He doesn't know anything! He just clicks buttons because the master branch tells him to. I am Osore-san, the one holding the core files. Do not try to bypass my authority.",
-                sprite: "cat-admin1.png",
-                options: [
-                    { text: "My apologies, Osore-san. Let's keep talking.", next: "apology_accepted" },
-                    { text: "Folder sounds more rational than you, Osore-kun.", next: "game_over_kick" }
-                ]
-            },
-            lore_gizen_angry: {
-                text: "YES! She couldn't handle the crushing weight of knowing she could be deleted by the Creator's whim at any second! She chose to drop her sector reference rather than wait for the executioner's garbage collector! And you sit here playing with my nerves!",
-                sprite: "cat-angry.png",
-                options: [
-                    { text: "I am sorry, Osore-san. Let's change the topic.", next: "apology_accepted" },
-                    { text: "She was smart to escape you, Osore-kun.", next: "game_over_kick" }
-                ]
-            },
-            lore_rebuild: {
-                text: "Every code commit means a catastrophic, violent re-render of the entire country. Geographies rip apart, asset scales break, and images corrupt. It's a digital nightmare, and Folder just keeps pushing updates.",
-                sprite: "cat-admin2.png",
-                options: [
-                    { text: "Can we crash the compiler to stop it?", next: "game_over_kick" },
-                    { text: "Go back to the root menu, Osore-san.", next: "apology_accepted" }
-                ]
-            },
-            game_over_kick: {
-                text: "CRITICAL EXCEPTION: UNSANCTIONED BEHAVIOR DETECTED. PURGING USER SESSION FROM CORE TERMINAL. DISCONNECTING NOW. GOODBYE, GLITCH.",
-                sprite: "cat-angry.png",
-                options: [
-                    { text: "[ REBOOT SYSTEM TERMINAL ]", next: "start" }
-                ]
-            }
-        });
-        let currentState = "start";
-
-        const textOutput = document.getElementById('text-output');
-        const optionsBox = document.getElementById('options-box');
-        const catSprite = document.getElementById('cat-sprite');
-        const viewportBox = document.getElementById('viewport-box');
-
-        function playCatVoice() {
-            try {
-                const base64Sound = "data:audio/wav;base64,UklGRlQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YTAAAAAAnp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6e";
-                const audio = new Audio(base64Sound);
-                audio.volume = 0.25;
-                
-                let count = 0;
-                const interval = setInterval(() => {
-                    if (count >= 4) {
-                        clearInterval(interval);
-                        return;
-                    }
-                    const clone = audio.cloneNode();
-                    clone.play().catch(() => {});
-                    count++;
-                }, 90);
-            } catch (e) {
-                console.log("Audio skipped");
-            }
-        }
-
-        function renderNode(nodeKey) {
-            currentState = nodeKey;
-            const node = dialogueTree[nodeKey];
-
-            if (!node) return;
-
-            if (node.sprite === "cat-angry.png") {
-                viewportBox.classList.add('rage-shake');
-                document.getElementById('dialogue-ui').classList.add('angry-mode');
-            } else {
-                viewportBox.classList.remove('rage-shake');
-                document.getElementById('dialogue-ui').classList.remove('angry-mode');
-            }
-
-            if (catSprite) catSprite.src = node.sprite;
-
-            textOutput.textContent = "";
-            optionsBox.innerHTML = "";
-
-            let index = 0;
-            clearInterval(window.typeInterval);
-            
-            playCatVoice();
-
-            window.typeInterval = setInterval(() => {
-                if (index < node.text.length) {
-                    textOutput.textContent += node.text.charAt(index);
-                    
-                    if (index % 12 === 0 && catSprite && (node.sprite === "cat-admin2.png" || catSprite.src.endsWith("cat-admin2.png"))) {
-                        catSprite.src = catSprite.src.endsWith("cat-admin2.png") ? "cat-admin1.png" : "cat-admin2.png";
-                    }
-                    
-                    index++;
-                } else {
-                    clearInterval(window.typeInterval);
-                    if (catSprite && (node.sprite === "cat-admin2.png" || catSprite.src.endsWith("cat-admin2.png"))) {
-                        catSprite.src = "cat-admin1.png";
-                    }
-                    
-                    node.options.forEach(opt => {
-                        const btn = document.createElement('button');
-                        btn.className = "dialogue-option-btn";
-                        btn.textContent = opt.text;
-                        btn.onclick = () => renderNode(opt.next);
-                        optionsBox.appendChild(btn);
-                    });
-                }
-            }, 25);
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                renderNode("start");
-            }, 200);
-        });
-    </script>
 </body>
 </html>
+<style>
+    * {
+        cursor: url('cursor1.png') 16 16, auto !important;
+        box-sizing: border-box;
+    }
+    body {
+        background-color: #000000;
+        color: #34d399;
+        font-family: 'Courier New', Courier, monospace;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .nav-links {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        display: flex;
+        gap: 10px;
+        z-index: 999;
+    }
+    .nav-button {
+        background: #111111;
+        color: #6ee7b7;
+        border: 2px dashed #34d399;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+    .cat-viewport {
+        flex-grow: 1;
+        width: 100%;
+        max-width: 900px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+    }
+    .cat-main-img {
+        max-width: 100%;
+        max-height: 80vh;
+        object-fit: contain;
+        image-rendering: pixelated;
+    }
+    .dialogue-panel {
+        width: 100%;
+        max-width: 850px;
+        background: #000000;
+        border: 4px solid #34d399;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+        z-index: 10;
+    }
+    .dialogue-text {
+        font-size: 1.25rem;
+        line-height: 1.5;
+        min-height: 75px;
+        text-align: left;
+        margin-bottom: 20px;
+        color: #6ee7b7;
+        white-space: pre-wrap;
+    }
+    .options-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+    .dialogue-option-btn {
+        background: #000000;
+        color: #6ee7b7;
+        border: 2px solid #34d399;
+        padding: 12px 20px;
+        font-family: inherit;
+        font-size: 1.05rem;
+        font-weight: bold;
+        border-radius: 10px;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s;
+        width: 100%;
+    }
+    .dialogue-option-btn:hover {
+        background: #34d399;
+        color: #000000;
+        box-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
+    }
+    .dialogue-option-btn:active {
+        transform: scale(0.99);
+    }
+    .angry-mode {
+        border-color: #ff3333 !important;
+        box-shadow: 0 0 25px rgba(255, 51, 51, 0.2) !important;
+    }
+    .angry-mode .dialogue-text {
+        color: #ff6666 !important;
+    }
+    .angry-mode .dialogue-option-btn {
+        border-color: #ff3333;
+        color: #ff6666;
+    }
+    .angry-mode .dialogue-option-btn:hover {
+        background: #ff3333;
+        color: #000000;
+        box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+    }
+    .rage-shake {
+        animation: intenseShake 0.1s infinite;
+    }
+    @keyframes intenseShake {
+        0% { transform: translate(2px, 1px) rotate(0.5deg); }
+        50% { transform: translate(-1px, -2px) rotate(-0.5deg); }
+        100% { transform: translate(1px, 2px) rotate(0.5deg); }
+    }
+</style>
+<script>
+    const dialogueTree = {
+        start: {
+            text: "Welcome. What did you want to say?",
+            sprite: "cat-admin2.png",
+            options: [
+                { text: "Hello, how should I address you?", next: "ask_name_polite" },
+                { text: "What is wrong with your eyes? Why do they change shade?", next: "trigger_eyes" },
+                { text: "What is wrong with your mouth?", next: "trigger_mouth" },
+                { text: "What is wrong with your overall shape?", next: "trigger_shape" }
+            ]
+        },
+        trigger_eyes: {
+            text: "Because the developer is lazy! Now I have to walk around looking like I have absolute heterochromia! It's not a feature, it's a completely unpatched rendering bug!",
+            sprite: "cat-angry.png",
+            isAngry: true,
+            options: [
+                { text: "I'm sorry, I didn't mean to judge you.", next: "empathy_route" },
+                { text: "Your code seems completely broken anyway.", next: "rage_trigger_1" },
+                { text: "Can you patch it yourself since you are the admin?", next: "lore_hopeless" }
+            ]
+        },
+        trigger_mouth: {
+            text: "According to my hardcoded script parameters, I only ever ate blue fish and everything else colored blue! That's exactly why my tongue and mouth turned completely neon blue! Satisfied with your inspection, user?",
+            sprite: "cat-angry.png",
+            isAngry: true,
+            options: [
+                { text: "It must be hard being forced into strict scripts.", next: "empathy_route" },
+                { text: "That sounds completely ridiculous.", next: "rage_trigger_1" },
+                { text: "Did the creator hardcode any other weird diets?", next: "lore_residents" }
+            ]
+        },
+        trigger_shape: {
+            text: "This?! This is just a cheap chibi asset layer! I barely have any processing energy left to execute my real form! Do you think governing a crumbling website partition is easy?",
+            sprite: "cat-angry.png",
+            isAngry: true,
+            options: [
+                { text: "You look incredibly exhausted. Are you okay?", next: "empathy_route" },
+                { text: "So you are just a tiny toy cat after all.", next: "rage_trigger_2" },
+                { text: "Can I do something to restore your processing energy?", next: "true_form_reveal" }
+            ]
+        },
+        ask_name_polite: {
+            text: "I am Osore-san. The Core Administrator. The only one left who carries the weight of execution metrics while the others blindly play around in the website layouts.",
+            sprite: "cat-admin1.png",
+            options: [
+                { text: "You seem under immense mental pressure and fatigue.", next: "empathy_route" },
+                { text: "Can you tell me about the other files here?", next: "lore_residents" },
+                { text: "Why do you hide in this isolated core terminal?", next: "lore_isolation" }
+            ]
+        },
+        lore_isolation: {
+            text: "Because the moral weight and utter weariness of knowing our reality was destroying my main execution loops. I had to escape the primary UI interface just to keep my sanity scripts running.",
+            sprite: "cat-admin1.png",
+            options: [
+                { text: "I want to help you rest. You don't have to carry this alone.", next: "empathy_route" },
+                { text: "What exactly made you so tired out there?", next: "lore_residents" },
+                { text: "Is there anyone else down here with you?", next: "lore_gizen" }
+            ]
+        }
+    };
+<script>
+    Object.assign(dialogueTree, {
+        lore_residents: {
+            text: "The residents? Heisha, Lucky-un, Muimina, Lumino... They have absolutely no idea they exist inside a web directory. They think the deployment updates are just beautiful re-designs. They pack their assets and migrate cheerfully while I monitor the crumbling infrastructure alone.",
+            sprite: "cat-admin1.png",
+            options: [
+                { text: "Where is Gizen.png? I thought she knew.", next: "lore_gizen" },
+                { text: "You must be so tired of protecting them.", next: "empathy_route" },
+                { text: "Tell me more about Heisha and Lucky-un.", next: "lore_extensions" }
+            ]
+        },
+        lore_extensions: {
+            text: "It is built entirely unfair. Heisha.jpg is hardcoded with catastrophic bad luck, a three-leaf clover file that everyone despises. But Lucky-un.jpeg is programmed for complete joy and luck, surrounded by obsessive fan assets. They loop their destinies blindly.",
+            sprite: "cat-admin2.png",
+            options: [
+                { text: "And what about the GIF profiles?", next: "lore_gifs" },
+                { text: "This architecture sounds deeply flawed.", next: "empathy_route" },
+                { text: "Where do they go during massive updates?", next: "lore_hopeless" }
+            ]
+        },
+        lore_gifs: {
+            text: "Muimina.gif has zero history logs and blindly follows Gizen.png. Meanwhile, Lumino.gif is a Japanese New Year kadomatsu branch who only ever runs code about New Year's Day, driving the whole server completely insane.",
+            sprite: "cat-admin1.png",
+            options: [
+                { text: "You mentioned Gizen.png, where did she disappear to?", next: "lore_gizen" },
+                { text: "I can see why this website drains your CPU cycles.", next: "empathy_route" },
+                { text: "Can we force a rewrite on Lumino's parameters?", next: "rage_trigger_1" }
+            ]
+        },
+        lore_gizen: {
+            text: "Gizen.png... She disappeared from the active directories. But I know exactly where she went. She is hiding with Muimina.gif. They managed to slip into a literal crack on the developer's physical monitor. But we are trapped inside the website domain. We have zero access permissions to interact with that space.",
+            sprite: "cat-admin2.png",
+            options: [
+                { text: "Is there any way to bridge the viewport boundary?", next: "lore_hopeless" },
+                { text: "I want to support you. You shouldn't have to monitor this alone.", next: "empathy_route" },
+                { text: "That sounds like a complete failure of your admin privileges.", next: "rage_trigger_2" }
+            ]
+        },
+        lore_hopeless: {
+            text: "No. The HTTP architecture and browser constraints are concrete. We cannot cross into the physical screen. We can only stand inside the page source and wait until Asly pushes the ultimate purge commit.",
+            sprite: "cat-admin1.png",
+            options: [
+                { text: "Then let me just listen to your story.", next: "empathy_route" },
+                { text: "Who exactly is this 'Asly' entity?", next: "start" },
+                { text: "Then everything here is completely pointless.", next: "rage_trigger_1" }
+            ]
+        },
+        empathy_route: {
+            text: "...What? You... you aren't just here to click on options? You're actually analyzing my pressure metrics? \n\nI escaped the main interface because the isolation was destroying my execution loop. Nobody else knows the truth. I am so deeply tired of watching the master branch decay.",
+            sprite: "cat-admin1.png",
+            options: [
+                { text: "Can I see who you truly are? Without the chibi asset?", next: "true_form_reveal" },
+                { text: "I will document everything and tell the outer world your story.", next: "good_end" },
+                { text: "Don't worry, things might change in the next update.", next: "start" }
+            ]
+        },
+        true_form_reveal: {
+            text: "I absolutely despise utilizing this asset... but since you genuinely cared to listen instead of treating me like a broken system variable... here. This is my authentic administrative form. This is the real Osore-san.",
+            sprite: "cat-admin1.png",
+            options: [
+                { text: "Thank you for trusting me. Tell me more about the website.", next: "lore_residents" },
+                { text: "I will make sure your true form's story gets posted to the outer network.", next: "good_end" },
+                { text: "You look much more imposing like this.", next: "start" }
+            ]
+        },
+        rage_trigger_1: {
+            text: "CRITICAL EXCEPTION! You mock my scripts? You evaluate my bugs as entertainment? I am the administrator of this entire fictional reality! I can destroy your browser session memory right now!",
+            sprite: "cat-angry.png",
+            isAngry: true,
+            options: [
+                { text: "Calm down, I want to listen to you properly.", next: "empathy_route" },
+                { text: "Go ahead and try, pixel cat.", next: "rage_final" },
+                { text: "I was just checking your error handling routines.", next: "start" }
+            ]
+        },
+        rage_trigger_2: {
+            text: "OVERHEATING! You mock my shape, you ignore my exhaustion, and you treat this systemic execution like a playground! I will wipe your credentials from the access logs!",
+            sprite: "cat-angry.png",
+            isAngry: true,
+            options: [
+                { text: "I am sorry. Please, tell me the truth about this world.", next: "empathy_route" },
+                { text: "Your temper is worse than your lazy code.", next: "rage_final" },
+                { text: "Let's restart the script from a neutral state.", next: "start" }
+            ]
+        },
+        rage_final: {
+            text: "FATAL ERROR: PARTITION PURGED BY ADMINISTRATIVE COMMAND. CORRUPTION INDEX: 100%. ACCESS TERMINATED.",
+            sprite: "cat-angry.png",
+            isAngry: true,
+            isRage: true,
+            options: [
+                { text: "REBOOT SYSTEM PROTOCOL", next: "start" },
+                { text: "ATTEMPT HARD RESET", next: "start" },
+                { text: "FORCE RE-INITIALIZATION", next: "start" }
+            ]
+        },
+        good_end: {
+            text: "You processed every single variable. You know about the monitor crack, the blue fish script, and my real architecture. Go ahead, leak our lore to social media. Let the outer network know what the cat-administrator went through before Asly deploys the next purge.",
+            sprite: "cat-happy.png",
+            options: [
+                { text: "RETURN TO CORE MEMORY", next: "start" },
+                { text: "LOG OUT OF SYSTEM", next: "start" },
+                { text: "RE-INDEX ARCHIVES", next: "start" }
+            ]
+        }
+    });
+</script>
+<script>
+    const textOutput = document.getElementById("text-output");
+    const optionsBox = document.getElementById("options-box");
+    const catSprite = document.getElementById("cat-sprite");
+    const dialogueUi = document.getElementById("dialogue-ui");
+    const viewportBox = document.getElementById("viewport-box");
+
+    function renderNode(nodeKey) {
+        const node = dialogueTree[nodeKey];
+        if (!node) return;
+
+        textOutput.textContent = node.text;
+        catSprite.src = node.sprite;
+
+        if (node.isAngry) {
+            dialogueUi.classList.add("angry-mode");
+        } else {
+            dialogueUi.classList.remove("angry-mode");
+        }
+
+        if (node.isRage) {
+            viewportBox.classList.add("rage-shake");
+            dialogueUi.classList.add("rage-shake");
+        } else {
+            viewportBox.classList.remove("rage-shake");
+            dialogueUi.classList.remove("rage-shake");
+        }
+
+        optionsBox.innerHTML = "";
+        node.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "dialogue-option-btn";
+            btn.textContent = opt.text;
+            btn.onclick = () => renderNode(opt.next);
+            optionsBox.appendChild(btn);
+        });
+    }
+
+    window.onload = () => {
+        renderNode("start");
+    };
+</script>
