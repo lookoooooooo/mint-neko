@@ -226,15 +226,11 @@
             <div class="emoji-icon">🗑️</div>
             <div class="icon-label">Trash</div>
         </div>
-        <div class="desktop-icon" style="top: 260px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-paint')">
-            <div class="emoji-icon">🎨</div>
-            <div class="icon-label">Paint</div>
-        </div>
-        <div class="desktop-icon" style="top: 380px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-browser')">
+        <div class="desktop-icon" style="top: 260px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-browser')">
             <div class="emoji-icon">🌐</div>
             <div class="icon-label">Web Navigator</div>
         </div>
-        <div class="desktop-icon" style="top: 500px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-settings')">
+        <div class="desktop-icon" style="top: 380px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-settings')">
             <div class="emoji-icon">⚙️</div>
             <div class="icon-label">Settings</div>
         </div>
@@ -253,6 +249,7 @@
                 <div id="file-content-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #34d399; min-height: 100px; display: none; white-space: pre-wrap;"></div>
             </div>
         </div>
+
         <div class="os-window" id="win-trash" style="width: 440px; height: 350px; top: 120px; left: 200px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-trash')">
                 <span>🗑️ Trash</span>
@@ -265,24 +262,6 @@
                 <div id="trash-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #ff3333; min-height: 80px; display: none; white-space: pre-wrap; color: #ff8888;"></div>
             </div>
         </div>
-
-        <div class="os-window" id="win-paint" style="width: 440px; height: 380px; top: 60px; left: 280px;">
-            <div class="window-header" onmousedown="initWindowDrag(event, 'win-paint')">
-                <span>🎨 Paint</span>
-                <button class="window-close-btn" onclick="closeOSWindow('win-paint')">X</button>
-            </div>
-            <div class="window-body">
-                <div class="paint-toolbar">
-                    <div class="paint-color-btn" style="background: #34d399;" onclick="setPaintColor('#34d399')"></div>
-                    <div class="paint-color-btn" style="background: #ff3333;" onclick="setPaintColor('#ff3333')"></div>
-                    <div class="paint-color-btn" style="background: #ffaa00;" onclick="setPaintColor('#ffaa00')"></div>
-                    <div class="paint-color-btn" style="background: #ffffff;" onclick="setPaintColor('#ffffff')"></div>
-                    <button class="os-btn" style="padding: 2px 8px; font-size: 0.7rem;" onclick="clearCanvas()">Clear</button>
-                </div>
-                <canvas id="paintCanvas" class="paint-canvas" width="395" height="250"></canvas>
-            </div>
-        </div>
-
         <div class="os-window" id="win-browser" style="width: 540px; height: 500px; top: 40px; left: 320px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-browser')">
                 <span>🌐 Web Navigator</span>
@@ -330,7 +309,7 @@
                 </div>
                 <div class="settings-row">
                     <label>Audio Monitoring Volume:</label>
-                    <input type="range" class="settings-input" min="0" max="100" value="80" onchange="console.log('Audio level updated: '+this.value+'%')">
+                    <input type="range" class="settings-input" min="0" max="100" value="80" onchange="console.log('Audio level: '+this.value+'%')">
                 </div>
                 <hr style="border: 1px dashed #34d399; margin: 15px 0;">
                 <div class="settings-row">
@@ -344,104 +323,102 @@
                 <div id="hiddenContent" style="display:none; color:#ff3333; margin-top:10px;">[OVERWRITE PROTOCOL UNLOCKED]</div>
             </div>
         </div>
+
+        <div class="os-window" id="win-dressup" style="width: 440px; height: 520px; top: 60px; left: 100px;">
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-dressup')"><span>👗 Game 1: Emoji Dress-up</span><button class="window-close-btn" onclick="closeOSWindow('win-dressup')">X</button></div>
+            <div class="window-body" style="text-align:center;">
+                <div style="font-size: 5rem; margin-bottom: 10px;" id="fullBodyAvatar">🧍🏻</div>
+                <div style="display:flex; gap:4px; justify-content:center; margin-bottom:8px; flex-wrap:wrap;">
+                    <button class="os-btn" onclick="setAvatarGender('m')">🧍🏻</button><button class="os-btn" onclick="setAvatarGender('f')">🧍🏻‍♀️</button>
+                    <button class="os-btn" onclick="setSkinTone('🏻')">🏻</button><button class="os-btn" onclick="setSkinTone('🏽')">🏽</button><button class="os-btn" onclick="setSkinTone('🏿')">🏿</button>
+                </div>
+                <div style="font-size:0.75rem; text-align:left; border-top:1px dashed #34d399; padding-top:6px; line-height: 1.8;">
+                    Cloth: <span onclick="setCloth('👚')" style="cursor:pointer">👚</span> <span onclick="setCloth('👕')" style="cursor:pointer">👕</span> <span onclick="setCloth('👖')" style="cursor:pointer">👖</span> <span onclick="setCloth('🩳')" style="cursor:pointer">🩳</span> <span onclick="setCloth('👗')" style="cursor:pointer">👗</span> <span onclick="setCloth('👘')" style="cursor:pointer">👘</span><br>
+                    Shoes: <span onclick="setShoes('👟')" style="cursor:pointer">👟</span> <span onclick="setShoes('👠')" style="cursor:pointer">👠</span> <span onclick="setShoes('🥾')" style="cursor:pointer">🥾</span> <span onclick="setShoes('🛼')" style="cursor:pointer">🛼</span><br>
+                    Head: <span onclick="setHead('👑')" style="cursor:pointer">👑</span> <span onclick="setHead('🎩')" style="cursor:pointer">🎩</span> <span onclick="setHead(' Cap','🧢')" style="cursor:pointer">🧢</span> <span onclick="setHead('👒')" style="cursor:pointer">👒</span><br>
+                    Accessory: <span onclick="setAcc('👓')" style="cursor:pointer">👓</span> <span onclick="setAcc('🕶️')" style="cursor:pointer">🕶️</span> <span onclick="setAcc('⌚️')" style="cursor:pointer">⌚️</span><br>
+                    Hand: <span onclick="setHand('👜')" style="cursor:pointer">👜</span> <span onclick="setHand('💼')" style="cursor:pointer">💼</span> <span onclick="setHand('🌂')" style="cursor:pointer">🌂</span> <span onclick="setHand('🪭')" style="cursor:pointer">🪭</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="os-window" id="win-clicker" style="width: 320px; height: 260px; top: 100px; left: 240px;">
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-clicker')"><span>⚡ Game 2: Core Clicker</span><button class="window-close-btn" onclick="closeOSWindow('win-clicker')">X</button></div>
+            <div class="window-body" style="text-align:center;">
+                <p>Pulses: <span id="clicker-score-local" style="font-size:1.2rem; font-weight:bold;">0</span></p>
+                <button class="os-btn" style="padding:10px 20px;" onclick="registerNetPulse()">PRODUCE PULSE</button>
+            </div>
+        </div>
+
+        <div class="os-window" id="win-paint" style="width: 500px; height: 440px; top: 40px; left: 140px;">
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-paint')"><span>🎨 App 3: Pro Paint Studio</span><button class="window-close-btn" onclick="closeOSWindow('win-paint')">X</button></div>
+            <div class="window-body">
+                <div style="display:flex; gap:5px; margin-bottom:5px; align-items:center; flex-wrap:wrap; font-size:0.72rem;">
+                    <input type="color" id="proColor" value="#34d399" onchange="paintColor=this.value; isEraser=false;" style="height:22px; width:28px;">
+                    Sz:<input type="range" min="1" max="25" value="3" onchange="brushSize=this.value" style="width:35px;">
+                    Blur:<input type="range" min="0" max="10" value="0" onchange="blurAmount=this.value" style="width:35px;">
+                    <select id="layerSelect" onchange="activeLayer=parseInt(this.value)" style="background:#222; color:#6ee7b7; border:1px solid #6ee7b7;">
+                        <option value="0">Layer 1</option>
+                        <option value="1">Layer 2</option>
+                    </select>
+                    <button class="os-btn" style="padding:1px 4px;" onclick="isEraser=true">Eraser</button>
+                    <button class="os-btn" style="padding:1px 4px;" onclick="bucketFillActive=true">Fill</button>
+                    <button class="os-btn" style="padding:1px 4px;" onclick="clearActiveLayer()">Clear</button>
+                </div>
+                <div style="position:relative; width:460px; height:280px; background:#fff; border:1px inset #333;">
+                    <canvas id="paintLayer0" width="460" height="280" style="position:absolute; left:0; top:0; cursor:crosshair;"></canvas>
+                    <canvas id="paintLayer1" width="460" height="280" style="position:absolute; left:0; top:0; cursor:crosshair; pointer-events:none;"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
-        let highestZ = 100;
-        let activeCanvas = document.getElementById('paintCanvas');
-        let ctx = activeCanvas ? activeCanvas.getContext('2d') : null;
-        let isDrawing = false;
-        let paintColor = '#34d399';
-        let brushSize = 3;
-        let isEraser = false;
-        let blurAmount = 0;
+        let highestZ = 100, netPulses = 0, currentQuestion = 0, extAppsInstalled = 0;
         let quizScores = { PNG: 0, JPG: 0, WEBP: 0, GIF: 0, JPEG: 0 };
-        let currentQuestion = 0;
-        let netPulses = 0;
-        let extAppsInstalled = 0;
+        let gender = 'm', skin = '🏻', cloth = '👕', shoes = '👟', head = '', acc = '', hand = '';
+        let paintColor = '#34d399', brushSize = 3, isEraser = false, activeLayer = 0, blurAmount = 0;
+        let isDrawing = false, bucketFillActive = false, canvases = [], ctxs = [];
 
         const quizQuestions = [
-            {
-                q: "How do you react when a system error occurs?",
-                a: [
-                    { t: "Try to cheer up everyone around with a joke.", k: "GIF" },
-                    { t: "Analyze the core log calmly using logic.", k: "PNG" },
-                    { t: "Get irritated and blame the hardware layers.", k: "WEBP" },
-                    { t: "Use creative workaround paths immediately.", k: "JPG" }
-                ]
-            },
-            {
-                q: "What is your main operational priority?",
-                a: [
-                    { t: "Absolute perfect clarity and depth.", k: "PNG" },
-                    { t: "Fastest execution, ignoring others' status.", k: "WEBP" },
-                    { t: "Bringing positive dynamic loops to the grid.", k: "GIF" },
-                    { t: "Creating elegant gadgets and new scripts.", k: "JPG" }
-                ]
-            },
-            {
-                q: "Select your desired architectural status:",
-                a: [
-                    { t: "Highly intelligent but deeply unstable.", k: "PNG" },
-                    { t: "Global superstar entity with age restrictions.", k: "JPEG" },
-                    { t: "Closed micro-cluster supreme logic.", k: "WEBP" },
-                    { t: "Balanced technological adapter.", k: "JPG" }
-                ]
-            }
+            { q: "How do you react when a system error occurs?", a: [{ t: "Try to cheer up everyone around with a joke.", k: "GIF" }, { t: "Analyze the core log calmly using logic.", k: "PNG" }, { t: "Get irritated and blame the hardware layers.", k: "WEBP" }, { t: "Use creative workaround paths immediately.", k: "JPG" }] },
+            { q: "What is your main operational priority?", a: [{ t: "Absolute perfect clarity and depth.", k: "PNG" }, { t: "Fastest execution, ignoring others' status.", k: "WEBP" }, { t: "Bringing positive dynamic loops to the grid.", k: "GIF" }, { t: "Creating elegant gadgets and new scripts.", k: "JPG" }] },
+            { q: "Select your desired architectural status:", a: [{ t: "Highly intelligent but deeply unstable.", k: "PNG" }, { t: "Global superstar entity with age restrictions.", k: "JPEG" }, { t: "Closed micro-cluster supreme logic.", k: "WEBP" }, { t: "Balanced technological adapter.", k: "JPG" }] }
         ];
 
         function openOSWindow(id) {
             let win = document.getElementById(id);
             if (!win) return;
-            highestZ++;
-            win.style.zIndex = highestZ;
+            win.style.zIndex = ++highestZ;
             win.style.display = 'flex';
-            if(id === 'win-paint') initPaint();
             if(id === 'win-browser') navigateBrowser('home');
+            if(id === 'win-paint') initPaintLayers();
         }
 
-        function closeOSWindow(id) {
-            let win = document.getElementById(id);
-            if (win) win.style.display = 'none';
-        }
+        function closeOSWindow(id) { document.getElementById(id).style.display = 'none'; }
 
         function initWindowDrag(e, id) {
             if (e.target.tagName === 'BUTTON' || e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
             let win = document.getElementById(id);
-            if (!win) return;
-            highestZ++;
-            win.style.zIndex = highestZ;
-            let posX = e.clientX;
-            let posY = e.clientY;
+            win.style.zIndex = ++highestZ;
+            let posX = e.clientX, posY = e.clientY;
             document.onmousemove = function(e) {
-                let diffX = posX - e.clientX;
-                let diffY = posY - e.clientY;
-                posX = e.clientX;
-                posY = e.clientY;
-                win.style.top = (win.offsetTop - diffY) + "px";
-                win.style.left = (win.offsetLeft - diffX) + "px";
+                win.style.top = (win.offsetTop - (posY - e.clientY)) + "px";
+                win.style.left = (win.offsetLeft - (posX - e.clientX)) + "px";
+                posX = e.clientX; posY = e.clientY;
             };
-            document.onmouseup = function() {
-                document.onmousemove = null;
-                document.onmouseup = null;
-            };
+            document.onmouseup = function() { document.onmousemove = null; document.onmouseup = null; };
         }
 
         function initIconDrag(e, icon) {
-            let posX = e.clientX;
-            let posY = e.clientY;
+            let posX = e.clientX, posY = e.clientY;
             document.onmousemove = function(e) {
-                let diffX = posX - e.clientX;
-                let diffY = posY - e.clientY;
-                posX = e.clientX;
-                posY = e.clientY;
-                icon.style.top = (icon.offsetTop - diffY) + "px";
-                icon.style.left = (icon.offsetLeft - diffX) + "px";
+                icon.style.top = (icon.offsetTop - (posY - e.clientY)) + "px";
+                icon.style.left = (icon.offsetLeft - (posX - e.clientX)) + "px";
+                posX = e.clientX; posY = e.clientY;
             };
-            document.onmouseup = function() {
-                document.onmousemove = null;
-                document.onmouseup = null;
-            };
+            document.onmouseup = function() { document.onmousemove = null; document.onmouseup = null; };
         }
+
         function navigateBrowser(page) {
             let addr = document.getElementById('browserAddress');
             let body = document.getElementById('browserBody');
@@ -451,92 +428,44 @@
                 addr.innerText = 'folder://arcade_hub/home';
                 body.innerHTML = `
                     <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">🕹️ FolderOS Arcade & App Hub</h3>
+                        <h3 style="color:#6ee7b7; margin-top:0;">🕹️ FolderOS Network Web Terminal</h3>
                         <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
                             <button class="os-btn" onclick="navigateBrowser('quiz')">🧬 Human Extension Core Matrix Test</button>
-                            <button class="os-btn" onclick="navigateBrowser('info1')">👗 Game 1: Emoji Dress-up</button>
-                            <button class="os-btn" onclick="navigateBrowser('info2')">⚡ Game 2: Core Clicker & Shop</button>
-                            <button class="os-btn" onclick="navigateBrowser('paintApp')">🎨 App 3: Pro Studio Canvas</button>
+                            <button class="os-btn" onclick="navigateBrowser('shop')">🛒 System App Market Store</button>
                         </div>
                     </div>
                 `;
             } else if (page === 'quiz') {
                 addr.innerText = 'folder://arcade_hub/extension_test';
                 renderQuiz();
-            } else if (page === 'info1') {
-                addr.innerText = 'folder://arcade_hub/game1_info';
+            } else if (page === 'shop') {
+                addr.innerText = 'folder://arcade_hub/market';
                 body.innerHTML = `
                     <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">👗 Emoji Dress-up Info</h3>
-                        <p>Game 1 is a creative styling module where you combine visual layers to assemble unique avatars inside the browser.</p>
-                        <button class="os-btn" onclick="navigateBrowser('game1')">Launch Dress-up</button>
-                        <button class="os-btn" style="background:#222; margin-left:5px;" onclick="navigateBrowser('home')">Back</button>
-                    </div>
-                `;
-            } else if (page === 'game1') {
-                addr.innerText = 'folder://arcade_hub/dress_up';
-                body.innerHTML = `
-                    <div style="padding: 10px; text-align:center;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">👗 Emoji Dress-up</h3>
-                        <div style="font-size:3.5rem; margin:10px;" id="avatarDisplay">👤</div>
-                        <p>Select Base Avatars:</p>
-                        <div style="display:flex; justify-content:center; gap:5px; margin-bottom:10px;">
-                            <button class="os-btn" onclick="document.getElementById('avatarDisplay').innerText='🧙‍♂️'">🧙‍♂️</button>
-                            <button class="os-btn" onclick="document.getElementById('avatarDisplay').innerText='🤖'">🤖</button>
-                            <button class="os-btn" onclick="document.getElementById('avatarDisplay').innerText='🥷'">🥷</button>
+                        <h3 style="color:#6ee7b7; margin-top:0;">🛒 App Compiler Market</h3>
+                        <p>Available Network Pulses: <span style="color:#fff; font-weight:bold;">${netPulses}</span></p>
+                        <hr style="border:1px dashed #34d399; margin:10px 0;">
+                        <div style="font-size:0.8rem; margin-bottom:12px;">
+                            <b>Game 1: Emoji Dress-up (Cost: 5 Pulses)</b><br>Styling core using avatar matrix human structures.<br>
+                            <button class="os-btn" style="margin-top:4px;" onclick="deployAppFromWeb('dressup', '🧍🏻‍♀️', 'Game 1: Dressup', 5)">Compile & Install App</button>
                         </div>
-                        <button class="os-btn" style="background:#222;" onclick="navigateBrowser('info1')">Info</button>
-                    </div>
-                `;
-            } else if (page === 'info2') {
-                addr.innerText = 'folder://arcade_hub/game2_info';
-                body.innerHTML = `
-                    <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">⚡ Core Clicker Info</h3>
-                        <p>Game 2 is an environmental generator. Accumulate network pulses to download physical modules to your desktop.</p>
-                        <button class="os-btn" onclick="navigateBrowser('game2')">Launch Clicker</button>
-                        <button class="os-btn" style="background:#222; margin-left:5px;" onclick="navigateBrowser('home')">Back</button>
-                    </div>
-                `;
-            } else if (page === 'game2') {
-                addr.innerText = 'folder://arcade_hub/clicker';
-                body.innerHTML = `
-                    <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">⚡ Core Clicker & Shop</h3>
-                        <p>Network Pulses: <span id="clicker-score" style="color:#fff; font-weight:bold;">${netPulses}</span></p>
-                        <button class="os-btn" onclick="registerNetPulse()">Produce Pulse</button>
-                        <br><br>
-                        <button class="os-btn" id="dl-reward-btn" style="background:#34d399; color:#000000;" onclick="downloadWebGameApp()">Download MiniGame to Desktop (Cost: 10 Pulses)</button>
-                        <br><br>
-                        <button class="os-btn" style="background:#222;" onclick="navigateBrowser('info2')">Info</button>
-                    </div>
-                `;
-            } else if (page === 'paintApp') {
-                addr.innerText = 'folder://arcade_hub/pro_paint';
-                body.innerHTML = `
-                    <div style="padding: 5px;">
-                        <h3 style="color:#6ee7b7; margin:0 0 5px 0;">🎨 Pro Studio Canvas</h3>
-                        <div style="display:flex; gap:5px; margin-bottom:5px; align-items:center; flex-wrap:wrap; font-size:0.75rem;">
-                            <input type="color" id="proColor" value="#34d399" onchange="setPaintColor(this.value)" style="background:#222; border:1px solid #34d399; height:24px; width:30px;">
-                            Size:<input type="range" min="1" max="25" value="3" onchange="brushSize=this.value;isEraser=false;" style="width:50px;">
-                            Blur:<input type="range" min="0" max="10" value="0" onchange="blurAmount=this.value" style="width:50px;">
-                            <button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="isEraser=true">Eraser</button>
-                            <button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="fillCanvas()">Fill</button>
-                            <button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="clearCanvasPro()">Clear</button>
+                        <div style="font-size:0.8rem; margin-bottom:12px;">
+                            <b>Game 2: Core Clicker (Cost: 5 Pulses)</b><br>Local rapid ecosystem deployment.<br>
+                            <button class="os-btn" style="margin-top:4px;" onclick="deployAppFromWeb('clicker', '⚡', 'Game 2: Clicker', 5)">Compile & Install App</button>
                         </div>
-                        <canvas id="browserPaintCanvas" width="500" height="250" style="background:#fff; border:1px inset #333; cursor:crosshair; display:block;"></canvas>
-                        <button class="os-btn" style="background:#222; margin-top:5px;" onclick="navigateBrowser('home')">Hub</button>
+                        <div style="font-size:0.8rem; margin-bottom:12px;">
+                            <b>App 3: Pro Paint Studio (Cost: 10 Pulses)</b><br>Advanced layer-based image editing frame with flood fill hooks.<br>
+                            <button class="os-btn" style="margin-top:4px;" onclick="deployAppFromWeb('paint', '🎨', 'App 3: Pro Paint', 10)">Compile & Install App</button>
+                        </div>
                     </div>
                 `;
-                setTimeout(initBrowserPaint, 50);
             }
         }
 
         function renderQuiz() {
             let container = document.getElementById('browserBody');
-            if (!container) return;
             if (currentQuestion >= quizQuestions.length) {
-                let maxKey = 'PNG'; let maxScore = -1;
+                let maxKey = 'PNG', maxScore = -1;
                 for (let k in quizScores) { if (quizScores[k] > maxScore) { maxScore = quizScores[k]; maxKey = k; } }
                 let articles = {
                     PNG: "HUMAN EXTENSION TYPE: PNG\n\nLossless High-Fidelity Consciousness. Highly analytical but unstable under extreme emotional memory cycles.",
@@ -548,7 +477,7 @@
                 container.innerHTML = `
                     <div style="padding: 10px;">
                         <h3 style="color:#6ee7b7;">Analysis Complete</h3>
-                        <p style="white-space:pre-wrap; background:#222; padding:10px; border:1px solid #34d399;">${articles[maxKey]}</p>
+                        <p style="white-space:pre-wrap; background:#222; padding:10px; border:1px solid #34d399; font-size:0.8rem;">${articles[maxKey]}</p>
                         <button class="os-btn" onclick="currentQuestion=0; quizScores={PNG:0,JPG:0,WEBP:0,GIF:0,JPEG:0}; renderQuiz();">Retake Analysis</button>
                     </div>
                 `;
@@ -559,60 +488,99 @@
             container.innerHTML = `
                 <div style="padding: 10px;">
                     <h3 style="color:#6ee7b7; margin-top:0;">Human Extension Matrix Test</h3>
-                    <p>Question ${currentQuestion + 1}/${quizQuestions.length}: ${qData.q}</p>
+                    <p style="font-size:0.85rem;">Question ${currentQuestion + 1}/${quizQuestions.length}: ${qData.q}</p>
                     <div style="margin-top:15px;">${optionsHtml}</div>
                 </div>
             `;
         }
+        function deployAppFromWeb(winId, emoji, label, cost) {
+            if (netPulses < cost) { alert('Core notification: Insufficient net pulses inside memory stack.'); return; }
+            if (document.getElementById('icon-spawned-' + winId)) { alert('Core notification: Application already deployed.'); return; }
+            netPulses -= cost;
+            extAppsInstalled++;
+            navigateBrowser('shop');
+
+            let desktop = document.getElementById('desktop');
+            let appEl = document.createElement('div');
+            appEl.className = 'desktop-icon';
+            appEl.id = 'icon-spawned-' + winId;
+            appEl.style.top = (40 + (extAppsInstalled * 105)) + 'px';
+            appEl.style.left = '140px';
+            appEl.setAttribute('onmousedown', 'initIconDrag(event, this)');
+            appEl.setAttribute('ondblclick', `openOSWindow('win-${winId}')`);
+            appEl.innerHTML = `<div class="emoji-icon">${emoji}</div><div class="icon-label">${label}</div>`;
+            desktop.appendChild(appEl);
+            alert('Application successfully compiled, registered, and deployed to desktop environment!');
+        }
+
         function registerNetPulse() {
             netPulses++;
-            let scoreEl = document.getElementById('clicker-score');
-            if (scoreEl) scoreEl.innerText = netPulses;
+            let localScore = document.getElementById('clicker-score-local');
+            if(localScore) localScore.innerText = netPulses;
         }
 
-        function downloadWebGameApp() {
-            if (netPulses < 10) { alert('Insufficient pulses!'); return; }
-            netPulses -= 10;
-            let scoreEl = document.getElementById('clicker-score');
-            if (scoreEl) scoreEl.innerText = netPulses;
-            extAppsInstalled++;
-            const desktop = document.getElementById('desktop');
-            const appEl = document.createElement('div');
-            appEl.className = 'desktop-icon';
-            appEl.style.top = (60 + (extAppsInstalled * 35)) + 'px';
-            appEl.style.left = (180 + (extAppsInstalled * 35)) + 'px';
-            appEl.setAttribute('onmousedown', 'initIconDrag(event, this)');
-            appEl.innerHTML = `<div class="emoji-icon">🎮</div><div class="icon-label">MiniGame Pack ${extAppsInstalled}</div>`;
-            desktop.appendChild(appEl);
-            alert('Application compiled and deployed onto local desktop environment!');
+        function updateAvatar() {
+            let base = gender === 'm' ? '🧍' : '🧍‍♀️';
+            document.getElementById('fullBodyAvatar').innerText = base + skin + " " + cloth + shoes + head + acc + hand;
         }
+        function setAvatarGender(g) { gender = g; updateAvatar(); }
+        function setSkinTone(s) { skin = s; updateAvatar(); }
+        function setCloth(c) { cloth = c; updateAvatar(); }
+        function setShoes(s) { shoes = s; updateAvatar(); }
+        function setHead(h) { head = head === h ? '' : h; updateAvatar(); }
+        function setAcc(a) { acc = acc === a ? '' : a; updateAvatar(); }
+        function setHand(h) { hand = hand === h ? '' : h; updateAvatar(); }
 
-        let browserCtx = null;
-        function initBrowserPaint() {
-            let canvas = document.getElementById('browserPaintCanvas');
-            if(!canvas) return;
-            browserCtx = canvas.getContext('2d');
-            canvas.onmousedown = () => isDrawing = true;
-            canvas.onmouseup = () => { if(browserCtx) browserCtx.beginPath(); isDrawing = false; };
-            canvas.onmousemove = drawBrowserCanvas;
+        function initPaintLayers() {
+            canvases = [document.getElementById('paintLayer0'), document.getElementById('paintLayer1')];
+            if (!canvases) return;
+            ctxs = canvases.map(c => c.getContext('2d'));
+            canvases.forEach((c, idx) => {
+                c.onmousedown = function(e) { if(activeLayer === idx) { isDrawing = true; drawStart(e, idx); } };
+                c.onmouseup = function() { isDrawing = false; ctxs[idx].beginPath(); };
+                c.onmousemove = function(e) { if(isDrawing && activeLayer === idx) drawMove(e, idx); };
+                c.onclick = function(e) { if(bucketFillActive && activeLayer === idx) { floodFill(e, idx); bucketFillActive = false; } };
+            });
         }
+        function drawStart(e, idx) {
+            let r = canvases[idx].getBoundingClientRect();
+            ctxs[idx].filter = blurAmount > 0 ? `blur(${blurAmount}px)` : 'none';
+            ctxs[idx].lineWidth = brushSize; ctxs[idx].lineCap = 'round';
+            ctxs[idx].strokeStyle = isEraser ? '#ffffff' : paintColor;
+            ctxs[idx].beginPath(); ctxs[idx].moveTo(e.clientX - r.left, e.clientY - r.top);
+        }
+        function drawMove(e, idx) {
+            if (!isDrawing) return;
+            let r = canvases[idx].getBoundingClientRect();
+            ctxs[idx].lineTo(e.clientX - r.left, e.clientY - r.top); ctxs[idx].stroke();
+        }
+        function clearActiveLayer() { ctxs[activeLayer].clearRect(0, 0, 460, 280); }
 
-        function setPaintColor(color) { paintColor = color; isEraser = false; }
-        function fillCanvas() { if(browserCtx) { browserCtx.fillStyle = paintColor; browserCtx.fillRect(0, 0, 500, 250); } }
-        function clearCanvasPro() { if(browserCtx) browserCtx.clearRect(0, 0, 500, 250); }
-
-        function drawBrowserCanvas(e) {
-            if (!isDrawing || !browserCtx) return;
-            let canvas = document.getElementById('browserPaintCanvas');
-            const rect = canvas.getBoundingClientRect();
-            browserCtx.filter = blurAmount > 0 ? `blur(${blurAmount}px)` : 'none';
-            browserCtx.lineWidth = brushSize;
-            browserCtx.lineCap = 'round';
-            browserCtx.strokeStyle = isEraser ? '#ffffff' : paintColor;
-            browserCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-            browserCtx.stroke();
-            browserCtx.beginPath();
-            browserCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        function floodFill(e, idx) {
+            let c = canvases[idx], ctx = ctxs[idx], r = c.getBoundingClientRect();
+            let startX = Math.floor(e.clientX - r.left), startY = Math.floor(e.clientY - r.top);
+            let imgData = ctx.getImageData(0, 0, c.width, c.height);
+            let data = imgData.data;
+            let targetIdx = (startY * c.width + startX) * 4;
+            let tr = data[targetIdx], tg = data[targetIdx+1], tb = data[targetIdx+2], ta = data[targetIdx+3];
+            let hex = paintColor.replace('#','');
+            let fr = parseInt(hex.substring(0,2),16), fg = parseInt(hex.substring(2,4),16), fb = parseInt(hex.substring(4,6),16);
+            if (tr === fr && tg === fg && tb === fb) return;
+            let queue = [[startX, startY]];
+            let visited = new Uint8Array(c.width * c.height);
+            while(queue.length > 0) {
+                let [x, y] = queue.pop();
+                if(x < 0 || x >= c.width || y < 0 || y >= c.height) continue;
+                let idxP = (y * c.width + x);
+                if(visited[idxP]) continue;
+                visited[idxP] = 1;
+                let pi = idxP * 4;
+                if(data[pi] === tr && data[pi+1] === tg && data[pi+2] === tb && data[pi+3] === ta) {
+                    data[pi] = fr; data[pi+1] = fg; data[pi+2] = fb; data[pi+3] = 255;
+                    queue.push([x+1, y], [x-1, y], [x, y+1], [x, y-1]);
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
         }
 
         function readSecretLog(type) {
@@ -672,20 +640,6 @@
                 `;
             }
         }
-
-        function initPaint() {
-            let canvas = document.getElementById('paintCanvas'); if(!canvas) return;
-            let pCtx = canvas.getContext('2d');
-            canvas.onmousedown = () => isDrawing = true;
-            canvas.onmouseup = () => { pCtx.beginPath(); isDrawing = false; };
-            canvas.onmousemove = function(e) {
-                if (!isDrawing) return; const rect = canvas.getBoundingClientRect();
-                pCtx.lineWidth = 3; pCtx.lineCap = 'round'; pCtx.strokeStyle = '#34d399';
-                pCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top); pCtx.stroke();
-                pCtx.beginPath(); pCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-            };
-        }
-        function clearCanvas() { let canvas = document.getElementById('paintCanvas'); if(canvas) canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height); }
     </script>
 </body>
 </html>
