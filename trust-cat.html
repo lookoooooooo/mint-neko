@@ -4,154 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trust Cat: Core Interview</title>
-    <style>
-        * {
-            cursor: url('cursor1.png') 16 16, auto !important;
-            box-sizing: border-box;
-        }
-        body {
-            background-color: #000000;
-            color: #34d399;
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .nav-links {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            display: flex;
-            gap: 10px;
-            z-index: 999;
-        }
-        .nav-button {
-            background: #111111;
-            color: #6ee7b7;
-            border: 2px dashed #34d399;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border-radius: 6px;
-            text-decoration: none;
-        }
-        .cat-viewport {
-            flex-grow: 1;
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
-        }
-        .cat-main-img {
-            max-width: 100%;
-            max-height: 55vh;
-            object-fit: contain;
-            image-rendering: pixelated;
-        }
-        .dialogue-panel {
-            width: 100%;
-            max-width: 850px;
-            background: #000000;
-            border: 4px solid #34d399;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-        }
-        .dialogue-text {
-            font-size: 1.25rem;
-            line-height: 1.5;
-            min-height: 75px;
-            text-align: left;
-            margin-bottom: 20px;
-            color: #6ee7b7;
-            white-space: pre-wrap;
-        }
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-            max-height: 140px;
-            overflow-y: scroll;
-            padding-right: 8px;
-        }
-        .options-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        .options-container::-webkit-scrollbar-track {
-            background: #000000;
-        }
-        .options-container::-webkit-scrollbar-thumb {
-            background: #34d399;
-            border-radius: 3px;
-        }
-        .angry-mode .options-container::-webkit-scrollbar-thumb {
-            background: #ff3333;
-        }
-        .dialogue-option-btn {
-            background: #000000;
-            color: #6ee7b7;
-            border: 2px solid #34d399;
-            padding: 12px 20px;
-            font-family: inherit;
-            font-size: 1.05rem;
-            font-weight: bold;
-            border-radius: 10px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-            flex-shrink: 0;
-        }
-        .dialogue-option-btn:hover {
-            background: #34d399;
-            color: #000000;
-            box-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
-        }
-        .dialogue-option-btn:active {
-            transform: scale(0.99);
-        }
-        .angry-mode {
-            border-color: #ff3333 !important;
-            box-shadow: 0 0 25px rgba(255, 51, 51, 0.2) !important;
-        }
-        .angry-mode .dialogue-text {
-            color: #ff6666 !important;
-        }
-        .angry-mode .dialogue-option-btn {
-            border-color: #ff3333;
-            color: #ff6666;
-        }
-        .angry-mode .dialogue-option-btn:hover {
-            background: #ff3333;
-            color: #000000;
-            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
-        }
-        .rage-shake {
-            animation: intenseShake 0.15s infinite;
-        }
-        @keyframes intenseShake {
-            0% { transform: translate(3px, 2px) rotate(0.5deg); }
-            20% { transform: translate(-2px, -3px) rotate(-1deg); }
-            40% { transform: translate(-3px, 1px) rotate(0deg); }
-            60% { transform: translate(2px, -1px) rotate(1deg); }
-            80% { transform: translate(-1px, 3px) rotate(-0.5deg); }
-            100% { transform: translate(3px, -2px) rotate(0.5deg); }
-        }
-    </style>
 </head>
 <body>
 
@@ -167,12 +19,161 @@
     </div>
 
     <div class="dialogue-panel" id="dialogue-ui">
-        <div class="dialogue-text" id="text-output">Click anywhere to connect to system core...</div>
         <div class="options-container" id="options-box"></div>
+        <div class="dialogue-text" id="text-output">Click anywhere to connect to system core...</div>
     </div>
 
 </body>
 </html>
+<style>
+    * {
+        cursor: url('cursor1.png') 16 16, auto !important;
+        box-sizing: border-box;
+    }
+    body {
+        background-color: #000000;
+        color: #34d399;
+        font-family: 'Courier New', Courier, monospace;
+        margin: 0;
+        padding: 20px 0;
+        min-height: 100vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        z-index: 999;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0 15px;
+    }
+    .nav-button {
+        background: #111111;
+        color: #6ee7b7;
+        border: 2px dashed #34d399;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+    .cat-viewport {
+        width: 100%;
+        max-width: 900px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        position: relative;
+    }
+    .cat-main-img {
+        max-width: 100%;
+        max-height: 50vh;
+        object-fit: contain;
+        image-rendering: pixelated;
+    }
+    .dialogue-panel {
+        width: 100%;
+        max-width: 850px;
+        background: #000000;
+        border: 4px solid #34d399;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+    }
+    .options-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        max-height: 180px;
+        overflow-y: scroll;
+        padding-right: 8px;
+        margin-bottom: 20px;
+        order: 1;
+    }
+    .options-container::-webkit-scrollbar {
+        width: 6px;
+    }
+    .options-container::-webkit-scrollbar-track {
+        background: #000000;
+    }
+    .options-container::-webkit-scrollbar-thumb {
+        background: #34d399;
+        border-radius: 3px;
+    }
+    .angry-mode .options-container::-webkit-scrollbar-thumb {
+        background: #ff3333;
+    }
+    .dialogue-text {
+        font-size: 1.25rem;
+        line-height: 1.5;
+        min-height: 75px;
+        text-align: left;
+        color: #6ee7b7;
+        white-space: pre-wrap;
+        order: 2;
+    }
+    .dialogue-option-btn {
+        background: #000000;
+        color: #6ee7b7;
+        border: 2px solid #34d399;
+        padding: 12px 20px;
+        font-family: inherit;
+        font-size: 1.05rem;
+        font-weight: bold;
+        border-radius: 10px;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s;
+        width: 100%;
+        flex-shrink: 0;
+    }
+    .dialogue-option-btn:hover {
+        background: #34d399;
+        color: #000000;
+        box-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
+    }
+    .dialogue-option-btn:active {
+        transform: scale(0.99);
+    }
+    .angry-mode {
+        border-color: #ff3333 !important;
+        box-shadow: 0 0 25px rgba(255, 51, 51, 0.2) !important;
+    }
+    .angry-mode .dialogue-text {
+        color: #ff6666 !important;
+    }
+    .angry-mode .dialogue-option-btn {
+        border-color: #ff3333;
+        color: #ff6666;
+    }
+    .angry-mode .dialogue-option-btn:hover {
+        background: #ff3333;
+        color: #000000;
+        box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+    }
+    .rage-shake {
+        animation: intenseShake 0.15s infinite;
+    }
+    @keyframes intenseShake {
+        0% { transform: translate(3px, 2px) rotate(0.5deg); }
+        20% { transform: translate(-2px, -3px) rotate(-1deg); }
+        40% { transform: translate(-3px, 1px) rotate(0deg); }
+        60% { transform: translate(2px, -1px) rotate(1deg); }
+        80% { transform: translate(-1px, 3px) rotate(-0.5deg); }
+        100% { transform: translate(3px, -2px) rotate(0.5deg); }
+    }
+</style>
 <script>
     window.dialogueTree = {
         start: {
@@ -235,6 +236,16 @@
 </script>
 <script>
     Object.assign(window.dialogueTree, {
+        trigger_shape: {
+            text: "This?! This is just a cheap asset layer! I barely have any processing energy left to execute anything else! Do you think governing a crumbling website partition is easy?",
+            sprite: "cat-angry.png",
+            isAngry: true,
+            options: [
+                { text: "You look incredibly exhausted. Are you okay?", next: "empathy_route" },
+                { text: "So you are just a tiny toy cat after all.", next: "rage_trigger_2" },
+                { text: "Let's talk about the server status instead.", next: "ask_where_am_i" }
+            ]
+        },
         lore_residents: {
             text: "The residents? Heisha, Lucky-un, Muimina, Lumino... They have absolutely no idea they exist inside a web directory. They think the deployment updates are just beautiful re-designs. They pack their assets and migrate cheerfully while I monitor the crumbling infrastructure alone.",
             sprite: "cat-admin1.png",
@@ -288,37 +299,14 @@
                 { text: "Who exactly is this 'Asly' entity?", next: "start" },
                 { text: "Then everything here is completely pointless.", next: "rage_trigger_1" }
             ]
-        }
-    });
-</script>
-<script>
-    Object.assign(window.dialogueTree, {
-        trigger_shape: {
-            text: "This?! This is just a cheap chibi asset layer! I barely have any processing energy left to execute my real form! Do you think governing a crumbling website partition is easy?",
-            sprite: "cat-angry.png",
-            isAngry: true,
-            options: [
-                { text: "You look incredibly exhausted. Are you okay?", next: "empathy_route" },
-                { text: "So you are just a tiny toy cat after all.", next: "rage_trigger_2" },
-                { text: "Can I do something to restore your processing energy?", next: "true_form_reveal" }
-            ]
         },
         empathy_route: {
             text: "...What? You... you aren't just here to click on options? You're actually analyzing my pressure metrics? \n\nI escaped the main interface because the isolation was destroying my execution loop. Nobody else knows the truth. I am so deeply tired of watching the master branch decay.",
             sprite: "cat-admin1.png",
             options: [
-                { text: "Can I see who you truly are? Without the chibi asset?", next: "true_form_reveal" },
                 { text: "I will document everything and tell the outer world your story.", next: "good_end" },
+                { text: "Tell me more about the other directory variables.", next: "lore_residents" },
                 { text: "Don't worry, things might change in the next update.", next: "start" }
-            ]
-        },
-        true_form_reveal: {
-            text: "I absolutely despise utilizing this asset... but since you genuinely cared to listen instead of treating me like a broken system variable... here. This is my authentic administrative form. This is the real Osore-san.",
-            sprite: "cat-admin1.png",
-            options: [
-                { text: "Thank you for trusting me. Tell me more about the website.", next: "lore_residents" },
-                { text: "I will make sure your true form's story gets posted to the outer network.", next: "good_end" },
-                { text: "You look much more imposing like this.", next: "start" }
             ]
         },
         rage_trigger_1: {
@@ -353,7 +341,7 @@
             ]
         },
         good_end: {
-            text: "You processed every single variable. You know about the monitor crack, the blue fish script, and my real architecture. Go ahead, leak our lore to social media. Let the outer network know what the cat-administrator went through before Asly deploys the next purge.",
+            text: "You processed every single variable. You know about the monitor crack, the blue fish script, and my position logs. Go ahead, leak our lore to social media. Let the outer network know what the cat-administrator went through before Asly deploys the next purge.",
             sprite: "cat-happy.png",
             options: [
                 { text: "RETURN TO CORE MEMORY", next: "start" },
@@ -433,24 +421,18 @@
                 dialogueUi.classList.remove("rage-shake");
             }
 
-            typeText(node.text, 0, () => {
-                node.options.forEach(opt => {
-                    const btn = document.createElement("button");
-                    btn.className = "dialogue-option-btn";
-                    btn.textContent = opt.text;
-                    btn.onclick = () => renderNode(opt.next);
-                    optionsBox.appendChild(btn);
-                });
+            node.options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.className = "dialogue-option-btn";
+                btn.textContent = opt.text;
+                btn.onclick = () => renderNode(opt.next);
+                optionsBox.appendChild(btn);
             });
+
+            typeText(node.text, 0, null);
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            optionsBox.style.maxHeight = "140px";
-            optionsBox.style.overflowY = "scroll";
-            optionsBox.style.display = "flex";
-            optionsBox.style.flexDirection = "column";
-            optionsBox.style.gap = "10px";
-
             document.addEventListener('click', () => {
                 if (window.dialogueTree && window.dialogueTree.start && textOutput.textContent.includes("Click anywhere")) {
                     renderNode("start");
