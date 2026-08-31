@@ -238,6 +238,7 @@
             <div class="emoji-icon">⚙️</div>
             <div class="icon-label">Settings</div>
         </div>
+
         <div class="os-window" id="win-files" style="width: 440px; height: 350px; top: 80px; left: 160px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-files')">
                 <span>📁 Folder_Contents.jpg</span>
@@ -252,7 +253,6 @@
                 <div id="file-content-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #34d399; min-height: 100px; display: none; white-space: pre-wrap;"></div>
             </div>
         </div>
-
         <div class="os-window" id="win-trash" style="width: 440px; height: 350px; top: 120px; left: 200px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-trash')">
                 <span>🗑️ Trash</span>
@@ -354,115 +354,183 @@
         </div>
     </div>
     <script>
+        let highestZ = 100;
+        let activeCanvas = document.getElementById('paintCanvas');
+        let ctx = activeCanvas ? activeCanvas.getContext('2d') : null;
+        let isDrawing = false;
+        let paintColor = '#34d399';
+        let quizScores = { PNG: 0, JPG: 0, WEBP: 0, GIF: 0, JPEG: 0 };
+        let currentQuestion = 0;
         let netPulses = 0;
         let extAppsInstalled = 0;
-        let activeDragIcon = null;
-        let activeDragWindow = null;
-        let offsetX = 0;
-        let offsetY = 0;
+
+        const quizQuestions = [
+            {
+                q: "How do you react when a system error occurs?",
+                a: [
+                    { t: "Try to cheer up everyone around with a joke.", k: "GIF" },
+                    { t: "Analyze the core log calmly using logic.", k: "PNG" },
+                    { t: "Get irritated and blame the hardware layers.", k: "WEBP" },
+                    { t: "Use creative workaround paths immediately.", k: "JPG" }
+                ]
+            },
+            {
+                q: "What is your main operational priority?",
+                a: [
+                    { t: "Absolute perfect clarity and depth.", k: "PNG" },
+                    { t: "Fastest execution, ignoring others' status.", k: "WEBP" },
+                    { t: "Bringing positive dynamic loops to the grid.", k: "GIF" },
+                    { t: "Creating elegant gadgets and new scripts.", k: "JPG" }
+                ]
+            },
+            {
+                q: "Select your desired architectural status:",
+                a: [
+                    { t: "Highly intelligent but deeply unstable.", k: "PNG" },
+                    { t: "Global superstar entity with age restrictions.", k: "JPEG" },
+                    { t: "Closed micro-cluster supreme logic.", k: "WEBP" },
+                    { t: "Balanced technological adapter.", k: "JPG" }
+                ]
+            }
+        ];
 
         function openOSWindow(id) {
-            const win = document.getElementById(id);
-            if (win) {
-                win.style.display = 'flex';
-                win.style.zIndex = parseInt(new Date().getTime() / 1000);
+            let win = document.getElementById(id);
+            if (!win) return;
+            highestZ++;
+            win.style.zIndex = highestZ;
+            win.style.display = 'flex';
+            if(id === 'win-paint') {
+                initPaint();
+            }
+            if(id === 'win-browser') {
+                navigateBrowser('home');
             }
         }
 
         function closeOSWindow(id) {
-            const win = document.getElementById(id);
+            let win = document.getElementById(id);
             if (win) win.style.display = 'none';
         }
 
-        function initIconDrag(e, element) {
-            activeDragIcon = element;
-            offsetX = e.clientX - element.offsetLeft;
-            offsetY = e.clientY - element.offsetTop;
-            document.addEventListener('mousemove', dragIcon);
-            document.addEventListener('mouseup', dropIcon);
-        }
-
-        function dragIcon(e) {
-            if (!activeDragIcon) return;
-            activeDragIcon.style.left = (e.clientX - offsetX) + 'px';
-            activeDragIcon.style.top = (e.clientY - offsetY) + 'px';
-        }
-
-        function dropIcon() {
-            activeDragIcon = null;
-            document.removeEventListener('mousemove', dragIcon);
-            document.removeEventListener('mouseup', dropIcon);
-        }
-
         function initWindowDrag(e, id) {
-            activeDragWindow = document.getElementById(id);
-            offsetX = e.clientX - activeDragWindow.offsetLeft;
-            offsetY = e.clientY - activeDragWindow.offsetTop;
-            document.addEventListener('mousemove', dragWindow);
-            document.addEventListener('mouseup', dropWindow);
+            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
+            let win = document.getElementById(id);
+            if (!win) return;
+            highestZ++;
+            win.style.zIndex = highestZ;
+            
+            let posX = e.clientX;
+            let posY = e.clientY;
+            
+            document.onmousemove = function(e) {
+                let diffX = posX - e.clientX;
+                let diffY = posY - e.clientY;
+                posX = e.clientX;
+                posY = e.clientY;
+                win.style.top = (win.offsetTop - diffY) + "px";
+                win.style.left = (win.offsetLeft - diffX) + "px";
+            };
+            
+            document.onmouseup = function() {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
         }
 
-        function dragWindow(e) {
-            if (!activeDragWindow) return;
-            activeDragWindow.style.left = (e.clientX - offsetX) + 'px';
-            activeDragWindow.style.top = (e.clientY - offsetY) + 'px';
+        function initIconDrag(e, icon) {
+            let posX = e.clientX;
+            let posY = e.clientY;
+            
+            document.onmousemove = function(e) {
+                let diffX = posX - e.clientX;
+                let diffY = posY - e.clientY;
+                posX = e.clientX;
+                posY = e.clientY;
+                icon.style.top = (icon.offsetTop - diffY) + "px";
+                icon.style.left = (icon.offsetLeft - diffX) + "px";
+            };
+            
+            document.onmouseup = function() {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
         }
 
-        function dropWindow() {
-            activeDragWindow = null;
-            document.removeEventListener('mousemove', dragWindow);
-            document.removeEventListener('mouseup', dropWindow);
+        function deployArticleToDesktop(title, content) {
+            let desktop = document.getElementById('desktop');
+            let artWin = document.createElement('div');
+            highestZ++;
+            artWin.className = 'os-window';
+            artWin.style.width = '300px';
+            artWin.style.height = '200px';
+            artWin.style.top = '100px';
+            artWin.style.left = '300px';
+            artWin.style.display = 'flex';
+            artWin.style.zIndex = highestZ;
+            
+            let uniqueId = 'art-' + Date.now();
+            artWin.id = uniqueId;
+            
+            artWin.innerHTML = `
+                <div class="window-header" onmousedown="initWindowDrag(event, '${uniqueId}')">
+                    <span>📄 ${title}</span>
+                    <button class="window-close-btn" onclick="document.getElementById('${uniqueId}').remove()">X</button>
+                </div>
+                <div class="window-body" style="background:#222; color:#fff; font-size:0.8rem; white-space:pre-wrap;">${content}</div>
+            `;
+            desktop.appendChild(artWin);
         }
-
         function readSecretLog(type) {
-            const viewer = document.getElementById('file-content-viewer');
+            let viewer = document.getElementById('file-content-viewer');
+            if (!viewer) return;
             viewer.style.display = 'block';
-            if (type === 'gizen') viewer.innerText = "[LOG]: Pseudo-reality core running. System loop detected.";
-            if (type === 'muimina') viewer.innerText = "[SYS]: Void process executed successfully. Value: NULL.";
-            if (type === 'lumino') viewer.innerText = "[ERROR]: Synchronization failure. Framework collapse imminent.";
+            
+            let logs = {
+                gizen: "GIZEN_DIARY // Entry 404\n\nThey think I am hiding behind this facade. The distortion spreads faster every loop. Lumino noticed the discrepancy.",
+                muimina: "MUIMINA_LOOP // Execution Stack\n\n[0x00] GOTO 0x00\n[0x01] ERASE MEMORY\n[0x02] RESTART CORE\n[CRITICAL] Loop counter exceeded infinity. Subject tracking human extensions failure.",
+                lumino: "LUMINO_ERROR_LOG // Core dump\n\nSYS_ERR: Light matrix fractional overflow.\nTraceback: os_core.js line 1092.\nStatus: Blinding expansion error."
+            };
+            
+            viewer.innerText = logs[type] || "Data corrupted.";
         }
 
         function readTrashFile() {
-            const viewer = document.getElementById('trash-viewer');
+            let viewer = document.getElementById('trash-viewer');
+            if (!viewer) return;
             viewer.style.display = 'block';
             viewer.innerText = "I can't keep this number in my head, I will delete myself soon...\n\n[MEM_NOTE]: 5422";
         }
 
-        function applySettings() {
-            const color = document.getElementById('btnColorSelect').value;
-            const font = document.getElementById('fontSelect').value;
-            
-            document.body.style.fontFamily = font;
-            const buttons = document.querySelectorAll('.os-btn');
-            buttons.forEach(btn => {
-                btn.style.borderColor = color;
-                btn.style.color = color;
-            });
-        }
-
         function checkDecryptionKey() {
-            const pass = document.getElementById('decryptionPassword').value;
-            if (pass === '5422') {
-                alert('ACCESS GRANTED: Root filesystem decrypted.');
+            let val = document.getElementById('decryptionPassword').value;
+            if (val === '5422') {
+                alert('ACCESS GRANTED: Human extension root parameters decrypted. Simulation overwrite initialized.');
+                let hidden = document.getElementById('hiddenContent');
+                if(hidden) hidden.style.display = 'block';
             } else {
-                alert('ACCESS DENIED: Invalid key string.');
+                alert('ACCESS DENIED: Core rejection.');
             }
         }
 
         function registerNetPulse() {
             netPulses++;
-            document.getElementById('net-score').innerText = netPulses;
-            if (netPulses >= 10) {
-                document.getElementById('dl-reward-btn').style.display = 'inline-block';
+            let scoreEl = document.getElementById('net-score');
+            if (scoreEl) scoreEl.innerText = netPulses;
+            let btn = document.getElementById('dl-reward-btn');
+            if (netPulses >= 10 && btn) {
+                btn.style.display = 'inline-block';
             }
         }
 
         function downloadWebGameApp() {
             if (netPulses < 10) return;
             netPulses -= 10;
-            document.getElementById('net-score').innerText = netPulses;
-            if (netPulses < 10) {
-                document.getElementById('dl-reward-btn').style.display = 'none';
+            let scoreEl = document.getElementById('net-score');
+            if (scoreEl) scoreEl.innerText = netPulses;
+            let btn = document.getElementById('dl-reward-btn');
+            if (netPulses < 10 && btn) {
+                btn.style.display = 'none';
             }
             extAppsInstalled++;
             
@@ -484,6 +552,7 @@
         function changeDesktopBg() {
             const mode = document.getElementById('bgSelect').value;
             const d = document.getElementById('desktop');
+            if (!d) return;
             if (mode === 'default') {
                 d.style.backgroundImage = "url('desktop-bg.jpg')";
                 d.style.backgroundSize = "cover";
@@ -500,21 +569,22 @@
         }
 
         function navigateBrowser(page) {
-            if (page === 'home') {
-                document.getElementById('browserAddress').innerText = 'folder://network_home';
+            let addr = document.getElementById('browserAddress');
+            if (addr && page === 'home') {
+                addr.innerText = 'folder://network_home';
             }
         }
 
-        const canvas = document.getElementById('paintCanvas');
-        let ctx = null;
-        let painting = false;
-        let paintColor = '#34d399';
-
-        if (canvas) {
-            ctx = canvas.getContext('2d');
-            canvas.addEventListener('mousedown', () => painting = true);
-            canvas.addEventListener('mouseup', () => { ctx.beginPath(); painting = false; });
-            canvas.addEventListener('mousemove', draw);
+        function initPaint() {
+            if (!activeCanvas) {
+                activeCanvas = document.getElementById('paintCanvas');
+                if(activeCanvas) ctx = activeCanvas.getContext('2d');
+            }
+            if (!activeCanvas) return;
+            
+            activeCanvas.onmousedown = () => isDrawing = true;
+            activeCanvas.onmouseup = () => { if(ctx) ctx.beginPath(); isDrawing = false; };
+            activeCanvas.onmousemove = draw;
         }
 
         function setPaintColor(color) {
@@ -522,12 +592,12 @@
         }
 
         function clearCanvas() {
-            if (ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (ctx && activeCanvas) ctx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
         }
 
         function draw(e) {
-            if (!painting || !ctx || !canvas) return;
-            const rect = canvas.getBoundingClientRect();
+            if (!isDrawing || !ctx || !activeCanvas) return;
+            const rect = activeCanvas.getBoundingClientRect();
             ctx.lineWidth = 3;
             ctx.lineCap = 'round';
             ctx.strokeStyle = paintColor;
@@ -536,6 +606,37 @@
             ctx.beginPath();
             ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
         }
+
+        function applySettings() {
+            let color = document.getElementById('btnColorSelect').value;
+            let font = document.getElementById('fontSelect').value;
+            let styleEl = document.getElementById('customStyles');
+            if (styleEl) {
+                styleEl.innerHTML = `
+                    * { cursor: url('cursor1.png') 16 16, auto !important; box-sizing: border-box; }
+                    body { background-color: #000000; color: ${color}; font-family: ${font}; margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+                    .nav-links { background: #111111; padding: 8px; display: flex; justify-content: center; gap: 10px; border-bottom: 2px solid ${color}; z-index: 9999; }
+                    .nav-button { background: #222222; color: ${color}; border: 1px dashed ${color}; padding: 4px 12px; font-size: 0.8rem; font-weight: bold; border-radius: 4px; text-decoration: none; }
+                    .desktop-environment { flex-grow: 1; width: 100%; background-size: cover; background-position: center; position: relative; padding: 20px; transition: background 0.3s; }
+                    .desktop-icon { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; padding: 5px; border-radius: 8px; position: absolute; width: 100px; height: 105px; user-select: none; }
+                    .emoji-icon { font-size: 45px; margin-bottom: 4px; display: inline-block; user-select: none; }
+                    .icon-label { font-size: 0.75rem; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000000; word-break: break-word; }
+                    .os-window { position: absolute; background: #111111; border: 3px solid ${color}; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); display: none; flex-direction: column; z-index: 100; overflow: hidden; }
+                    .window-header { background: ${color}; color: #000000; padding: 6px 12px; font-weight: bold; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; cursor: move; user-select: none; }
+                    .window-close-btn { background: #ff3333; border: 1px solid #000000; color: #ffffff; font-size: 0.7rem; font-weight: bold; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; }
+                    .window-body { padding: 15px; flex-grow: 1; overflow-y: auto; color: #a7f3d0; font-size: 0.9rem; }
+                    .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
+                    .paint-canvas { background: #ffffff; border: 2px inset #333333; cursor: crosshair !important; display: block; }
+                    .paint-toolbar { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+                    .paint-color-btn { width: 20px; height: 20px; border: 1px solid #ffffff; cursor: pointer; border-radius: 4px; }
+                    .os-btn { background: #222222; color: ${color}; border: 2px solid ${color}; padding: 6px 12px; font-family: inherit; font-size: 0.8rem; font-weight: bold; border-radius: 6px; cursor: pointer; }
+                `;
+            }
+        }
+        
+        window.onload = function() {
+            initPaint();
+        };
     </script>
 </body>
 </html>
