@@ -152,7 +152,7 @@
     }
 </style>
 <script>
-    const dialogueTree = {
+    window.dialogueTree = {
         start: {
             text: "Welcome. What did you want to say?",
             sprite: "cat-admin2.png",
@@ -212,8 +212,9 @@
             ]
         }
     };
+</script>
 <script>
-    Object.assign(dialogueTree, {
+    Object.assign(window.dialogueTree, {
         lore_residents: {
             text: "The residents? Heisha, Lucky-un, Muimina, Lumino... They have absolutely no idea they exist inside a web directory. They think the deployment updates are just beautiful re-designs. They pack their assets and migrate cheerfully while I monitor the crumbling infrastructure alone.",
             sprite: "cat-admin1.png",
@@ -320,44 +321,50 @@
     });
 </script>
 <script>
-    const textOutput = document.getElementById("text-output");
-    const optionsBox = document.getElementById("options-box");
-    const catSprite = document.getElementById("cat-sprite");
-    const dialogueUi = document.getElementById("dialogue-ui");
-    const viewportBox = document.getElementById("viewport-box");
+    (function() {
+        const textOutput = document.getElementById("text-output");
+        const optionsBox = document.getElementById("options-box");
+        const catSprite = document.getElementById("cat-sprite");
+        const dialogueUi = document.getElementById("dialogue-ui");
+        const viewportBox = document.getElementById("viewport-box");
 
-    function renderNode(nodeKey) {
-        const node = dialogueTree[nodeKey];
-        if (!node) return;
+        function renderNode(nodeKey) {
+            const node = window.dialogueTree[nodeKey];
+            if (!node) return;
 
-        textOutput.textContent = node.text;
-        catSprite.src = node.sprite;
+            textOutput.textContent = node.text;
+            catSprite.src = node.sprite;
 
-        if (node.isAngry) {
-            dialogueUi.classList.add("angry-mode");
-        } else {
-            dialogueUi.classList.remove("angry-mode");
+            if (node.isAngry) {
+                dialogueUi.classList.add("angry-mode");
+            } else {
+                dialogueUi.classList.remove("angry-mode");
+            }
+
+            if (node.isRage) {
+                viewportBox.classList.add("rage-shake");
+                dialogueUi.classList.add("rage-shake");
+            } else {
+                viewportBox.classList.remove("rage-shake");
+                dialogueUi.classList.remove("rage-shake");
+            }
+
+            optionsBox.innerHTML = "";
+            node.options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.className = "dialogue-option-btn";
+                btn.textContent = opt.text;
+                btn.onclick = () => renderNode(opt.next);
+                optionsBox.appendChild(btn);
+            });
         }
 
-        if (node.isRage) {
-            viewportBox.classList.add("rage-shake");
-            dialogueUi.classList.add("rage-shake");
-        } else {
-            viewportBox.classList.remove("rage-shake");
-            dialogueUi.classList.remove("rage-shake");
-        }
-
-        optionsBox.innerHTML = "";
-        node.options.forEach(opt => {
-            const btn = document.createElement("button");
-            btn.className = "dialogue-option-btn";
-            btn.textContent = opt.text;
-            btn.onclick = () => renderNode(opt.next);
-            optionsBox.appendChild(btn);
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.dialogueTree && window.dialogueTree.start) {
+                renderNode("start");
+            }
         });
-    }
-
-    window.onload = () => {
-        renderNode("start");
-    };
+    })();
 </script>
+</body>
+</html>
