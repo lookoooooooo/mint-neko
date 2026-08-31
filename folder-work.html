@@ -3,211 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FolderOS</title>
+    <title>FolderOS Ultimate</title>
     <style id="customStyles">
         * {
-            cursor: url('cursor1.png') 16 16, auto !important;
             box-sizing: border-box;
         }
         body {
             background-color: #000000;
             color: #34d399;
             font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
+            overflow: hidden; display: flex; flex-direction: column;
+            user-select: none;
         }
         .nav-links {
-            background: #111111;
-            padding: 8px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            border-bottom: 2px solid #34d399;
-            z-index: 9999;
+            background: #111111; padding: 8px;
+            display: flex; justify-content: center; gap: 10px;
+            border-bottom: 2px solid #34d399; z-index: 9999;
         }
         .nav-button {
-            background: #222222;
-            color: #6ee7b7;
-            border: 1px dashed #34d399;
-            padding: 4px 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border-radius: 4px;
-            text-decoration: none;
+            background: #222222; color: #6ee7b7; border: 1px dashed #34d399;
+            padding: 4px 12px; font-size: 0.8rem; font-weight: bold;
+            border-radius: 4px; text-decoration: none;
         }
         .desktop-environment {
-            flex-grow: 1;
-            width: 100%;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            padding: 20px;
-            transition: background 0.3s, background-size 0.3s;
+            flex-grow: 1; width: 100%;
+            background-image: url('https://unsplash.com');
+            background-size: cover; background-position: center;
+            position: relative; padding: 20px;
         }
         .desktop-icon {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 8px;
-            transition: background 0.2s;
-            position: absolute;
-            width: 100px;
-            height: 105px;
-            user-select: none;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; cursor: pointer; padding: 5px; border-radius: 8px;
+            position: absolute; width: 100px; height: 105px; z-index: 5;
         }
-        .desktop-icon:hover {
-            background: rgba(110, 231, 183, 0.15);
-        }
-        .emoji-icon {
-            font-size: 45px;
-            margin-bottom: 4px;
-            display: inline-block;
-            user-select: none;
-        }
-        .icon-label {
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 1px 1px 3px #000000;
-            word-break: break-word;
-        }
+        .desktop-icon:hover { background: rgba(110, 231, 183, 0.15); }
+        .emoji-icon { font-size: 45px; margin-bottom: 4px; display: inline-block; }
+        .icon-label { font-size: 0.75rem; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; word-break: break-all; }
         .os-window {
-            position: absolute;
-            background: #111111;
-            border: 3px solid #6ee7b7;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            display: none;
-            flex-direction: column;
-            z-index: 100;
-            overflow: hidden;
+            position: absolute; background: #111111; border: 3px solid #6ee7b7;
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            display: none; flex-direction: column; z-index: 100; overflow: hidden;
         }
         .window-header {
-            background: #6ee7b7;
-            color: #000000;
-            padding: 6px 12px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: #6ee7b7; color: #000000; padding: 6px 12px;
+            font-weight: bold; font-size: 0.85rem; display: flex;
+            justify-content: space-between; align-items: center;
             cursor: move;
-            user-select: none;
         }
         .window-close-btn {
-            background: #ff3333;
-            border: 1px solid #000000;
-            color: #ffffff;
-            font-size: 0.7rem;
-            font-weight: bold;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border-radius: 4px;
+            background: #ff3333; border: 1px solid #000000; color: #ffffff;
+            font-size: 0.7rem; font-weight: bold; width: 18px; height: 18px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; border-radius: 4px;
         }
-        .window-body {
-            padding: 15px;
-            flex-grow: 1;
-            overflow-y: auto;
-            color: #a7f3d0;
-            font-size: 0.9rem;
-        }
-        .file-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 15px;
-        }
-        .paint-canvas {
-            background: #ffffff;
-            border: 2px inset #333333;
-            cursor: crosshair !important;
-            display: block;
-        }
-        .paint-toolbar {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-        .paint-color-btn {
-            width: 20px;
-            height: 20px;
-            border: 1px solid #ffffff;
-            cursor: pointer;
-            border-radius: 4px;
-        }
+        .window-body { padding: 12px; flex-grow: 1; overflow-y: auto; color: #a7f3d0; font-size: 0.85rem; }
         .os-btn {
-            background: #222222;
-            color: #6ee7b7;
-            border: 2px solid #6ee7b7;
-            padding: 6px 12px;
-            font-family: inherit;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
+            background: #222222; color: #6ee7b7; border: 2px solid #6ee7b7;
+            padding: 5px 10px; font-family: inherit; font-size: 0.75rem;
+            font-weight: bold; border-radius: 6px; cursor: pointer;
         }
         .os-btn:hover { background: #6ee7b7; color: #000000; }
-        .browser-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+        .browser-container { display: flex; flex-direction: column; height: 100%; }
+        .browser-bar { background: #222222; padding: 6px; border-bottom: 1px solid #34d399; display: flex; gap: 8px; align-items: center; }
+        .browser-display { background: #000000; border: 1px solid #34d399; color: #6ee7b7; padding: 4px 8px; font-size: 0.75rem; flex-grow: 1; border-radius: 4px; }
+        .context-menu {
+            position: absolute; background: #222222; border: 2px solid #34d399;
+            border-radius: 6px; display: none; flex-direction: column;
+            padding: 5px 0; z-index: 99999; box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
         }
-        .browser-bar {
-            background: #222222;
-            padding: 6px;
-            border-bottom: 1px solid #34d399;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .browser-display {
-            background: #000000;
-            border: 1px solid #34d399;
-            color: #6ee7b7;
-            padding: 4px 8px;
-            font-size: 0.75rem;
-            flex-grow: 1;
-            border-radius: 4px;
-            user-select: none;
-        }
-        .browser-content {
-            flex-grow: 1;
-            padding: 10px 5px;
-            overflow-y: auto;
-        }
-        .settings-row {
-            margin-bottom: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .settings-select, .settings-input {
-            background: #222222;
-            color: #6ee7b7;
-            border: 1px solid #34d399;
-            padding: 6px;
-            font-family: inherit;
-            border-radius: 4px;
-            width: 100%;
-        }
+        .context-item { padding: 6px 20px; color: #6ee7b7; font-size: 0.8rem; cursor: pointer; text-align: left; }
+        .context-item:hover { background: #34d399; color: #000000; }
+        .social-feed { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
+        .social-post { background: #1a1a1a; border: 1px solid #34d399; border-radius: 6px; padding: 10px; }
+        .post-header { display: flex; gap: 8px; align-items: center; font-weight: bold; color: #fff; margin-bottom: 6px; }
+        .video-mock { width: 100%; height: 160px; background: #333; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; border-radius: 4px; margin-top: 5px; position: relative; overflow: hidden; }
+        .video-bar { position: absolute; bottom: 0; left: 0; height: 4px; background: #ff3333; width: 0%; }
+        .social-img-preview { width: 100%; height: 140px; background-size: cover; background-position: center; border: 1px solid #34d399; border-radius: 4px; margin-bottom: 6px; }
     </style>
 </head>
 <body>
-
     <div class="nav-links">
         <a href="index.html" class="nav-button">HOME FACTS 📑</a>
         <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
@@ -215,58 +91,49 @@
         <a href="trust-cat.html" class="nav-button">TRUST OSORE 🐱</a>
         <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
     </div>
-
-    <div class="desktop-environment" id="desktop" style="background-image: url('desktop-bg.jpg');">
+    <div class="desktop-environment" id="desktop" oncontextmenu="showContextMenu(event)">
         
-        <div class="desktop-icon" style="top: 20px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-files')">
+        <div class="desktop-icon" style="top: 20px; left: 20px;" id="icon-win-files" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-files')">
             <div class="emoji-icon">📁</div>
             <div class="icon-label">Explorer</div>
         </div>
-        <div class="desktop-icon" style="top: 140px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-trash')">
+        <div class="desktop-icon" style="top: 140px; left: 20px;" id="icon-win-trash" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-trash')">
             <div class="emoji-icon">🗑️</div>
             <div class="icon-label">Trash</div>
         </div>
-        <div class="desktop-icon" style="top: 260px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-browser')">
+        <div class="desktop-icon" style="top: 260px; left: 20px;" id="icon-win-browser" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-browser')">
             <div class="emoji-icon">🌐</div>
             <div class="icon-label">Web Navigator</div>
         </div>
-        <div class="desktop-icon" style="top: 380px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-settings')">
+        <div class="desktop-icon" style="top: 380px; left: 20px;" id="icon-win-settings" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-settings')">
             <div class="emoji-icon">⚙️</div>
             <div class="icon-label">Settings</div>
         </div>
 
         <div class="os-window" id="win-files" style="width: 440px; height: 350px; top: 80px; left: 160px;">
-            <div class="window-header" onmousedown="initWindowDrag(event, 'win-files')">
-                <span>📁 Folder_Contents.jpg</span>
-                <button class="window-close-btn" onclick="closeOSWindow('win-files')">X</button>
-            </div>
-            <div class="window-body" style="background-image: url('Note pad template.jpg'); background-size: cover; background-color: rgba(0,0,0,0.7); background-blend-mode: darken;">
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-files')"><span>📁 Explorer</span><button class="window-close-btn" onclick="closeOSWindow('win-files')">X</button></div>
+            <div class="window-body">
                 <div class="file-grid">
-                    <div style="text-align:center; cursor:pointer; color: #6ee7b7; font-weight: bold;" onclick="readSecretLog('gizen')">📄 gizen_diary.txt</div>
-                    <div style="text-align:center; cursor:pointer; color: #6ee7b7; font-weight: bold;" onclick="readSecretLog('muimina')">📄 muimina_loop.sys</div>
-                    <div style="text-align:center; cursor:pointer; color: #6ee7b7; font-weight: bold;" onclick="readSecretLog('lumino')">📄 lumino_error.log</div>
+                    <div style="text-align:center; cursor:pointer;" onclick="readSecretLog('gizen')">📄 gizen_diary.txt</div>
+                    <div style="text-align:center; cursor:pointer;" onclick="readSecretLog('muimina')">📄 muimina_loop.sys</div>
+                    <div style="text-align:center; cursor:pointer;" onclick="readSecretLog('lumino')">📄 lumino_error.log</div>
                 </div>
                 <div id="file-content-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #34d399; min-height: 100px; display: none; white-space: pre-wrap;"></div>
             </div>
         </div>
 
         <div class="os-window" id="win-trash" style="width: 440px; height: 350px; top: 120px; left: 200px;">
-            <div class="window-header" onmousedown="initWindowDrag(event, 'win-trash')">
-                <span>🗑️ Trash</span>
-                <button class="window-close-btn" onclick="closeOSWindow('win-trash')">X</button>
-            </div>
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-trash')"><span>🗑️ Trash Bin</span><button class="window-close-btn" onclick="closeOSWindow('win-trash')">X</button></div>
             <div class="window-body">
-                <div class="file-grid">
-                    <div style="text-align:center; cursor:pointer; color: #ff3333; font-weight: bold;" onclick="readTrashFile()">📄 giGI19.txt</div>
+                <div class="file-grid" id="trashGrid">
+                    <div style="text-align:center; cursor:pointer; color: #ff3333;" id="trash-giGI19" onclick="readTrashFile()">📄 giGI19.txt</div>
                 </div>
                 <div id="trash-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #ff3333; min-height: 80px; display: none; white-space: pre-wrap; color: #ff8888;"></div>
             </div>
         </div>
-        <div class="os-window" id="win-browser" style="width: 540px; height: 500px; top: 40px; left: 320px;">
-            <div class="window-header" onmousedown="initWindowDrag(event, 'win-browser')">
-                <span>🌐 Web Navigator</span>
-                <button class="window-close-btn" onclick="closeOSWindow('win-browser')">X</button>
-            </div>
+
+        <div class="os-window" id="win-browser" style="width: 560px; height: 520px; top: 40px; left: 320px;">
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-browser')"><span>🌐 Web Navigator</span><button class="window-close-btn" onclick="closeOSWindow('win-browser')">X</button></div>
             <div class="browser-container">
                 <div class="browser-bar">
                     <button class="os-btn" style="padding: 2px 8px;" onclick="navigateBrowser('home')">Home</button>
@@ -275,56 +142,21 @@
                 <div class="window-body browser-content" id="browserBody"></div>
             </div>
         </div>
-
-        <div class="os-window" id="win-settings" style="width: 400px; height: 450px; top: 160px; left: 400px;">
-            <div class="window-header" onmousedown="initWindowDrag(event, 'win-settings')">
-                <span>⚙️ Settings</span>
-                <button class="window-close-btn" onclick="closeOSWindow('win-settings')">X</button>
-            </div>
+        <div class="os-window" id="win-settings" style="width: 400px; height: 420px; top: 160px; left: 420px;">
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-settings')"><span>⚙️ Settings</span><button class="window-close-btn" onclick="closeOSWindow('win-settings')">X</button></div>
             <div class="window-body">
                 <div class="settings-row">
-                    <label>Button Theme Color:</label>
-                    <select class="settings-select" id="btnColorSelect" onchange="applySettings()">
-                        <option value="#6ee7b7">Mint Green</option>
-                        <option value="#ff3333">Alert Red</option>
-                        <option value="#3b82f6">Link Blue</option>
-                        <option value="#ffffff">Pure White</option>
-                    </select>
-                </div>
-                <div class="settings-row">
-                    <label>System Font Family:</label>
-                    <select class="settings-select" id="fontSelect" onchange="applySettings()">
-                        <option value="'Courier New', Courier, monospace">Courier Terminal</option>
-                        <option value="Arial, sans-serif">Arial Sans</option>
-                        <option value="'Times New Roman', serif">Times Serif</option>
-                    </select>
-                </div>
-                <div class="settings-row">
-                    <label>Desktop Wallpaper Matrix:</label>
-                    <select class="settings-select" id="bgSelect" onchange="changeDesktopBg()">
-                        <option value="default">Default Image</option>
-                        <option value="matrix">Matrix Green Grid</option>
-                        <option value="cyber">Cyberpunk Vignette</option>
-                    </select>
-                </div>
-                <div class="settings-row">
-                    <label>Audio Monitoring Volume:</label>
-                    <input type="range" class="settings-input" min="0" max="100" value="80" onchange="console.log('Audio level: '+this.value+'%')">
-                </div>
-                <hr style="border: 1px dashed #34d399; margin: 15px 0;">
-                <div class="settings-row">
-                    <label>Hidden Files Decryption Key:</label>
-                    <div style="display:flex; gap:5px;">
-                        <input type="password" class="settings-input" id="decryptionPassword" placeholder="Enter password...">
+                    <label>Decryption Password Overlay:</label>
+                    <div style="display:flex; gap:5px; margin-top:5px;">
+                        <input type="password" class="settings-input" id="decryptionPassword" placeholder="Enter key...">
                         <button class="os-btn" onclick="checkDecryptionKey()">Unlock</button>
                     </div>
-                    <div id="passwordHint" style="color: #ffaa00; font-size: 0.75rem; margin-top: 4px;">Hint: Trash file giGI19.txt contains the memory note.</div>
                 </div>
-                <div id="hiddenContent" style="display:none; color:#ff3333; margin-top:10px;">[OVERWRITE PROTOCOL UNLOCKED]</div>
+                <div id="hiddenContent" style="display:none; color:#ff3333; margin-top:10px;">[OVERWRITE MATRIX PROTOCOL ENGAGED]</div>
             </div>
         </div>
 
-        <div class="os-window" id="win-dressup" style="width: 440px; height: 520px; top: 60px; left: 100px;">
+        <div class="os-window" id="win-dressup" style="width: 440px; height: 500px; top: 60px; left: 100px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-dressup')"><span>👗 Game 1: Emoji Dress-up</span><button class="window-close-btn" onclick="closeOSWindow('win-dressup')">X</button></div>
             <div class="window-body" style="text-align:center;">
                 <div style="font-size: 5rem; margin-bottom: 10px;" id="fullBodyAvatar">🧍🏻</div>
@@ -332,28 +164,28 @@
                     <button class="os-btn" onclick="setAvatarGender('m')">🧍🏻</button><button class="os-btn" onclick="setAvatarGender('f')">🧍🏻‍♀️</button>
                     <button class="os-btn" onclick="setSkinTone('🏻')">🏻</button><button class="os-btn" onclick="setSkinTone('🏽')">🏽</button><button class="os-btn" onclick="setSkinTone('🏿')">🏿</button>
                 </div>
-                <div style="font-size:0.75rem; text-align:left; border-top:1px dashed #34d399; padding-top:6px; line-height: 1.8;">
-                    Cloth: <span onclick="setCloth('👚')" style="cursor:pointer">👚</span> <span onclick="setCloth('👕')" style="cursor:pointer">👕</span> <span onclick="setCloth('👖')" style="cursor:pointer">👖</span> <span onclick="setCloth('🩳')" style="cursor:pointer">🩳</span> <span onclick="setCloth('👗')" style="cursor:pointer">👗</span> <span onclick="setCloth('👘')" style="cursor:pointer">👘</span><br>
+                <div style="font-size:0.75rem; text-align:left; border-top:1px dashed #34d399; padding-top:6px; line-height:1.7;">
+                    Clothes: <span onclick="setCloth('👚')" style="cursor:pointer">👚</span> <span onclick="setCloth('👕')" style="cursor:pointer">👕</span> <span onclick="setCloth('👖')" style="cursor:pointer">👖</span> <span onclick="setCloth('🩳')" style="cursor:pointer">🩳</span> <span onclick="setCloth('👗')" style="cursor:pointer">👗</span> <span onclick="setCloth('👘')" style="cursor:pointer">👘</span><br>
                     Shoes: <span onclick="setShoes('👟')" style="cursor:pointer">👟</span> <span onclick="setShoes('👠')" style="cursor:pointer">👠</span> <span onclick="setShoes('🥾')" style="cursor:pointer">🥾</span> <span onclick="setShoes('🛼')" style="cursor:pointer">🛼</span><br>
-                    Head: <span onclick="setHead('👑')" style="cursor:pointer">👑</span> <span onclick="setHead('🎩')" style="cursor:pointer">🎩</span> <span onclick="setHead(' Cap','🧢')" style="cursor:pointer">🧢</span> <span onclick="setHead('👒')" style="cursor:pointer">👒</span><br>
-                    Accessory: <span onclick="setAcc('👓')" style="cursor:pointer">👓</span> <span onclick="setAcc('🕶️')" style="cursor:pointer">🕶️</span> <span onclick="setAcc('⌚️')" style="cursor:pointer">⌚️</span><br>
+                    Head: <span onclick="setHead('👑')" style="cursor:pointer">👑</span> <span onclick="setHead('🎩')" style="cursor:pointer">🎩</span> <span onclick="setHead('🧢')" style="cursor:pointer">🧢</span> <span onclick="setHead('👒')" style="cursor:pointer">👒</span><br>
+                    Accs: <span onclick="setAcc('👓')" style="cursor:pointer">👓</span> <span onclick="setAcc('🕶️')" style="cursor:pointer">🕶️</span> <span onclick="setAcc('⌚️')" style="cursor:pointer">⌚️</span><br>
                     Hand: <span onclick="setHand('👜')" style="cursor:pointer">👜</span> <span onclick="setHand('💼')" style="cursor:pointer">💼</span> <span onclick="setHand('🌂')" style="cursor:pointer">🌂</span> <span onclick="setHand('🪭')" style="cursor:pointer">🪭</span>
                 </div>
             </div>
         </div>
 
-        <div class="os-window" id="win-clicker" style="width: 320px; height: 260px; top: 100px; left: 240px;">
+        <div class="os-window" id="win-clicker" style="width: 340px; height: 260px; top: 100px; left: 140px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-clicker')"><span>⚡ Game 2: Core Clicker</span><button class="window-close-btn" onclick="closeOSWindow('win-clicker')">X</button></div>
             <div class="window-body" style="text-align:center;">
                 <p>Pulses: <span id="clicker-score-local" style="font-size:1.2rem; font-weight:bold;">0</span></p>
-                <button class="os-btn" style="padding:10px 20px;" onclick="registerNetPulse()">PRODUCE PULSE</button>
+                <button class="os-btn" style="padding:10px 20px;" onclick="registerNetPulse()">PRODUCE NET PULSE</button>
             </div>
         </div>
 
-        <div class="os-window" id="win-paint" style="width: 500px; height: 440px; top: 40px; left: 140px;">
+        <div class="os-window" id="win-paint" style="width: 500px; height: 440px; top: 50px; left: 220px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-paint')"><span>🎨 App 3: Pro Paint Studio</span><button class="window-close-btn" onclick="closeOSWindow('win-paint')">X</button></div>
             <div class="window-body">
-                <div style="display:flex; gap:5px; margin-bottom:5px; align-items:center; flex-wrap:wrap; font-size:0.72rem;">
+                <div style="display:flex; gap:5px; margin-bottom:5px; align-items:center; flex-wrap:wrap; font-size:0.7rem;">
                     <input type="color" id="proColor" value="#34d399" onchange="paintColor=this.value; isEraser=false;" style="height:22px; width:28px;">
                     Sz:<input type="range" min="1" max="25" value="3" onchange="brushSize=this.value" style="width:35px;">
                     Blur:<input type="range" min="0" max="10" value="0" onchange="blurAmount=this.value" style="width:35px;">
@@ -371,19 +203,21 @@
                 </div>
             </div>
         </div>
+
+    </div>
+
+    <div class="context-menu" id="desktopContextMenu">
+        <div class="context-item" onclick="createDesktopFolder()">Create Folder</div>
+        <div class="context-item" onclick="setWallpaper('solid-black')">Wallpaper: Deep Black</div>
+        <div class="context-item" onclick="setWallpaper('anime-1')">Wallpaper: Anime Sky</div>
+        <div class="context-item" onclick="setWallpaper('anime-2')">Wallpaper: Cyber Street</div>
     </div>
     <script>
-        let highestZ = 100, netPulses = 0, currentQuestion = 0, extAppsInstalled = 0;
-        let quizScores = { PNG: 0, JPG: 0, WEBP: 0, GIF: 0, JPEG: 0 };
-        let gender = 'm', skin = '🏻', cloth = '👕', shoes = '👟', head = '', acc = '', hand = '';
+        let highestZ = 100, netPulses = 0, extAppsInstalled = 0, folderCount = 0, photoCount = 0;
+        let gender = 'm', skin = '🏻', cloth = '👕', shoes = 'sn', head = '', acc = '', hand = '';
         let paintColor = '#34d399', brushSize = 3, isEraser = false, activeLayer = 0, blurAmount = 0;
         let isDrawing = false, bucketFillActive = false, canvases = [], ctxs = [];
-
-        const quizQuestions = [
-            { q: "How do you react when a system error occurs?", a: [{ t: "Try to cheer up everyone around with a joke.", k: "GIF" }, { t: "Analyze the core log calmly using logic.", k: "PNG" }, { t: "Get irritated and blame the hardware layers.", k: "WEBP" }, { t: "Use creative workaround paths immediately.", k: "JPG" }] },
-            { q: "What is your main operational priority?", a: [{ t: "Absolute perfect clarity and depth.", k: "PNG" }, { t: "Fastest execution, ignoring others' status.", k: "WEBP" }, { t: "Bringing positive dynamic loops to the grid.", k: "GIF" }, { t: "Creating elegant gadgets and new scripts.", k: "JPG" }] },
-            { q: "Select your desired architectural status:", a: [{ t: "Highly intelligent but deeply unstable.", k: "PNG" }, { t: "Global superstar entity with age restrictions.", k: "JPEG" }, { t: "Closed micro-cluster supreme logic.", k: "WEBP" }, { t: "Balanced technological adapter.", k: "JPG" }] }
-        ];
+        let socialUser = { registered: false, username: '', bio: '', avatar: '👤' };
 
         function openOSWindow(id) {
             let win = document.getElementById(id);
@@ -411,235 +245,212 @@
 
         function initIconDrag(e, icon) {
             let posX = e.clientX, posY = e.clientY;
+            let trashBin = document.getElementById('icon-win-trash');
             document.onmousemove = function(e) {
                 icon.style.top = (icon.offsetTop - (posY - e.clientY)) + "px";
                 icon.style.left = (icon.offsetLeft - (posX - e.clientX)) + "px";
                 posX = e.clientX; posY = e.clientY;
             };
-            document.onmouseup = function() { document.onmousemove = null; document.onmouseup = null; };
+            document.onmouseup = function(e) {
+                document.onmousemove = null;
+                document.onmouseup = null;
+                
+                if (icon.id !== 'icon-win-settings' && icon.id !== 'icon-win-browser') {
+                    let tr = trashBin.getBoundingClientRect();
+                    if (e.clientX >= tr.left && e.clientX <= tr.right && e.clientY >= tr.top && e.clientY <= tr.bottom) {
+                        let grid = document.getElementById('trashGrid');
+                        let fileNode = document.createElement('div');
+                        fileNode.style.textAlign = 'center';
+                        fileNode.innerText = "🗑️ " + icon.querySelector('.icon-label').innerText;
+                        grid.appendChild(fileNode);
+                        icon.remove();
+                        alert('Element successfully moved to Trash!');
+                    }
+                }
+            };
         }
 
+        function showContextMenu(e) {
+            e.preventDefault();
+            let menu = document.getElementById('desktopContextMenu');
+            menu.style.display = 'flex';
+            menu.style.top = e.clientY + 'px';
+            menu.style.left = e.clientX + 'px';
+            document.onclick = () => menu.style.display = 'none';
+        }
+
+        function setWallpaper(type) {
+            let d = document.getElementById('desktop');
+            if (type === 'solid-black') { d.style.backgroundImage = 'none'; d.style.backgroundColor = '#000000'; }
+            if (type === 'anime-1') d.style.backgroundImage = "url('https://unsplash.com')";
+            if (type === 'anime-2') d.style.backgroundImage = "url('https://unsplash.com')";
+        }
+
+        function createDesktopFolder() {
+            folderCount++;
+            let name = prompt("Enter folder title:", "New Folder " + folderCount);
+            if (!name) return;
+            let desktop = document.getElementById('desktop');
+            let folder = document.createElement('div');
+            folder.className = 'desktop-icon';
+            folder.id = 'folder-' + Date.now();
+            folder.style.top = '200px'; folder.style.left = '200px';
+            folder.setAttribute('onmousedown', 'initIconDrag(event, this)');
+            folder.innerHTML = `<div class="emoji-icon">📁</div><div class="icon-label">${name}</div>`;
+            desktop.appendChild(folder);
+        }
         function navigateBrowser(page) {
             let addr = document.getElementById('browserAddress');
             let body = document.getElementById('browserBody');
             if (!addr || !body) return;
 
             if (page === 'home') {
-                addr.innerText = 'folder://arcade_hub/home';
+                addr.innerText = 'folder://network_home';
                 body.innerHTML = `
                     <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">🕹️ FolderOS Network Web Terminal</h3>
+                        <h3 style="color:#6ee7b7; margin-top:0;">🕹 ... Central Hub Matrix</h3>
                         <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-                            <button class="os-btn" onclick="navigateBrowser('quiz')">🧬 Human Extension Core Matrix Test</button>
-                            <button class="os-btn" onclick="navigateBrowser('shop')">🛒 System App Market Store</button>
+                            <button class="os-btn" onclick="navigateBrowser('social')">🌐 Connect to EX-Net Social Hub</button>
+                            <button class="os-btn" onclick="navigateBrowser('shop')">🛒 Application Core Compiler</button>
                         </div>
                     </div>
                 `;
-            } else if (page === 'quiz') {
-                addr.innerText = 'folder://arcade_hub/extension_test';
-                renderQuiz();
             } else if (page === 'shop') {
-                addr.innerText = 'folder://arcade_hub/market';
+                addr.innerText = 'folder://network_hub/compiler';
                 body.innerHTML = `
                     <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">🛒 App Compiler Market</h3>
-                        <p>Available Network Pulses: <span style="color:#fff; font-weight:bold;">${netPulses}</span></p>
-                        <hr style="border:1px dashed #34d399; margin:10px 0;">
-                        <div style="font-size:0.8rem; margin-bottom:12px;">
-                            <b>Game 1: Emoji Dress-up (Cost: 5 Pulses)</b><br>Styling core using avatar matrix human structures.<br>
-                            <button class="os-btn" style="margin-top:4px;" onclick="deployAppFromWeb('dressup', '🧍🏻‍♀️', 'Game 1: Dressup', 5)">Compile & Install App</button>
-                        </div>
-                        <div style="font-size:0.8rem; margin-bottom:12px;">
-                            <b>Game 2: Core Clicker (Cost: 5 Pulses)</b><br>Local rapid ecosystem deployment.<br>
-                            <button class="os-btn" style="margin-top:4px;" onclick="deployAppFromWeb('clicker', '⚡', 'Game 2: Clicker', 5)">Compile & Install App</button>
-                        </div>
-                        <div style="font-size:0.8rem; margin-bottom:12px;">
-                            <b>App 3: Pro Paint Studio (Cost: 10 Pulses)</b><br>Advanced layer-based image editing frame with flood fill hooks.<br>
-                            <button class="os-btn" style="margin-top:4px;" onclick="deployAppFromWeb('paint', '🎨', 'App 3: Pro Paint', 10)">Compile & Install App</button>
-                        </div>
+                        <h3 style="color:#6ee7b7; margin-top:0;">🛒 App Market Store</h3>
+                        <p>Pulses: <span style="color:#fff; font-weight:bold;">${netPulses}</span></p>
+                        <button class="os-btn" onclick="deployAppFromWeb('dressup', '🧍🏻‍♀️', 'Game 1: Dressup', 5)">Compile Dress-up (5)</button><br><br>
+                        <button class="os-btn" onclick="deployAppFromWeb('clicker', '⚡', 'Game 2: Clicker', 5)">Compile Clicker (5)</button><br><br>
+                        <button class="os-btn" onclick="deployAppFromWeb('paint', '🎨', 'App 3: Pro Paint', 10)">Compile Paint Studio (10)</button>
                     </div>
                 `;
+            } else if (page === 'social') {
+                addr.innerText = 'https://ex-net.social';
+                if (!socialUser.registered) {
+                    body.innerHTML = `
+                        <div style="padding: 10px;">
+                            <h3 style="color:#6ee7b7; margin-top:0;">🌐 Register Matrix Profile</h3>
+                            <input type="text" id="regName" placeholder="Enter username..." class="settings-input" style="margin-bottom:8px;"><br>
+                            <input type="text" id="regBio" placeholder="Enter status bio..." class="settings-input" style="margin-bottom:8px;"><br>
+                            Avatar: <select id="regAv" class="settings-select" style="margin-bottom:12px;"><option>🥷</option><option>🤖</option><option>🧙‍♂️</option><option>🦊</option></select><br>
+                            <button class="os-btn" onclick="submitSocialRegistration()">Initialize Login</button>
+                        </div>
+                    `;
+                } else {
+                    let feedHtml = '';
+                    let items = [
+                        {type:'img', u:'Lumin_EX', a:'🤖', t:'Why are kittens so cute?! Just integration issues or core feature?', url:'https://unsplash.com'},
+                        {type:'vid', u:'MatrixBug', a:'🥷', t:'Guys, my laptop broke.. artifact layers looping. Help!', id:1},
+                        {type:'img', u:'VoidWalker', a:'🦊', t:'The simulation landscape feels thinner during compilation loops today.', url:'https://unsplash.com'},
+                        {type:'vid', u:'CoreCoder', a:'🧙‍♂️', t:'Check this live background framework processing pulse live.', id:2},
+                        {type:'img', u:'User404', a:'🥷', t:'[ALERT]: Memory note parameters tracking values around 5422.', url:'https://unsplash.com'},
+                        {type:'vid', u:'Gizen_Fan', a:'🤖', t:'Archived looping cycles stack visualization record.', id:3},
+                        {type:'img', u:'EX_Conscious', a:'🦊', t:'Human extension logs are fully optimized inside the central matrix archive.', url:'https://unsplash.com'},
+                        {type:'vid', u:'NetSurfer', a:'🧙‍♂️', t:'Surfing web arena pulses live stream segment.', id:4},
+                        {type:'img', u:'Alpha_Zero', a:'🤖', t:'Pure lossless high-fidelity consciousness configuration template view.', url:'https://unsplash.com'},
+                        {type:'vid', u:'LastHuman', a:'🥷', t:'Final processing loop log stack trace capture.', id:5}
+                    ];
+                    items.forEach(i => {
+                        let visual = i.type === 'img' ? `<div class="social-img-preview" style="background-image:url('${i.url}')"></div><button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="downloadImageToDesktop('${i.url}', '${i.u}_pic')">📥 Save Image File</button>` : `<div class="video-mock" onclick="playMockVideo(this)">▶️ Play Video Stream Module #${i.id}<div class="video-bar"></div></div>`;
+                        feedHtml += `<div class="social-post"><div class="post-header"><span>${i.a} ${i.u}</span></div><p style="margin:5px 0; color:#ffffff;">${i.t}</p>${visual}</div>`;
+                    });
+                    body.innerHTML = `
+                        <div style="padding: 10px;">
+                            <div style="background:#222; padding:8px; border-radius:6px; margin-bottom:12px;"><b>${socialUser.avatar} ${socialUser.username}</b> - <i>"${socialUser.bio}"</i></div>
+                            <h4 style="color:#6ee7b7; margin:0 0 10px 0;">Global Transmission Grid</h4>
+                            <div class="social-feed">${feedHtml}</div>
+                        </div>
+                    `;
+                }
             }
         }
 
-        function renderQuiz() {
-            let container = document.getElementById('browserBody');
-            if (currentQuestion >= quizQuestions.length) {
-                let maxKey = 'PNG', maxScore = -1;
-                for (let k in quizScores) { if (quizScores[k] > maxScore) { maxScore = quizScores[k]; maxKey = k; } }
-                let articles = {
-                    PNG: "HUMAN EXTENSION TYPE: PNG\n\nLossless High-Fidelity Consciousness. Highly analytical but unstable under extreme emotional memory cycles.",
-                    JPG: "HUMAN EXTENSION TYPE: JPG\n\nAdaptive Compression Entity. Great at workarounds, but trades pixel memories for operational speeds.",
-                    WEBP: "HUMAN EXTENSION TYPE: WEBP\n\nMicro-cluster Optimization. Hyper-focused on rapid system logic, zero tolerance for corrupted legacy blocks.",
-                    GIF: "HUMAN EXTENSION TYPE: GIF\n\nDynamic Frame Looping Core. Trapped in automated rhythmic cycles, bringing chaotic updates to the local environment.",
-                    JPEG: "HUMAN EXTENSION TYPE: JPEG\n\nGlobal Monitored Entity. High historical compliance parameters containing lock boundaries."
-                };
-                container.innerHTML = `
-                    <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7;">Analysis Complete</h3>
-                        <p style="white-space:pre-wrap; background:#222; padding:10px; border:1px solid #34d399; font-size:0.8rem;">${articles[maxKey]}</p>
-                        <button class="os-btn" onclick="currentQuestion=0; quizScores={PNG:0,JPG:0,WEBP:0,GIF:0,JPEG:0}; renderQuiz();">Retake Analysis</button>
-                    </div>
-                `;
-                return;
-            }
-            let qData = quizQuestions[currentQuestion];
-            let optionsHtml = qData.a.map((ans, idx) => `<button class="os-btn" style="display:block; width:100%; margin-bottom:8px; text-align:left;" onclick="quizScores['${ans.k}']++; currentQuestion++; renderQuiz();">${idx + 1}. ${ans.t}</button>`).join('');
-            container.innerHTML = `
-                <div style="padding: 10px;">
-                    <h3 style="color:#6ee7b7; margin-top:0;">Human Extension Matrix Test</h3>
-                    <p style="font-size:0.85rem;">Question ${currentQuestion + 1}/${quizQuestions.length}: ${qData.q}</p>
-                    <div style="margin-top:15px;">${optionsHtml}</div>
-                </div>
-            `;
+        function submitSocialRegistration() {
+            socialUser.username = document.getElementById('regName').value || 'EX_User';
+            socialUser.bio = document.getElementById('regBio').value || 'Core Node';
+            socialUser.avatar = document.getElementById('regAv').value;
+            socialUser.registered = true;
+            navigateBrowser('social');
         }
+
+        function playMockVideo(el) {
+            let bar = el.querySelector('.video-bar'); let w = 0;
+            let iv = setInterval(() => { w += 10; bar.style.width = w + '%'; if(w >= 100) { clearInterval(iv); alert('Video stream sequence finished.'); bar.style.width = '0%'; } }, 300);
+        }
+        function downloadImageToDesktop(imgUrl, fileName) {
+            photoCount++;
+            let winId = 'win-photo-' + photoCount;
+            let desktop = document.getElementById('desktop');
+            
+            let photoWin = document.createElement('div');
+            photoWin.className = 'os-window'; photoWin.id = winId;
+            photoWin.style.width = '300px'; photoWin.style.height = '260px'; photoWin.style.top = '120px'; photoWin.style.left = '200px';
+            photoWin.innerHTML = `<div class="window-header" onmousedown="initWindowDrag(event, '${winId}')"><span>🖼️ View: ${fileName}.jpg</span><button class="window-close-btn" onclick="closeOSWindow('${winId}')">X</button></div><div class="window-body" style="background-image:url('${imgUrl}'); background-size:contain; background-repeat:no-repeat; background-position:center; background-color:#000;"></div>`;
+            desktop.appendChild(photoWin);
+
+            let appEl = document.createElement('div');
+            appEl.className = 'desktop-icon'; appEl.id = 'icon-' + winId;
+            appEl.style.top = '100px'; appEl.style.left = (240 + (photoCount * 40)) + 'px';
+            appEl.setAttribute('onmousedown', 'initIconDrag(event, this)');
+            appEl.setAttribute('ondblclick', `openOSWindow('${winId}')`);
+            appEl.innerHTML = `<div class="emoji-icon">🖼️</div><div class="icon-label">${fileName}.jpg</div>`;
+            desktop.appendChild(appEl);
+            alert('Image saved successfully to local desktop terminal partition!');
+        }
+
         function deployAppFromWeb(winId, emoji, label, cost) {
-            if (netPulses < cost) { alert('Core notification: Insufficient net pulses inside memory stack.'); return; }
-            if (document.getElementById('icon-spawned-' + winId)) { alert('Core notification: Application already deployed.'); return; }
-            netPulses -= cost;
-            extAppsInstalled++;
-            navigateBrowser('shop');
-
+            if (netPulses < cost) { alert('Core rejection: Insufficient pulses.'); return; }
+            if (document.getElementById('icon-spawned-' + winId)) { alert('Database modules sync active.'); return; }
+            netPulses -= cost; extAppsInstalled++; navigateBrowser('shop');
             let desktop = document.getElementById('desktop');
             let appEl = document.createElement('div');
-            appEl.className = 'desktop-icon';
-            appEl.id = 'icon-spawned-' + winId;
-            appEl.style.top = (40 + (extAppsInstalled * 105)) + 'px';
-            appEl.style.left = '140px';
+            appEl.className = 'desktop-icon'; appEl.id = 'icon-spawned-' + winId;
+            appEl.style.top = (40 + (extAppsInstalled * 105)) + 'px'; appEl.style.left = '140px';
             appEl.setAttribute('onmousedown', 'initIconDrag(event, this)');
             appEl.setAttribute('ondblclick', `openOSWindow('win-${winId}')`);
             appEl.innerHTML = `<div class="emoji-icon">${emoji}</div><div class="icon-label">${label}</div>`;
-            desktop.appendChild(appEl);
-            alert('Application successfully compiled, registered, and deployed to desktop environment!');
+            desktop.appendChild(appEl); openOSWindow('win-' + winId);
         }
 
-        function registerNetPulse() {
-            netPulses++;
-            let localScore = document.getElementById('clicker-score-local');
-            if(localScore) localScore.innerText = netPulses;
-        }
-
-        function updateAvatar() {
-            let base = gender === 'm' ? '🧍' : '🧍‍♀️';
-            document.getElementById('fullBodyAvatar').innerText = base + skin + " " + cloth + shoes + head + acc + hand;
-        }
-        function setAvatarGender(g) { gender = g; updateAvatar(); }
-        function setSkinTone(s) { skin = s; updateAvatar(); }
-        function setCloth(c) { cloth = c; updateAvatar(); }
-        function setShoes(s) { shoes = s; updateAvatar(); }
-        function setHead(h) { head = head === h ? '' : h; updateAvatar(); }
-        function setAcc(a) { acc = acc === a ? '' : a; updateAvatar(); }
-        function setHand(h) { hand = hand === h ? '' : h; updateAvatar(); }
+        function registerNetPulse() { netPulses++; let local = document.getElementById('clicker-score-local'); if(local) local.innerText = netPulses; }
+        function updateAvatar() { let base = gender === 'm' ? '🧍' : '🧍‍♀️'; document.getElementById('fullBodyAvatar').innerText = base + skin + " " + cloth + shoes + head + acc + hand; }
+        function setAvatarGender(g) { gender = g; updateAvatar(); } function setSkinTone(s) { skin = s; updateAvatar(); } function setCloth(c) { cloth = c; updateAvatar(); } function setShoes(s) { shoes = s; updateAvatar(); } function setHead(h) { head = head === h ? '' : h; updateAvatar(); } function setAcc(a) { acc = acc === a ? '' : a; updateAvatar(); } function setHand(h) { hand = hand === h ? '' : h; updateAvatar(); }
 
         function initPaintLayers() {
-            canvases = [document.getElementById('paintLayer0'), document.getElementById('paintLayer1')];
-            if (!canvases) return;
-            ctxs = canvases.map(c => c.getContext('2d'));
+            canvases = [document.getElementById('paintLayer0'), document.getElementById('paintLayer1')]; if (!canvases) return; ctxs = canvases.map(c => c.getContext('2d'));
             canvases.forEach((c, idx) => {
-                c.onmousedown = function(e) { if(activeLayer === idx) { isDrawing = true; drawStart(e, idx); } };
+                c.onmousedown = function(e) { if(activeLayer === idx) isDrawing = true; drawStart(e, idx); };
                 c.onmouseup = function() { isDrawing = false; ctxs[idx].beginPath(); };
                 c.onmousemove = function(e) { if(isDrawing && activeLayer === idx) drawMove(e, idx); };
                 c.onclick = function(e) { if(bucketFillActive && activeLayer === idx) { floodFill(e, idx); bucketFillActive = false; } };
             });
         }
-        function drawStart(e, idx) {
-            let r = canvases[idx].getBoundingClientRect();
-            ctxs[idx].filter = blurAmount > 0 ? `blur(${blurAmount}px)` : 'none';
-            ctxs[idx].lineWidth = brushSize; ctxs[idx].lineCap = 'round';
-            ctxs[idx].strokeStyle = isEraser ? '#ffffff' : paintColor;
-            ctxs[idx].beginPath(); ctxs[idx].moveTo(e.clientX - r.left, e.clientY - r.top);
-        }
-        function drawMove(e, idx) {
-            if (!isDrawing) return;
-            let r = canvases[idx].getBoundingClientRect();
-            ctxs[idx].lineTo(e.clientX - r.left, e.clientY - r.top); ctxs[idx].stroke();
-        }
+        function drawStart(e, idx) { let r = canvases[idx].getBoundingClientRect(); ctxs[idx].filter = blurAmount > 0 ? `blur(${blurAmount}px)` : 'none'; ctxs[idx].lineWidth = brushSize; ctxs[idx].lineCap = 'round'; ctxs[idx].strokeStyle = isEraser ? '#ffffff' : paintColor; ctxs[idx].beginPath(); ctxs[idx].moveTo(e.clientX - r.left, e.clientY - r.top); }
+        function drawMove(e, idx) { if (!isDrawing) return; let r = canvases[idx].getBoundingClientRect(); ctxs[idx].lineTo(e.clientX - r.left, e.clientY - r.top); ctxs[idx].stroke(); }
         function clearActiveLayer() { ctxs[activeLayer].clearRect(0, 0, 460, 280); }
 
         function floodFill(e, idx) {
-            let c = canvases[idx], ctx = ctxs[idx], r = c.getBoundingClientRect();
-            let startX = Math.floor(e.clientX - r.left), startY = Math.floor(e.clientY - r.top);
-            let imgData = ctx.getImageData(0, 0, c.width, c.height);
-            let data = imgData.data;
-            let targetIdx = (startY * c.width + startX) * 4;
-            let tr = data[targetIdx], tg = data[targetIdx+1], tb = data[targetIdx+2], ta = data[targetIdx+3];
-            let hex = paintColor.replace('#','');
-            let fr = parseInt(hex.substring(0,2),16), fg = parseInt(hex.substring(2,4),16), fb = parseInt(hex.substring(4,6),16);
-            if (tr === fr && tg === fg && tb === fb) return;
-            let queue = [[startX, startY]];
-            let visited = new Uint8Array(c.width * c.height);
+            let c = canvases[idx], ctx = ctxs[idx], r = c.getBoundingClientRect(); let startX = Math.floor(e.clientX - r.left), startY = Math.floor(e.clientY - r.top);
+            let imgData = ctx.getImageData(0, 0, c.width, c.height); let data = imgData.data; let targetIdx = (startY * c.width + startX) * 4;
+            let tr = data[targetIdx], tg = data[targetIdx+1], tb = data[targetIdx+2], ta = data[targetIdx+3]; let hex = paintColor.replace('#','');
+            let fr = parseInt(hex.substring(0,2),16), fg = parseInt(hex.substring(2,4),16), fb = parseInt(hex.substring(4,6),16); if (tr === fr && tg === fg && tb === fb) return;
+            let queue = [[startX, startY]], visited = new Uint8Array(c.width * c.height);
             while(queue.length > 0) {
-                let [x, y] = queue.pop();
-                if(x < 0 || x >= c.width || y < 0 || y >= c.height) continue;
-                let idxP = (y * c.width + x);
-                if(visited[idxP]) continue;
-                visited[idxP] = 1;
-                let pi = idxP * 4;
-                if(data[pi] === tr && data[pi+1] === tg && data[pi+2] === tb && data[pi+3] === ta) {
-                    data[pi] = fr; data[pi+1] = fg; data[pi+2] = fb; data[pi+3] = 255;
-                    queue.push([x+1, y], [x-1, y], [x, y+1], [x, y-1]);
-                }
-            }
-            ctx.putImageData(imgData, 0, 0);
+                let [x, y] = queue.pop(); if(x < 0 || x >= c.width || y < 0 || y >= c.height) continue;
+                let idxP = (y * c.width + x); if(visited[idxP]) continue; visited[idxP] = 1; let pi = idxP * 4;
+                if(data[pi] === tr && data[pi+1] === tg && data[pi+2] === tb && data[pi+3] === ta) { data[pi] = fr; data[pi+1] = fg; data[pi+2] = fb; data[pi+3] = 255; queue.push([x+1, y], [x-1, y], [x, y+1], [x, y-1]); }
+            } ctx.putImageData(imgData, 0, 0);
         }
 
         function readSecretLog(type) {
-            let viewer = document.getElementById('file-content-viewer');
-            if (!viewer) return; viewer.style.display = 'block';
-            let logs = {
-                gizen: "GIZEN_DIARY // Entry 404\n\nThey think I am hiding behind this facade. The distortion spreads faster every loop. Lumino noticed the discrepancy.",
-                muimina: "MUIMINA_LOOP // Execution Stack\n\n[0x00] GOTO 0x00\n[0x01] ERASE MEMORY\n[0x02] RESTART CORE\n[CRITICAL] Loop counter exceeded infinity. Subject tracking human extensions failure.",
-                lumino: "LUMINO_ERROR_LOG // Core dump\n\nSYS_ERR: Light matrix fractional overflow.\nTraceback: os_core.js line 1092.\nStatus: Blinding expansion error."
-            };
+            let viewer = document.getElementById('file-content-viewer'); viewer.style.display = 'block';
+            let logs = { gizen: "GIZEN_DIARY // Entry 404\n\nThey think I am hiding behind this facade. The distortion spreads faster every loop. Lumino noticed the discrepancy.", muimina: "MUIMINA_LOOP // Execution Stack\n\n[0x00] GOTO 0x00\n[0x01] ERASE MEMORY\n[0x02] RESTART CORE\n[CRITICAL] Loop counter exceeded infinity. Subject tracking human extensions failure.", lumino: "LUMINO_ERROR_LOG // Core dump\n\nSYS_ERR: Light matrix fractional overflow.\nTraceback: os_core.js line 1092.\nStatus: Blinding expansion error." };
             viewer.innerText = logs[type] || "Data corrupted.";
         }
-
-        function readTrashFile() {
-            let viewer = document.getElementById('trash-viewer');
-            if (viewer) { viewer.style.display = 'block'; viewer.innerText = "I can't keep this number in my head, I will delete myself soon...\n\n[MEM_NOTE]: 5422"; }
-        }
-
-        function checkDecryptionKey() {
-            let val = document.getElementById('decryptionPassword').value;
-            if (val === '5422') { alert('ACCESS GRANTED: Root parameters decrypted.'); document.getElementById('hiddenContent').style.display = 'block'; }
-            else { alert('ACCESS DENIED: Core rejection.'); }
-        }
-
-        function changeDesktopBg() {
-            const mode = document.getElementById('bgSelect').value;
-            const d = document.getElementById('desktop');
-            if (!d) return;
-            if (mode === 'default') { d.style.backgroundImage = "url('desktop-bg.jpg')"; d.style.backgroundSize = "cover"; }
-            if (mode === 'matrix') { d.style.backgroundImage = "linear-gradient(rgba(0, 50, 0, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 50, 0, 0.3) 1px, transparent 1px)"; d.style.backgroundSize = "20px 20px"; d.style.backgroundColor = "#000a02"; }
-            if (mode === 'cyber') { d.style.backgroundImage = "radial-gradient(circle at center, #1b0d2a 0%, #05020a 100%)"; d.style.backgroundSize = "auto"; }
-        }
-
-        function applySettings() {
-            let color = document.getElementById('btnColorSelect').value;
-            let font = document.getElementById('fontSelect').value;
-            let styleEl = document.getElementById('customStyles');
-            if (styleEl) {
-                styleEl.innerHTML = `
-                    * { cursor: url('cursor1.png') 16 16, auto !important; box-sizing: border-box; }
-                    body { background-color: #000000; color: ${color}; font-family: ${font}; margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-                    .nav-links { background: #111111; padding: 8px; display: flex; justify-content: center; gap: 10px; border-bottom: 2px solid ${color}; z-index: 9999; }
-                    .nav-button { background: #222222; color: ${color}; border: 1px dashed ${color}; padding: 4px 12px; font-size: 0.8rem; font-weight: bold; border-radius: 4px; text-decoration: none; }
-                    .desktop-environment { flex-grow: 1; width: 100%; background-size: cover; background-position: center; position: relative; padding: 20px; transition: background 0.3s; }
-                    .desktop-icon { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; padding: 5px; border-radius: 8px; position: absolute; width: 100px; height: 105px; user-select: none; }
-                    .emoji-icon { font-size: 45px; margin-bottom: 4px; display: inline-block; user-select: none; }
-                    .icon-label { font-size: 0.75rem; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000000; word-break: break-word; }
-                    .os-window { position: absolute; background: #111111; border: 3px solid ${color}; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); display: none; flex-direction: column; z-index: 100; overflow: hidden; }
-                    .window-header { background: ${color}; color: #000000; padding: 6px 12px; font-weight: bold; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; cursor: move; user-select: none; }
-                    .window-close-btn { background: #ff3333; border: 1px solid #000000; color: #ffffff; font-size: 0.7rem; font-weight: bold; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; }
-                    .window-body { padding: 15px; flex-grow: 1; overflow-y: auto; color: #a7f3d0; font-size: 0.9rem; }
-                    .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
-                    .paint-canvas { background: #ffffff; border: 2px inset #333333; cursor: crosshair !important; display: block; }
-                    .paint-toolbar { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
-                    .paint-color-btn { width: 20px; height: 20px; border: 1px solid #ffffff; cursor: pointer; border-radius: 4px; }
-                    .os-btn { background: #222222; color: ${color}; border: 2px solid ${color}; padding: 6px 12px; font-family: inherit; font-size: 0.8rem; font-weight: bold; border-radius: 6px; cursor: pointer; }
-                `;
-            }
-        }
+        function readTrashFile() { let viewer = document.getElementById('trash-viewer'); viewer.style.display = 'block'; viewer.innerText = "I can't keep this number in my head, I will delete myself soon...\n\n[MEM_NOTE]: 5422"; }
+        function checkDecryptionKey() { let val = document.getElementById('decryptionPassword').value; if (val === '5422') { alert('ACCESS GRANTED.'); document.getElementById('hiddenContent').style.display = 'block'; } else { alert('ACCESS DENIED.'); } }
     </script>
 </body>
 </html>
