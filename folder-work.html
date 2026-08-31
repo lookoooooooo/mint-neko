@@ -283,7 +283,7 @@
             </div>
         </div>
 
-        <div class="os-window" id="win-browser" style="width: 520px; height: 450px; top: 40px; left: 340px;">
+        <div class="os-window" id="win-browser" style="width: 540px; height: 500px; top: 40px; left: 320px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-browser')">
                 <span>🌐 Web Navigator</span>
                 <button class="window-close-btn" onclick="closeOSWindow('win-browser')">X</button>
@@ -293,16 +293,7 @@
                     <button class="os-btn" style="padding: 2px 8px;" onclick="navigateBrowser('home')">Home</button>
                     <div class="browser-display" id="browserAddress">folder://network_home</div>
                 </div>
-                <div class="window-body browser-content" id="browserBody">
-                    <div id="browser-game-zone" style="padding: 10px; border: 1px dashed #34d399; border-radius: 6px;">
-                        <h3 style="margin-top:0; color:#6ee7b7;">Cyber Clicker Arcade</h3>
-                        <p>Score 10 network pulses to compile a physical application download.</p>
-                        <p>Network Pulses: <span id="net-score" style="color:#ffffff; font-weight:bold;">0</span></p>
-                        <button class="os-btn" onclick="registerNetPulse()">Trigger Pulse</button>
-                        <br><br>
-                        <button class="os-btn" id="dl-reward-btn" style="display:none; background:#34d399; color:#000000;" onclick="downloadWebGameApp()">Download Game Pack</button>
-                    </div>
-                </div>
+                <div class="window-body browser-content" id="browserBody"></div>
             </div>
         </div>
 
@@ -350,6 +341,7 @@
                     </div>
                     <div id="passwordHint" style="color: #ffaa00; font-size: 0.75rem; margin-top: 4px;">Hint: Trash file giGI19.txt contains the memory note.</div>
                 </div>
+                <div id="hiddenContent" style="display:none; color:#ff3333; margin-top:10px;">[OVERWRITE PROTOCOL UNLOCKED]</div>
             </div>
         </div>
     </div>
@@ -359,6 +351,9 @@
         let ctx = activeCanvas ? activeCanvas.getContext('2d') : null;
         let isDrawing = false;
         let paintColor = '#34d399';
+        let brushSize = 3;
+        let isEraser = false;
+        let blurAmount = 0;
         let quizScores = { PNG: 0, JPG: 0, WEBP: 0, GIF: 0, JPEG: 0 };
         let currentQuestion = 0;
         let netPulses = 0;
@@ -400,12 +395,8 @@
             highestZ++;
             win.style.zIndex = highestZ;
             win.style.display = 'flex';
-            if(id === 'win-paint') {
-                initPaint();
-            }
-            if(id === 'win-browser') {
-                navigateBrowser('home');
-            }
+            if(id === 'win-paint') initPaint();
+            if(id === 'win-browser') navigateBrowser('home');
         }
 
         function closeOSWindow(id) {
@@ -419,10 +410,8 @@
             if (!win) return;
             highestZ++;
             win.style.zIndex = highestZ;
-            
             let posX = e.clientX;
             let posY = e.clientY;
-            
             document.onmousemove = function(e) {
                 let diffX = posX - e.clientX;
                 let diffY = posY - e.clientY;
@@ -431,7 +420,6 @@
                 win.style.top = (win.offsetTop - diffY) + "px";
                 win.style.left = (win.offsetLeft - diffX) + "px";
             };
-            
             document.onmouseup = function() {
                 document.onmousemove = null;
                 document.onmouseup = null;
@@ -441,7 +429,6 @@
         function initIconDrag(e, icon) {
             let posX = e.clientX;
             let posY = e.clientY;
-            
             document.onmousemove = function(e) {
                 let diffX = posX - e.clientX;
                 let diffY = posY - e.clientY;
@@ -450,161 +437,213 @@
                 icon.style.top = (icon.offsetTop - diffY) + "px";
                 icon.style.left = (icon.offsetLeft - diffX) + "px";
             };
-            
             document.onmouseup = function() {
                 document.onmousemove = null;
                 document.onmouseup = null;
             };
         }
+        function navigateBrowser(page) {
+            let addr = document.getElementById('browserAddress');
+            let body = document.getElementById('browserBody');
+            if (!addr || !body) return;
 
-        function deployArticleToDesktop(title, content) {
-            let desktop = document.getElementById('desktop');
-            let artWin = document.createElement('div');
-            highestZ++;
-            artWin.className = 'os-window';
-            artWin.style.width = '300px';
-            artWin.style.height = '200px';
-            artWin.style.top = '100px';
-            artWin.style.left = '300px';
-            artWin.style.display = 'flex';
-            artWin.style.zIndex = highestZ;
-            
-            let uniqueId = 'art-' + Date.now();
-            artWin.id = uniqueId;
-            
-            artWin.innerHTML = `
-                <div class="window-header" onmousedown="initWindowDrag(event, '${uniqueId}')">
-                    <span>📄 ${title}</span>
-                    <button class="window-close-btn" onclick="document.getElementById('${uniqueId}').remove()">X</button>
-                </div>
-                <div class="window-body" style="background:#222; color:#fff; font-size:0.8rem; white-space:pre-wrap;">${content}</div>
-            `;
-            desktop.appendChild(artWin);
-        }
-        function readSecretLog(type) {
-            let viewer = document.getElementById('file-content-viewer');
-            if (!viewer) return;
-            viewer.style.display = 'block';
-            
-            let logs = {
-                gizen: "GIZEN_DIARY // Entry 404\n\nThey think I am hiding behind this facade. The distortion spreads faster every loop. Lumino noticed the discrepancy.",
-                muimina: "MUIMINA_LOOP // Execution Stack\n\n[0x00] GOTO 0x00\n[0x01] ERASE MEMORY\n[0x02] RESTART CORE\n[CRITICAL] Loop counter exceeded infinity. Subject tracking human extensions failure.",
-                lumino: "LUMINO_ERROR_LOG // Core dump\n\nSYS_ERR: Light matrix fractional overflow.\nTraceback: os_core.js line 1092.\nStatus: Blinding expansion error."
-            };
-            
-            viewer.innerText = logs[type] || "Data corrupted.";
-        }
-
-        function readTrashFile() {
-            let viewer = document.getElementById('trash-viewer');
-            if (!viewer) return;
-            viewer.style.display = 'block';
-            viewer.innerText = "I can't keep this number in my head, I will delete myself soon...\n\n[MEM_NOTE]: 5422";
-        }
-
-        function checkDecryptionKey() {
-            let val = document.getElementById('decryptionPassword').value;
-            if (val === '5422') {
-                alert('ACCESS GRANTED: Human extension root parameters decrypted. Simulation overwrite initialized.');
-                let hidden = document.getElementById('hiddenContent');
-                if(hidden) hidden.style.display = 'block';
-            } else {
-                alert('ACCESS DENIED: Core rejection.');
+            if (page === 'home') {
+                addr.innerText = 'folder://arcade_hub/home';
+                body.innerHTML = `
+                    <div style="padding: 10px;">
+                        <h3 style="color:#6ee7b7; margin-top:0;">🕹️ FolderOS Arcade & App Hub</h3>
+                        <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                            <button class="os-btn" onclick="navigateBrowser('quiz')">🧬 Human Extension Core Matrix Test</button>
+                            <button class="os-btn" onclick="navigateBrowser('info1')">👗 Game 1: Emoji Dress-up</button>
+                            <button class="os-btn" onclick="navigateBrowser('info2')">⚡ Game 2: Core Clicker & Shop</button>
+                            <button class="os-btn" onclick="navigateBrowser('paintApp')">🎨 App 3: Pro Studio Canvas</button>
+                        </div>
+                    </div>
+                `;
+            } else if (page === 'quiz') {
+                addr.innerText = 'folder://arcade_hub/extension_test';
+                renderQuiz();
+            } else if (page === 'info1') {
+                addr.innerText = 'folder://arcade_hub/game1_info';
+                body.innerHTML = `
+                    <div style="padding: 10px;">
+                        <h3 style="color:#6ee7b7; margin-top:0;">👗 Emoji Dress-up Info</h3>
+                        <p>Game 1 is a creative styling module where you combine visual layers to assemble unique avatars inside the browser.</p>
+                        <button class="os-btn" onclick="navigateBrowser('game1')">Launch Dress-up</button>
+                        <button class="os-btn" style="background:#222; margin-left:5px;" onclick="navigateBrowser('home')">Back</button>
+                    </div>
+                `;
+            } else if (page === 'game1') {
+                addr.innerText = 'folder://arcade_hub/dress_up';
+                body.innerHTML = `
+                    <div style="padding: 10px; text-align:center;">
+                        <h3 style="color:#6ee7b7; margin-top:0;">👗 Emoji Dress-up</h3>
+                        <div style="font-size:3.5rem; margin:10px;" id="avatarDisplay">👤</div>
+                        <p>Select Base Avatars:</p>
+                        <div style="display:flex; justify-content:center; gap:5px; margin-bottom:10px;">
+                            <button class="os-btn" onclick="document.getElementById('avatarDisplay').innerText='🧙‍♂️'">🧙‍♂️</button>
+                            <button class="os-btn" onclick="document.getElementById('avatarDisplay').innerText='🤖'">🤖</button>
+                            <button class="os-btn" onclick="document.getElementById('avatarDisplay').innerText='🥷'">🥷</button>
+                        </div>
+                        <button class="os-btn" style="background:#222;" onclick="navigateBrowser('info1')">Info</button>
+                    </div>
+                `;
+            } else if (page === 'info2') {
+                addr.innerText = 'folder://arcade_hub/game2_info';
+                body.innerHTML = `
+                    <div style="padding: 10px;">
+                        <h3 style="color:#6ee7b7; margin-top:0;">⚡ Core Clicker Info</h3>
+                        <p>Game 2 is an environmental generator. Accumulate network pulses to download physical modules to your desktop.</p>
+                        <button class="os-btn" onclick="navigateBrowser('game2')">Launch Clicker</button>
+                        <button class="os-btn" style="background:#222; margin-left:5px;" onclick="navigateBrowser('home')">Back</button>
+                    </div>
+                `;
+            } else if (page === 'game2') {
+                addr.innerText = 'folder://arcade_hub/clicker';
+                body.innerHTML = `
+                    <div style="padding: 10px;">
+                        <h3 style="color:#6ee7b7; margin-top:0;">⚡ Core Clicker & Shop</h3>
+                        <p>Network Pulses: <span id="clicker-score" style="color:#fff; font-weight:bold;">${netPulses}</span></p>
+                        <button class="os-btn" onclick="registerNetPulse()">Produce Pulse</button>
+                        <br><br>
+                        <button class="os-btn" id="dl-reward-btn" style="background:#34d399; color:#000000;" onclick="downloadWebGameApp()">Download MiniGame to Desktop (Cost: 10 Pulses)</button>
+                        <br><br>
+                        <button class="os-btn" style="background:#222;" onclick="navigateBrowser('info2')">Info</button>
+                    </div>
+                `;
+            } else if (page === 'paintApp') {
+                addr.innerText = 'folder://arcade_hub/pro_paint';
+                body.innerHTML = `
+                    <div style="padding: 5px;">
+                        <h3 style="color:#6ee7b7; margin:0 0 5px 0;">🎨 Pro Studio Canvas</h3>
+                        <div style="display:flex; gap:5px; margin-bottom:5px; align-items:center; flex-wrap:wrap; font-size:0.75rem;">
+                            <input type="color" id="proColor" value="#34d399" onchange="setPaintColor(this.value)" style="background:#222; border:1px solid #34d399; height:24px; width:30px;">
+                            Size:<input type="range" min="1" max="25" value="3" onchange="brushSize=this.value;isEraser=false;" style="width:50px;">
+                            Blur:<input type="range" min="0" max="10" value="0" onchange="blurAmount=this.value" style="width:50px;">
+                            <button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="isEraser=true">Eraser</button>
+                            <button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="fillCanvas()">Fill</button>
+                            <button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="clearCanvasPro()">Clear</button>
+                        </div>
+                        <canvas id="browserPaintCanvas" width="500" height="250" style="background:#fff; border:1px inset #333; cursor:crosshair; display:block;"></canvas>
+                        <button class="os-btn" style="background:#222; margin-top:5px;" onclick="navigateBrowser('home')">Hub</button>
+                    </div>
+                `;
+                setTimeout(initBrowserPaint, 50);
             }
         }
 
+        function renderQuiz() {
+            let container = document.getElementById('browserBody');
+            if (!container) return;
+            if (currentQuestion >= quizQuestions.length) {
+                let maxKey = 'PNG'; let maxScore = -1;
+                for (let k in quizScores) { if (quizScores[k] > maxScore) { maxScore = quizScores[k]; maxKey = k; } }
+                let articles = {
+                    PNG: "HUMAN EXTENSION TYPE: PNG\n\nLossless High-Fidelity Consciousness. Highly analytical but unstable under extreme emotional memory cycles.",
+                    JPG: "HUMAN EXTENSION TYPE: JPG\n\nAdaptive Compression Entity. Great at workarounds, but trades pixel memories for operational speeds.",
+                    WEBP: "HUMAN EXTENSION TYPE: WEBP\n\nMicro-cluster Optimization. Hyper-focused on rapid system logic, zero tolerance for corrupted legacy blocks.",
+                    GIF: "HUMAN EXTENSION TYPE: GIF\n\nDynamic Frame Looping Core. Trapped in automated rhythmic cycles, bringing chaotic updates to the local environment.",
+                    JPEG: "HUMAN EXTENSION TYPE: JPEG\n\nGlobal Monitored Entity. High historical compliance parameters containing lock boundaries."
+                };
+                container.innerHTML = `
+                    <div style="padding: 10px;">
+                        <h3 style="color:#6ee7b7;">Analysis Complete</h3>
+                        <p style="white-space:pre-wrap; background:#222; padding:10px; border:1px solid #34d399;">${articles[maxKey]}</p>
+                        <button class="os-btn" onclick="currentQuestion=0; quizScores={PNG:0,JPG:0,WEBP:0,GIF:0,JPEG:0}; renderQuiz();">Retake Analysis</button>
+                    </div>
+                `;
+                return;
+            }
+            let qData = quizQuestions[currentQuestion];
+            let optionsHtml = qData.a.map((ans, idx) => `<button class="os-btn" style="display:block; width:100%; margin-bottom:8px; text-align:left;" onclick="quizScores['${ans.k}']++; currentQuestion++; renderQuiz();">${idx + 1}. ${ans.t}</button>`).join('');
+            container.innerHTML = `
+                <div style="padding: 10px;">
+                    <h3 style="color:#6ee7b7; margin-top:0;">Human Extension Matrix Test</h3>
+                    <p>Question ${currentQuestion + 1}/${quizQuestions.length}: ${qData.q}</p>
+                    <div style="margin-top:15px;">${optionsHtml}</div>
+                </div>
+            `;
+        }
         function registerNetPulse() {
             netPulses++;
-            let scoreEl = document.getElementById('net-score');
+            let scoreEl = document.getElementById('clicker-score');
             if (scoreEl) scoreEl.innerText = netPulses;
-            let btn = document.getElementById('dl-reward-btn');
-            if (netPulses >= 10 && btn) {
-                btn.style.display = 'inline-block';
-            }
         }
 
         function downloadWebGameApp() {
-            if (netPulses < 10) return;
+            if (netPulses < 10) { alert('Insufficient pulses!'); return; }
             netPulses -= 10;
-            let scoreEl = document.getElementById('net-score');
+            let scoreEl = document.getElementById('clicker-score');
             if (scoreEl) scoreEl.innerText = netPulses;
-            let btn = document.getElementById('dl-reward-btn');
-            if (netPulses < 10 && btn) {
-                btn.style.display = 'none';
-            }
             extAppsInstalled++;
-            
             const desktop = document.getElementById('desktop');
             const appEl = document.createElement('div');
             appEl.className = 'desktop-icon';
             appEl.style.top = (60 + (extAppsInstalled * 35)) + 'px';
             appEl.style.left = (180 + (extAppsInstalled * 35)) + 'px';
             appEl.setAttribute('onmousedown', 'initIconDrag(event, this)');
-            
-            appEl.innerHTML = `
-                <div class="emoji-icon">🎮</div>
-                <div class="icon-label">WebGame Pack ${extAppsInstalled}</div>
-            `;
+            appEl.innerHTML = `<div class="emoji-icon">🎮</div><div class="icon-label">MiniGame Pack ${extAppsInstalled}</div>`;
             desktop.appendChild(appEl);
-            alert('New tactical application successfully initialized and deployed to local desktop storage!');
+            alert('Application compiled and deployed onto local desktop environment!');
+        }
+
+        let browserCtx = null;
+        function initBrowserPaint() {
+            let canvas = document.getElementById('browserPaintCanvas');
+            if(!canvas) return;
+            browserCtx = canvas.getContext('2d');
+            canvas.onmousedown = () => isDrawing = true;
+            canvas.onmouseup = () => { if(browserCtx) browserCtx.beginPath(); isDrawing = false; };
+            canvas.onmousemove = drawBrowserCanvas;
+        }
+
+        function setPaintColor(color) { paintColor = color; isEraser = false; }
+        function fillCanvas() { if(browserCtx) { browserCtx.fillStyle = paintColor; browserCtx.fillRect(0, 0, 500, 250); } }
+        function clearCanvasPro() { if(browserCtx) browserCtx.clearRect(0, 0, 500, 250); }
+
+        function drawBrowserCanvas(e) {
+            if (!isDrawing || !browserCtx) return;
+            let canvas = document.getElementById('browserPaintCanvas');
+            const rect = canvas.getBoundingClientRect();
+            browserCtx.filter = blurAmount > 0 ? `blur(${blurAmount}px)` : 'none';
+            browserCtx.lineWidth = brushSize;
+            browserCtx.lineCap = 'round';
+            browserCtx.strokeStyle = isEraser ? '#ffffff' : paintColor;
+            browserCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            browserCtx.stroke();
+            browserCtx.beginPath();
+            browserCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function readSecretLog(type) {
+            let viewer = document.getElementById('file-content-viewer');
+            if (!viewer) return; viewer.style.display = 'block';
+            let logs = {
+                gizen: "GIZEN_DIARY // Entry 404\n\nThey think I am hiding behind this facade. The distortion spreads faster every loop. Lumino noticed the discrepancy.",
+                muimina: "MUIMINA_LOOP // Execution Stack\n\n[0x00] GOTO 0x00\n[0x01] ERASE MEMORY\n[0x02] RESTART CORE\n[CRITICAL] Loop counter exceeded infinity. Subject tracking human extensions failure.",
+                lumino: "LUMINO_ERROR_LOG // Core dump\n\nSYS_ERR: Light matrix fractional overflow.\nTraceback: os_core.js line 1092.\nStatus: Blinding expansion error."
+            };
+            viewer.innerText = logs[type] || "Data corrupted.";
+        }
+
+        function readTrashFile() {
+            let viewer = document.getElementById('trash-viewer');
+            if (viewer) { viewer.style.display = 'block'; viewer.innerText = "I can't keep this number in my head, I will delete myself soon...\n\n[MEM_NOTE]: 5422"; }
+        }
+
+        function checkDecryptionKey() {
+            let val = document.getElementById('decryptionPassword').value;
+            if (val === '5422') { alert('ACCESS GRANTED: Root parameters decrypted.'); document.getElementById('hiddenContent').style.display = 'block'; }
+            else { alert('ACCESS DENIED: Core rejection.'); }
         }
 
         function changeDesktopBg() {
             const mode = document.getElementById('bgSelect').value;
             const d = document.getElementById('desktop');
             if (!d) return;
-            if (mode === 'default') {
-                d.style.backgroundImage = "url('desktop-bg.jpg')";
-                d.style.backgroundSize = "cover";
-            }
-            if (mode === 'matrix') {
-                d.style.backgroundImage = "linear-gradient(rgba(0, 50, 0, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 50, 0, 0.3) 1px, transparent 1px)";
-                d.style.backgroundSize = "20px 20px";
-                d.style.backgroundColor = "#000a02";
-            }
-            if (mode === 'cyber') {
-                d.style.backgroundImage = "radial-gradient(circle at center, #1b0d2a 0%, #05020a 100%)";
-                d.style.backgroundSize = "auto";
-            }
-        }
-
-        function navigateBrowser(page) {
-            let addr = document.getElementById('browserAddress');
-            if (addr && page === 'home') {
-                addr.innerText = 'folder://network_home';
-            }
-        }
-
-        function initPaint() {
-            if (!activeCanvas) {
-                activeCanvas = document.getElementById('paintCanvas');
-                if(activeCanvas) ctx = activeCanvas.getContext('2d');
-            }
-            if (!activeCanvas) return;
-            
-            activeCanvas.onmousedown = () => isDrawing = true;
-            activeCanvas.onmouseup = () => { if(ctx) ctx.beginPath(); isDrawing = false; };
-            activeCanvas.onmousemove = draw;
-        }
-
-        function setPaintColor(color) {
-            paintColor = color;
-        }
-
-        function clearCanvas() {
-            if (ctx && activeCanvas) ctx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
-        }
-
-        function draw(e) {
-            if (!isDrawing || !ctx || !activeCanvas) return;
-            const rect = activeCanvas.getBoundingClientRect();
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = paintColor;
-            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+            if (mode === 'default') { d.style.backgroundImage = "url('desktop-bg.jpg')"; d.style.backgroundSize = "cover"; }
+            if (mode === 'matrix') { d.style.backgroundImage = "linear-gradient(rgba(0, 50, 0, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 50, 0, 0.3) 1px, transparent 1px)"; d.style.backgroundSize = "20px 20px"; d.style.backgroundColor = "#000a02"; }
+            if (mode === 'cyber') { d.style.backgroundImage = "radial-gradient(circle at center, #1b0d2a 0%, #05020a 100%)"; d.style.backgroundSize = "auto"; }
         }
 
         function applySettings() {
@@ -633,10 +672,20 @@
                 `;
             }
         }
-        
-        window.onload = function() {
-            initPaint();
-        };
+
+        function initPaint() {
+            let canvas = document.getElementById('paintCanvas'); if(!canvas) return;
+            let pCtx = canvas.getContext('2d');
+            canvas.onmousedown = () => isDrawing = true;
+            canvas.onmouseup = () => { pCtx.beginPath(); isDrawing = false; };
+            canvas.onmousemove = function(e) {
+                if (!isDrawing) return; const rect = canvas.getBoundingClientRect();
+                pCtx.lineWidth = 3; pCtx.lineCap = 'round'; pCtx.strokeStyle = '#34d399';
+                pCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top); pCtx.stroke();
+                pCtx.beginPath(); pCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+            };
+        }
+        function clearCanvas() { let canvas = document.getElementById('paintCanvas'); if(canvas) canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height); }
     </script>
 </body>
 </html>
