@@ -6,7 +6,7 @@
     <title>FolderOS</title>
     <style id="customStyles">
         * {
-            cursor: auto !important;
+            cursor: url('cursor1.png') 16 16, auto !important;
             box-sizing: border-box;
         }
         body {
@@ -43,9 +43,11 @@
         .desktop-environment {
             flex-grow: 1;
             width: 100%;
-            background: #0d0d0d;
+            background-size: cover;
+            background-position: center;
             position: relative;
             padding: 20px;
+            transition: background 0.3s, background-size 0.3s;
         }
         .desktop-icon {
             display: flex;
@@ -64,11 +66,6 @@
         }
         .desktop-icon:hover {
             background: rgba(110, 231, 183, 0.15);
-        }
-        .emoji-icon {
-            font-size: 44px;
-            margin-bottom: 6px;
-            display: block;
         }
         .icon-label {
             font-size: 0.75rem;
@@ -155,7 +152,7 @@
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
-            margin: 4px;
+            transition: all 0.2s;
         }
         .os-btn:hover { background: #6ee7b7; color: #000000; }
         .browser-container {
@@ -196,150 +193,224 @@
             background: #222222;
             color: #6ee7b7;
             border: 1px solid #34d399;
-            padding: 4px;
+            padding: 6px;
             font-family: inherit;
+            border-radius: 4px;
+            width: 100%;
         }
-        .hidden-section {
-            border: 1px dashed #ff3333;
-            padding: 10px;
-            margin-top: 15px;
-            display: none;
-        }
-    </style>
+</style>
 </head>
 <body>
-
-    <div class="nav-links">
+<div class="nav-links">
         <a href="index.html" class="nav-button">HOME FACTS 📑</a>
         <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
         <a href="gacha.html" class="nav-button">GACHA STUDIO 🎰</a>
         <a href="trust-cat.html" class="nav-button">TRUST OSORE 🐱</a>
         <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
     </div>
-
-    <div class="desktop-environment" id="desktop">
+    <div class="desktop-environment" id="desktop" style="background-image: url('desktop-bg.jpg');">
         
         <div class="desktop-icon" style="top: 20px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-files')">
-            <span class="emoji-icon">📁</span>
+            <div class="emoji-icon">📁</div>
             <div class="icon-label">Explorer</div>
         </div>
-
         <div class="desktop-icon" style="top: 140px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-trash')">
-            <span class="emoji-icon">🗑️</span>
+            <div class="emoji-icon">🗑️</div>
             <div class="icon-label">Trash</div>
         </div>
-
         <div class="desktop-icon" style="top: 260px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-paint')">
-            <span class="emoji-icon">🎨</span>
+            <div class="emoji-icon">🎨</div>
             <div class="icon-label">Paint</div>
         </div>
-
         <div class="desktop-icon" style="top: 380px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-browser')">
-            <span class="emoji-icon">🌐</span>
+            <div class="emoji-icon">🌐</div>
             <div class="icon-label">Web Navigator</div>
         </div>
-
         <div class="desktop-icon" style="top: 500px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-settings')">
-            <span class="emoji-icon">⚙️</span>
+            <div class="emoji-icon">⚙️</div>
             <div class="icon-label">Settings</div>
         </div>
-        <div id="win-files" class="os-window" style="width: 400px; height: 300px; top: 50px; left: 200px;">
+        <div class="os-window" id="win-files" style="width: 440px; height: 350px; top: 80px; left: 160px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-files')">
-                <span>📁 Explorer</span>
-                <div class="window-close-btn" onclick="closeOSWindow('win-files')">X</div>
+                <span>📁 Folder_Contents.</span>
+                <button class="window-close-btn" onclick="closeOSWindow('win-files')">X</button>
+            </div>
+            <div class="window-body" style="background-image: url('Note pad template.jpg'); background-size: cover; background-color: rgba(0,0,0,0.7); background-blend-mode: darken;">
+                <div class="file-grid">
+                    <div style="text-align:center; cursor:pointer; color: #6ee7b7; font-weight: bold;" onclick="readSecretLog('gizen')">📄 gizen_diary.txt</div>
+                    <div style="text-align:center; cursor:pointer; color: #6ee7b7; font-weight: bold;" onclick="readSecretLog('muimina')">📄 muimina_loop.sys</div>
+                    <div style="text-align:center; cursor:pointer; color: #6ee7b7; font-weight: bold;" onclick="readSecretLog('lumino')">📄 lumino_error.log</div>
+                </div>
+                <div id="file-content-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #34d399; min-height: 100px; display: none; white-space: pre-wrap;"></div>
+            </div>
+        </div>
+        <div class="os-window" id="win-trash" style="width: 440px; height: 350px; top: 120px; left: 200px;">
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-trash')">
+                <span>🗑️ Trash</span>
+                <button class="window-close-btn" onclick="closeOSWindow('win-trash')">X</button>
             </div>
             <div class="window-body">
                 <div class="file-grid">
-                    <p>System Files</p>
+                    <div style="text-align:center; cursor:pointer; color: #ff3333; font-weight: bold;" onclick="readTrashFile()">📄 giGI19.txt</div>
                 </div>
+                <div id="trash-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #ff3333; min-height: 80px; display: none; white-space: pre-wrap; color: #ff8888;"></div>
             </div>
         </div>
-
-        <div id="win-trash" class="os-window" style="width: 400px; height: 300px; top: 100px; left: 250px;">
-            <div class="window-header" onmousedown="initWindowDrag(event, 'win-trash')">
-                <span>🗑️ Trash</span>
-                <div class="window-close-btn" onclick="closeOSWindow('win-trash')">X</div>
-            </div>
-            <div class="window-body">
-                <p id="trash-status">Empty</p>
-                <div id="trash-content-list"></div>
-                <button class="os-btn" onclick="purgeTrash()">Purge</button>
-            </div>
-        </div>
-
-        <div id="win-paint" class="os-window" style="width: 450px; height: 400px; top: 150px; left: 300px;">
+        <div class="os-window" id="win-paint" style="width: 440px; height: 380px; top: 60px; left: 280px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-paint')">
                 <span>🎨 Paint</span>
-                <div class="window-close-btn" onclick="closeOSWindow('win-paint')">X</div>
+                <button class="window-close-btn" onclick="closeOSWindow('win-paint')">X</button>
             </div>
             <div class="window-body">
                 <div class="paint-toolbar">
-                    <div class="paint-color-btn" style="background: #ff3333;" onclick="setPaintColor('#ff3333')"></div>
                     <div class="paint-color-btn" style="background: #34d399;" onclick="setPaintColor('#34d399')"></div>
+                    <div class="paint-color-btn" style="background: #ff3333;" onclick="setPaintColor('#ff3333')"></div>
+                    <div class="paint-color-btn" style="background: #ffaa00;" onclick="setPaintColor('#ffaa00')"></div>
                     <div class="paint-color-btn" style="background: #ffffff;" onclick="setPaintColor('#ffffff')"></div>
-                    <div class="paint-color-btn" style="background: #000000;" onclick="setPaintColor('#000000')"></div>
+                    <button class="os-btn" style="padding: 2px 8px; font-size: 0.7rem;" onclick="clearCanvas()">Clear</button>
                 </div>
-                <canvas class="paint-canvas" id="canvas" width="400" height="280"></canvas>
+                <canvas id="paintCanvas" class="paint-canvas" width="395" height="250"></canvas>
             </div>
         </div>
-
-        <div id="win-browser" class="os-window" style="width: 500px; height: 400px; top: 80px; left: 350px;">
+        <div class="os-window" id="win-browser" style="width: 520px; height: 450px; top: 40px; left: 340px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-browser')">
                 <span>🌐 Web Navigator</span>
-                <div class="window-close-btn" onclick="closeOSWindow('win-browser')">X</div>
+                <button class="window-close-btn" onclick="closeOSWindow('win-browser')">X</button>
             </div>
-            <div class="window-body">
-                <div class="browser-container">
-                    <div class="browser-bar">
-                        <div class="browser-display">Mini-Game Web Arena</div>
-                    </div>
-                    <div class="browser-content">
-                        <div id="browser-game">
-                            <h3>Clicker Arena</h3>
-                            <p>Points Needed: 10 | Current Points: <span id="game-points">0</span></p>
-                            <button class="os-btn" onclick="clickGameTarget()">Target Hit</button>
-                            <button class="os-btn" id="dl-app-btn" style="display:none;" onclick="triggerAppDownload()">Download Reward App</button>
-                        </div>
+            <div class="browser-container">
+                <div class="browser-bar">
+                    <button class="os-btn" style="padding: 2px 8px;" onclick="navigateBrowser('home')">Home</button>
+                    <div class="browser-display" id="browserAddress">folder://network_home</div>
+                </div>
+                <div class="window-body browser-content" id="browserBody">
+                    <div id="browser-game-zone" style="padding: 10px; border: 1px dashed #34d399; border-radius: 6px;">
+                        <h3 style="margin-top:0; color:#6ee7b7;">Cyber Clicker Arcade</h3>
+                        <p>Score 10 network pulses to compile a physical application download.</p>
+                        <p>Network Pulses: <span id="net-score" style="color:#ffffff; font-weight:bold;">0</span></p>
+                        <button class="os-btn" onclick="registerNetPulse()">Trigger Pulse</button>
+                        <br><br>
+                        <button class="os-btn" id="dl-reward-btn" style="display:none; background:#34d399; color:#000000;" onclick="downloadWebGameApp()">Download Game Pack</button>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div id="win-settings" class="os-window" style="width: 420px; height: 420px; top: 120px; left: 400px;">
+        <div class="os-window" id="win-settings" style="width: 400px; height: 450px; top: 160px; left: 400px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-settings')">
                 <span>⚙️ Settings</span>
-                <div class="window-close-btn" onclick="closeOSWindow('win-settings')">X</div>
+                <button class="window-close-btn" onclick="closeOSWindow('win-settings')">X</button>
             </div>
             <div class="window-body">
                 <div class="settings-row">
-                    <label>Wallpaper Pattern</label>
-                    <select class="settings-select" onchange="adjustWallpaper(this.value)">
-                        <option value="solid">Dark Void</option>
-                        <option value="matrix">Matrix Grid</option>
+                    <label>Button Theme Color:</label>
+                    <select class="settings-select" id="btnColorSelect" onchange="applySettings()">
+                        <option value="#6ee7b7">Mint Green</option>
+                        <option value="#ff3333">Alert Red</option>
+                        <option value="#3b82f6">Link Blue</option>
+                        <option value="#ffffff">Pure White</option>
                     </select>
                 </div>
                 <div class="settings-row">
-                    <label>Audio Scaling</label>
-                    <input type="range" class="settings-input" min="0" max="100" value="75" onchange="adjustAudio(this.value)">
+                    <label>System Font Family:</label>
+                    <select class="settings-select" id="fontSelect" onchange="applySettings()">
+                        <option value="'Courier New', Courier, monospace">Courier Terminal</option>
+                        <option value="Arial, sans-serif">Arial Sans</option>
+                        <option value="'Times New Roman', serif">Times Serif</option>
+                    </select>
                 </div>
                 <div class="settings-row">
-                    <label>System Focus Mode</label>
-                    <button class="os-btn" onclick="toggleSystemFocus()">Toggle Focus</button>
+                    <label>Desktop Wallpaper Matrix:</label>
+                    <select class="settings-select" id="bgSelect" onchange="changeDesktopBg()">
+                        <option value="default">Default Image</option>
+                        <option value="matrix">Matrix Green Grid</option>
+                        <option value="cyber">Cyberpunk Vignette</option>
+                    </select>
                 </div>
                 <div class="settings-row">
-                    <button class="os-btn" onclick="revealHiddenConfig()">Advanced Framework</button>
-                    <div class="hidden-section" id="hidden-config">
-                        <p>Core Override Panel</p>
-                        <button class="os-btn" onclick="wipeLocalCache()">Purge OS Cache</button>
+                    <label>Audio Monitoring Volume:</label>
+                    <input type="range" class="settings-input" min="0" max="100" value="80" onchange="console.log('Audio level updated: '+this.value+'%')">
+                </div>
+                <hr style="border: 1px dashed #34d399; margin: 15px 0;">
+                <div class="settings-row">
+                    <label>Hidden Files Decryption Key:</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="password" class="settings-input" id="decryptionPassword" placeholder="Enter password...">
+                        <button class="os-btn" onclick="checkDecryptionKey()">Unlock</button>
                     </div>
+                    <div id="passwordHint" style="color: #ffaa00; font-size: 0.75rem; margin-top: 4px;">Hint: Trash file giGI19.txt contains indications.</div>
                 </div>
             </div>
         </div>
-
     </div>
+    
+    <style>
+        .emoji-icon {
+            font-size: 45px;
+            margin-bottom: 4px;
+            display: inline-block;
+            user-select: none;
+        }
+    </style>
     <script>
-        let appPoints = 0;
-        let installedApps = 0;
+        let netPulses = 0;
+        let extAppsInstalled = 0;
+
+        function registerNetPulse() {
+            netPulses++;
+            document.getElementById('net-score').innerText = netPulses;
+            if (netPulses >= 10) {
+                document.getElementById('dl-reward-btn').style.display = 'inline-block';
+            }
+        }
+
+        function downloadWebGameApp() {
+            if (netPulses < 10) return;
+            netPulses -= 10;
+            document.getElementById('net-score').innerText = netPulses;
+            if (netPulses < 10) {
+                document.getElementById('dl-reward-btn').style.display = 'none';
+            }
+            extAppsInstalled++;
+            
+            const desktop = document.getElementById('desktop');
+            const appEl = document.createElement('div');
+            appEl.className = 'desktop-icon';
+            appEl.style.top = (60 + (extAppsInstalled * 35)) + 'px';
+            appEl.style.left = (180 + (extAppsInstalled * 35)) + 'px';
+            appEl.setAttribute('onmousedown', 'initIconDrag(event, this)');
+            
+            appEl.innerHTML = `
+                <div class="emoji-icon">🎮</div>
+                <div class="icon-label">WebGame Pack ${extAppsInstalled}</div>
+            `;
+            desktop.appendChild(appEl);
+            alert('New tactical application successfully initialized and deployed to local desktop storage!');
+        }
+
+        function changeDesktopBg() {
+            const mode = document.getElementById('bgSelect').value;
+            const d = document.getElementById('desktop');
+            if (mode === 'default') {
+                d.style.backgroundImage = "url('desktop-bg.jpg')";
+                d.style.backgroundSize = "cover";
+            }
+            if (mode === 'matrix') {
+                d.style.backgroundImage = "linear-gradient(rgba(0, 50, 0, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 50, 0, 0.3) 1px, transparent 1px)";
+                d.style.backgroundSize = "20px 20px";
+                d.style.backgroundColor = "#000a02";
+            }
+            if (mode === 'cyber') {
+                d.style.backgroundImage = "radial-gradient(circle at center, #1b0d2a 0%, #05020a 100%)";
+                d.style.backgroundSize = "auto";
+            }
+        }
+
+        function navigateBrowser(page) {
+            if (page === 'home') {
+                document.getElementById('browserAddress').innerText = 'folder://network_home';
+            }
+        }
+    </script>
+    <script>
         let activeDragIcon = null;
         let activeDragWindow = null;
         let offsetX = 0;
@@ -398,89 +469,71 @@
             document.removeEventListener('mouseup', dropWindow);
         }
 
-        function clickGameTarget() {
-            appPoints++;
-            document.getElementById('game-points').innerText = appPoints;
-            if (appPoints >= 10) {
-                document.getElementById('dl-app-btn').style.display = 'inline-block';
+        function readSecretLog(type) {
+            const viewer = document.getElementById('file-content-viewer');
+            viewer.style.display = 'block';
+            if (type === 'gizen') viewer.innerText = "[LOG]: Pseudo-reality core running. System loop detected.";
+            if (type === 'muimina') viewer.innerText = "[SYS]: Void process executed successfully. Value: NULL.";
+            if (type === 'lumino') viewer.innerText = "[ERROR]: Synchronization failure. Framework collapse imminent.";
+        }
+
+        function readTrashFile() {
+            const viewer = document.getElementById('trash-viewer');
+            viewer.style.display = 'block';
+            viewer.innerText = "CONTENT DECRYPTED: Access Key found inside system nodes -> 'giGI19_PASS_2026'";
+        }
+
+        function applySettings() {
+            const color = document.getElementById('btnColorSelect').value;
+            const font = document.getElementById('fontSelect').value;
+            
+            document.body.style.fontFamily = font;
+            const buttons = document.querySelectorAll('.os-btn');
+            buttons.forEach(btn => {
+                btn.style.borderColor = color;
+                btn.style.color = color;
+            });
+        }
+
+        function checkDecryptionKey() {
+            const pass = document.getElementById('decryptionPassword').value;
+            if (pass === 'giGI19_PASS_2026') {
+                alert('ACCESS GRANTED: Root filesystem decrypted.');
+            } else {
+                alert('ACCESS DENIED: Invalid key string.');
             }
         }
 
-        function triggerAppDownload() {
-            if (appPoints < 10) return;
-            appPoints -= 10;
-            document.getElementById('game-points').innerText = appPoints;
-            if (appPoints < 10) {
-                document.getElementById('dl-app-btn').style.display = 'none';
-            }
-            installedApps++;
-            
-            const desktop = document.getElementById('desktop');
-            const newApp = document.createElement('div');
-            newApp.className = 'desktop-icon';
-            newApp.style.top = (40 + (installedApps * 20)) + 'px';
-            newApp.style.left = (200 + (installedApps * 20)) + 'px';
-            newApp.setAttribute('onmousedown', 'initIconDrag(event, this)');
-            
-            newApp.innerHTML = `
-                <span class="emoji-icon">🎮</span>
-                <div class="icon-label">App Pack ${installedApps}</div>
-            `;
-            desktop.appendChild(newApp);
-        }
+        const canvas = document.getElementById('paintCanvas');
+        let ctx = null;
+        let painting = false;
+        let paintColor = '#34d399';
 
-        function adjustWallpaper(type) {
-            const desk = document.getElementById('desktop');
-            if (type === 'solid') desk.style.background = '#0d0d0d';
-            if (type === 'matrix') desk.style.background = 'radial-gradient(circle, #111 0%, #000 100%)';
-        }
-
-        function adjustAudio(val) {
-            console.log('System Audio Track Set: ' + val + '%');
-        }
-
-        function toggleSystemFocus() {
-            alert('Focus Strategy Adjusted');
-        }
-
-        function revealHiddenConfig() {
-            const panel = document.getElementById('hidden-config');
-            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function wipeLocalCache() {
-            alert('Cache Purged');
-        }
-
-        function purgeTrash() {
-            document.getElementById('trash-status').innerText = 'Empty';
-            document.getElementById('trash-content-list').innerHTML = '';
-        }
-
-        const canvas = document.getElementById('canvas');
         if (canvas) {
-            const ctx = canvas.getContext('2d');
-            let painting = false;
-            let paintColor = '#000000';
-
+            ctx = canvas.getContext('2d');
             canvas.addEventListener('mousedown', () => painting = true);
             canvas.addEventListener('mouseup', () => { ctx.beginPath(); painting = false; });
             canvas.addEventListener('mousemove', draw);
+        }
 
-            function setPaintColor(color) { paintColor = color; }
-            window.setPaintColor = setPaintColor;
+        function setPaintColor(color) {
+            paintColor = color;
+        }
 
-            function draw(e) {
-                if (!painting) return;
-                const rect = canvas.getBoundingClientRect();
-                ctx.lineWidth = 4;
-                ctx.lineCap = 'round';
-                ctx.strokeStyle = paintColor;
-                ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-            }
+        function clearCanvas() {
+            if (ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function draw(e) {
+            if (!painting || !ctx || !canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = paintColor;
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
         }
     </script>
 </body>
