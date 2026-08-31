@@ -67,25 +67,28 @@
         .settings-select, .settings-input { background: #222222; color: #6ee7b7; border: 1px solid #34d399; padding: 6px; font-family: inherit; border-radius: 4px; width: 100%; }
         .folder-window-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; padding: 5px; }
         .social-img-preview { width: 100%; height: 140px; background-size: cover; background-position: center; border: 1px solid #34d399; border-radius: 4px; margin-bottom: 6px; }
-        
-    
-        .doll-canvas { width: 100%; height: 260px; background: #222; border: 2px solid #34d399; border-radius: 8px; position: relative; margin-bottom: 10px; overflow: hidden; }
-        .doll-layer { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 5.5rem; line-height: 1; pointer-events: none; }
-        .doll-layer.head-gear { transform: translateY(-45px); font-size: 2.2rem; }
-        .doll-layer.cloth-layer { transform: translateY(-5px); font-size: 4rem; opacity: 0.95; }
-        .doll-layer.left-shoe { transform: translate(-22px, 58px); font-size: 1.8rem; }
-        .doll-layer.right-shoe { transform: translate(22px, 58px); font-size: 1.8rem; }
-        .doll-layer.acc-layer { transform: translateY(-38px); font-size: 2.5rem; }
-        .doll-layer.hand-layer { transform: translate(50px, 15px); font-size: 2.2rem; }
-        
-        
+        #win-dressup { width: 560px !important; height: 640px !important; top: 40px !important; left: 80px !important; }
+        .doll-canvas { width: 100%; height: 380px; background: #111; border: 2px solid #34d399; border-radius: 8px; position: relative; margin-bottom: 15px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .doll-layer { position: absolute; display: flex; align-items: center; justify-content: center; font-size: 9rem; line-height: 1; pointer-events: none; transition: all 0.1s ease; }
+        .doll-layer.head-gear { transform: translateY(-75px); font-size: 3.8rem; }
+        .doll-layer.cloth-layer { transform: translateY(-5px); font-size: 6.5rem; opacity: 0.98; }
+        .doll-layer.left-shoe { transform: translate(-35px, 95px); font-size: 2.8rem; }
+        .doll-layer.right-shoe { transform: translate(35px, 95px); font-size: 2.8rem; }
+        .doll-layer.acc-layer { transform: translateY(-60px); font-size: 4rem; }
+        .doll-layer.hand-layer { transform: translate(80px, 20px); font-size: 3.5rem; }
         .cc-timeline { background: #000; border: 1px solid #34d399; height: 75px; margin-top: 10px; position: relative; overflow-x: auto; display: flex; align-items: center; padding: 5px; }
         .cc-track-item { background: #34d399; color: #000; font-size: 0.65rem; font-weight: bold; padding: 4px 8px; border-radius: 4px; position: absolute; white-space: nowrap; cursor: pointer; }
     </style>
 </head>
 <body>
+    <div class="nav-links">
+        <a href="index.html" class="nav-button">HOME FACTS 📑</a>
+        <a href="mint-choco.html" class="nav-button">MINT-CHOCO ZONE 🍫</a>
+        <a href="gacha.html" class="nav-button">GACHA STUDIO 🎰</a>
+        <a href="trust-cat.html" class="nav-button">TRUST OSORE 🐱</a>
+        <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
+    </div>
     <div class="desktop-environment" id="desktop" oncontextmenu="showContextMenu(event)">
-        
         <div class="desktop-icon" style="top: 20px; left: 20px;" id="icon-win-files" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-files')">
             <div class="emoji-icon">📁</div>
             <div class="icon-label">Explorer</div>
@@ -102,23 +105,21 @@
             <div class="emoji-icon">⚙️</div>
             <div class="icon-label">Settings</div>
         </div>
-
         <div class="os-window" id="win-files" style="width: 440px; height: 350px; top: 80px; left: 160px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-files')"><span>📁 Explorer</span><button class="window-close-btn" onclick="closeOSWindow('win-files')">X</button></div>
             <div class="window-body">
-                <div class="file-grid">
-                    <div style="text-align:center; cursor:pointer; font-weight:bold;" onclick="readSecretLog('gizen')">📄 gizen_diary.txt</div>
-                    <div style="text-align:center; cursor:pointer; font-weight:bold;" onclick="readSecretLog('muimina')">📄 muimina_loop.sys</div>
-                    <div style="text-align:center; cursor:pointer; font-weight:bold;" onclick="readSecretLog('lumino')">📄 lumino_error.log</div>
+                <div class="file-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px;">
+                    <div style="text-align:center; cursor:pointer;" onclick="readSecretLog('gizen')">📄 gizen_diary.txt</div>
+                    <div style="text-align:center; cursor:pointer;" onclick="readSecretLog('muimina')">📄 muimina_loop.sys</div>
+                    <div style="text-align:center; cursor:pointer;" onclick="readSecretLog('lumino')">📄 lumino_error.log</div>
                 </div>
                 <div id="file-content-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #34d399; min-height: 100px; display: none; white-space: pre-wrap;"></div>
             </div>
         </div>
-
         <div class="os-window" id="win-trash" style="width: 440px; height: 350px; top: 120px; left: 200px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-trash')"><span>🗑️ Trash Bin</span><button class="window-close-btn" onclick="closeOSWindow('win-trash')">X</button></div>
             <div class="window-body">
-                <div class="file-grid" id="trashGrid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;">
+                <div class="file-grid" id="trashGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px;">
                     <div style="text-align:center; cursor:pointer; color: #ff3333;" id="trash-giGI19" onclick="readTrashFile()">📄 giGI19.txt</div>
                 </div>
                 <div id="trash-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #ff3333; min-height: 80px; display: none; white-space: pre-wrap; color: #ff8888;"></div>
@@ -134,28 +135,27 @@
                 <div class="window-body browser-content" id="browserBody"></div>
             </div>
         </div>
-
-        <div class="os-window" id="win-settings" style="width: 400px; height: 490px; top: 160px; left: 420px;">
+        <div class="os-window" id="win-settings" style="width: 400px; height: 460px; top: 160px; left: 420px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-settings')"><span>⚙️ Settings</span><button class="window-close-btn" onclick="closeOSWindow('win-settings')">X</button></div>
             <div class="window-body">
                 <div class="settings-row">
-                    <label>Wallpaper Mask Color Overcast:</label>
+                    <label>Wallpaper Color Overlay/Tint:</label>
                     <input type="color" id="setBgColorInput" value="#050b14" onchange="applySettingsUI()" style="width:100%; height:30px; background:#222; border:1px solid #34d399; margin-top:4px;">
                 </div>
                 <div class="settings-row">
-                    <label>System Core UI Font Family:</label>
+                    <label>System Font Family Profile:</label>
                     <select id="setFontInput" onchange="applySettingsUI()" style="width:100%; background:#222; color:#34d399; border:1px solid #34d399; padding:6px; margin-top:4px;">
                         <option value="'Courier New', Courier, monospace">Terminal Courier</option>
                         <option value="Arial, sans-serif">Sans-Serif Arial</option>
-                        <option value="Georgia, serif">Serif Georgia Layout</option>
+                        <option value="Georgia, serif">Serif Georgia</option>
                     </select>
                 </div>
                 <div class="settings-row">
-                    <label>UI Theme Accent Border Palette:</label>
+                    <label>UI Theme Accent Color:</label>
                     <select id="setThemeInput" onchange="applySettingsUI()" style="width:100%; background:#222; color:#34d399; border:1px solid #34d399; padding:6px; margin-top:4px;">
-                        <option value="#34d399">Mint Green Matrix</option>
-                        <option value="#ff3333">Alert Crimson Warning</option>
-                        <option value="#3b82f6">Cybernetic Circuit Blue</option>
+                        <option value="#34d399">Mint Green</option>
+                        <option value="#ff3333">Alert Crimson</option>
+                        <option value="#3b82f6">Circuit Blue</option>
                     </select>
                 </div>
                 <div class="settings-row">
@@ -165,11 +165,10 @@
                         <button class="os-btn" onclick="checkDecryptionKey()">Unlock</button>
                     </div>
                 </div>
-                <div id="hiddenContent" style="display:none; color:#ff3333; margin-top:10px; font-weight:bold;">[OVERWRITE MATRIX PROTOCOL PARAMETERS ENGAGED]</div>
+                <div id="hiddenContent" style="display:none; color:#ff3333; margin-top:10px; font-weight:bold;">[OVERWRITE MATRIX PROTOCOL ENGAGED]</div>
             </div>
         </div>
-       
-        <div class="os-window" id="win-dressup" style="width: 440px; height: 530px; top: 60px; left: 100px;">
+        <div class="os-window" id="win-dressup">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-dressup')"><span>👗 Game 1: Layered Pro Dress-up</span><button class="window-close-btn" onclick="closeOSWindow('win-dressup')">X</button></div>
             <div class="window-body">
                 <div class="doll-canvas">
@@ -182,20 +181,18 @@
                     <div class="doll-layer hand-layer" id="layer-hand"></div>
                 </div>
                 <div style="display:flex; gap:4px; justify-content:center; margin-bottom:6px;">
-                    Gender: <button class="os-btn" onclick="setBaseDollModel('m')">🧍</button><button class="os-btn" onclick="setBaseDollModel('f')">🧍‍♀️</button>
-                    Skin: <button class="os-btn" onclick="setBaseDollSkin('🏻')">🧍🏻</button><button class="os-btn" onclick="setBaseDollSkin('🏽')">🧍🏼‍♀️</button>
+                    Gender: <button class="os-btn" onclick="setBaseDollModel('m')">🧍🏻</button><button class="os-btn" onclick="setBaseDollModel('f')">🧍🏻‍♀️</button>
+                    Skin: <button class="os-btn" onclick="setBaseDollSkin('🏻')">🏻</button><button class="os-btn" onclick="setBaseDollSkin('🏽')">🏽</button>
                 </div>
                 <div style="font-size:0.72rem; max-height:140px; overflow-y:auto; border-top:1px dashed #34d399; padding-top:4px;">
                     Clothes: <span onclick="addClothNodeLayer('👚')" style="cursor:pointer;font-size:1.1rem;">👚</span> <span onclick="addClothNodeLayer('👕')" style="cursor:pointer;font-size:1.1rem;">👕</span> <span onclick="addClothNodeLayer('👗')" style="cursor:pointer;font-size:1.1rem;">👗</span> <span onclick="addClothNodeLayer('👘')" style="cursor:pointer;font-size:1.1rem;">👘</span><br>
                     Shoes: <span onclick="addShoesNodeLayer('👟')" style="cursor:pointer;font-size:1.1rem;">👟</span> <span onclick="addShoesNodeLayer('👠')" style="cursor:pointer;font-size:1.1rem;">👠</span> <span onclick="addShoesNodeLayer('🛼')" style="cursor:pointer;font-size:1.1rem;">🛼</span><br>
                     Headwear: <span onclick="addHeadNodeLayer('👑')" style="cursor:pointer;font-size:1.1rem;">👑</span> <span onclick="addHeadNodeLayer('🎩')" style="cursor:pointer;font-size:1.1rem;">🎩</span> <span onclick="addHeadNodeLayer('🧢')" style="cursor:pointer;font-size:1.1rem;">🧢</span><br>
-                    Accessories: <span onclick="addAccNodeLayer('眼镜','👓')" style="cursor:pointer;font-size:1.1rem;">👓</span> <span onclick="addAccNodeLayer('眼镜','🕶️')" style="cursor:pointer;font-size:1.1rem;">🕶️</span> <span onclick="addAccNodeLayer('眼镜','🎗️')" style="cursor:pointer;font-size:1.1rem;">🎗️</span><br>
+                    Accessories: <span onclick="addAccNodeLayer('👓')" style="cursor:pointer;font-size:1.1rem;">👓</span> <span onclick="addAccNodeLayer('🕶️')" style="cursor:pointer;font-size:1.1rem;">🕶️</span> <span onclick="addAccNodeLayer('🎗️')" style="cursor:pointer;font-size:1.1rem;">🎗️</span><br>
                     Hand Slot: <span onclick="addHandNodeLayer('🪭')" style="cursor:pointer;font-size:1.1rem;">🪭</span> <span onclick="addHandNodeLayer('👜')" style="cursor:pointer;font-size:1.1rem;">👜</span> <span onclick="addHandNodeLayer('🌂')" style="cursor:pointer;font-size:1.1rem;">🌂</span>
                 </div>
             </div>
         </div>
-
-      
         <div class="os-window" id="win-clicker" style="width: 380px; height: 420px; top: 100px; left: 140px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-clicker')"><span>⚡ Game 2: Advanced Core Clicker</span><button class="window-close-btn" onclick="closeOSWindow('win-clicker')">X</button></div>
             <div class="window-body" style="display:flex; flex-direction:column; gap:10px;">
@@ -219,7 +216,6 @@
                 </div>
             </div>
         </div>
-      
         <div class="os-window" id="win-paint" style="width: 500px; height: 450px; top: 50px; left: 220px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-paint')"><span>🎨 App 3: Pro Layers Canvas Studio</span><button class="window-close-btn" onclick="closeOSWindow('win-paint')">X</button></div>
             <div class="window-body">
@@ -232,12 +228,10 @@
                     <button class="os-btn" style="padding:1px 4px; font-size:0.65rem;" onclick="bucketFillActive=true">Flood Fill</button>
                     <button class="os-btn" style="padding:1px 4px; font-size:0.65rem;" onclick="clearActivePaintLayerNode()">Wipe</button>
                 </div>
-                <div style="margin-bottom:5px; font-size:0.7rem;">Active Target: <select id="paintLayerSelect" onchange="activeLayer=parseInt(this.value)" style="background:#222; color:#6ee7b7; border:1px solid #6ee7b7;"></select></div>
+                <div style="margin-bottom:5px; font-size:0.7rem;">Active Target: <select id="paintLayerSelect" onchange="activeLayer=parseInt(this.value); syncCanvasesMouseEvents();" style="background:#222; color:#6ee7b7; border:1px solid #6ee7b7;"></select></div>
                 <div id="canvasLayersContainer" style="position:relative; width:460px; height:280px; background:#fff; border:1px inset #333;"></div>
             </div>
         </div>
-
-       
         <div class="os-window" id="win-videomaker" style="width: 480px; height: 500px; top: 40px; left: 240px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-videomaker')"><span>🎬 App 4: CapCut Advanced Studio</span><button class="window-close-btn" onclick="closeOSWindow('win-videomaker')">X</button></div>
             <div class="window-body">
@@ -255,33 +249,44 @@
                 <button class="os-btn" style="width:100%; margin-top:5px; padding:8px;" onclick="compileAndBuildVideoFile()">Compile & Export Video Track</button>
             </div>
         </div>
-
+    </div>
+    <div class="context-menu" id="desktopContextMenu">
+        <div class="context-item" onclick="createDesktopFolder()">Create Folder</div>
+        <div class="context-item" onclick="resetToOriginalWallpaperMatrix()">Restore 'desktop-bg.jpg'</div>
     </div>
     <div class="sys-notification" id="osNotification"><b id="notifTitle">Matrix Alert</b><p id="notifText" style="margin:5px 0 0 0; font-size:0.75rem; color:#a7f3d0;"></p></div>
     <script>
-        let highestZ = 100, netPulses = 0, extAppsInstalled = 0, folderCount = 0, photoCount = 0, generatedVideoCount = 0;
+        let highestZ = 100, extAppsInstalled = 0, folderCount = 0, photoCount = 0, generatedVideoCount = 0;
         let paintColor = '#34d399', brushSize = 3, isEraser = false, activeLayer = 0, blurAmount = 0;
         let isDrawing = false, bucketFillActive = false, canvases = [], ctxs = [];
         let socialUser = { registered: false, username: '', bio: '', avatar: '👤' };
         let customUploadedUserVideos = [];
         let activeOpenFolders = {};
+        let currentQuestion = 0;
+        let quizScores = { PNG: 0, JPG: 0, WEBP: 0, GIF: 0, JPEG: 0 };
+        let gender = 'm', skin = '🏻', cloth = '👕', shoes = 'sn', head = '', acc = '', hand = '';
+
+        const quizQuestions = [
+            { q: "How do you react when a system error occurs?", a: [{ t: "Try to cheer up everyone around with a joke.", k: "GIF" }, { t: "Analyze the core log calmly using logic.", k: "PNG" }, { t: "Get irritated and blame the hardware layers.", k: "WEBP" }, { t: "Use creative workaround paths immediately.", k: "JPG" }] },
+            { q: "What is your main operational priority?", a: [{ t: "Absolute perfect clarity and depth.", k: "PNG" }, { t: "Fastest execution, ignoring others' status.", k: "WEBP" }, { t: "Bringing positive dynamic loops to the grid.", k: "GIF" }, { t: "Creating elegant gadgets and new scripts.", k: "JPG" }] },
+            { q: "Select your desired architectural status:", a: [{ t: "Highly intelligent but deeply unstable.", k: "PNG" }, { t: "Global superstar entity with age restrictions.", k: "JPEG" }, { t: "Closed micro-cluster supreme logic.", k: "WEBP" }, { t: "Balanced technological adapter.", k: "JPG" }] }
+        ];
 
         function openOSWindow(id) {
             let win = document.getElementById(id);
             if (!win) return;
-            win.style.zIndex = ++highestZ; win.style.display = 'flex';
+            highestZ++; win.style.zIndex = highestZ; win.style.display = 'flex';
             if(id === 'win-browser') navigateBrowser('home');
             if(id === 'win-paint' && canvases.length === 0) addNewPaintLayerDynamic();
         }
         function closeOSWindow(id) { document.getElementById(id).style.display = 'none'; }
-
         function initWindowDrag(e, id) {
             if (e.target.tagName === 'BUTTON' || e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
             let win = document.getElementById(id); win.style.zIndex = ++highestZ;
             let posX = e.clientX, posY = e.clientY;
-            document.onmousemove = function(e) {
-                win.style.top = (win.offsetTop - (posY - e.clientY)) + "px"; win.style.left = (win.offsetLeft - (posX - e.clientX)) + "px";
-                posX = e.clientX; posY = e.clientY;
+            document.onmousemove = function(ev) {
+                win.style.top = (win.offsetTop - (posY - ev.clientY)) + "px"; win.style.left = (win.offsetLeft - (posX - ev.clientX)) + "px";
+                posX = ev.clientX; posY = ev.clientY;
             };
             document.onmouseup = function() { document.onmousemove = null; document.onmouseup = null; };
         }
@@ -289,15 +294,15 @@
         function initIconDrag(e, icon) {
             let posX = e.clientX, posY = e.clientY;
             let trashBin = document.getElementById('icon-win-trash');
-            document.onmousemove = function(e) {
-                icon.style.top = (icon.offsetTop - (posY - e.clientY)) + "px"; icon.style.left = (icon.offsetLeft - (posX - e.clientX)) + "px";
-                posX = e.clientX; posY = e.clientY;
+            document.onmousemove = function(ev) {
+                icon.style.top = (icon.offsetTop - (posY - ev.clientY)) + "px"; icon.style.left = (icon.offsetLeft - (posX - ev.clientX)) + "px";
+                posX = ev.clientX; posY = ev.clientY;
             };
-            document.onmouseup = function(e) {
+            document.onmouseup = function(ev) {
                 document.onmousemove = null; document.onmouseup = null;
                 if (icon.id !== 'icon-win-settings' && icon.id !== 'icon-win-browser' && icon.id !== 'icon-win-trash' && icon.id !== 'icon-win-files') {
                     let tr = trashBin.getBoundingClientRect();
-                    if (e.clientX >= tr.left && e.clientX <= tr.right && e.clientY >= tr.top && e.clientY <= tr.bottom) {
+                    if (ev.clientX >= tr.left && ev.clientX <= tr.right && ev.clientY >= tr.top && ev.clientY <= tr.bottom) {
                         let grid = document.getElementById('trashGrid');
                         let fileNode = document.createElement('div'); fileNode.style.textAlign = 'center'; fileNode.innerText = "🗑️ " + icon.querySelector('.icon-label').innerText;
                         grid.appendChild(fileNode); icon.remove();
@@ -307,16 +312,17 @@
                     let folders = document.querySelectorAll('.desktop-environment > .desktop-icon[id^="folder-"]');
                     folders.forEach(f => {
                         let fr = f.getBoundingClientRect();
-                        if (e.clientX >= fr.left && e.clientX <= fr.right && e.clientY >= fr.top && e.clientY <= fr.bottom) {
+                        if (ev.clientX >= fr.left && ev.clientX <= fr.right && ev.clientY >= fr.top && ev.clientY <= fr.bottom) {
                             let fId = f.id;
                             activeOpenFolders[fId].push({html: icon.innerHTML, dblClick: icon.getAttribute('ondblclick')});
                             icon.remove(); refreshFolderWindowBody(fId);
-                            triggerOsBroadcastNotification("Storage Matrix", "Item sorted into database folder directory.");
+                            triggerOsBroadcastNotification("Storage Matrix", "Item sorted into folder directory.");
                         }
                     });
                 }
             };
         }
+
         function showContextMenu(e) {
             if (e.target.className !== 'desktop-environment') return;
             e.preventDefault();
@@ -327,9 +333,9 @@
 
         function createDesktopFolder() {
             folderCount++;
-            let name = prompt("Enter folder title label designation:", "Folder Layer " + folderCount);
+            let name = prompt("Enter folder title designation:", "Folder Layer " + folderCount);
             if (!name) return;
-            let emoji = prompt("Choose custom folder emoji icon stamp:", "📁") || "📁";
+            let emoji = prompt("Choose custom folder emoji icon:", "📁") || "📁";
             let fId = 'folder-' + Date.now();
             activeOpenFolders[fId] = [];
             
@@ -364,7 +370,6 @@
                 node.innerHTML = item.html; node.setAttribute('ondblclick', item.dblClick); grid.appendChild(node);
             });
         }
-
         function triggerOsBroadcastNotification(title, message) {
             let notif = document.getElementById('osNotification');
             document.getElementById('notifTitle').innerText = title; document.getElementById('notifText').innerText = message;
@@ -378,10 +383,10 @@
                 addr.innerText = 'folder://network_home';
                 body.innerHTML = `
                     <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">🕹️ Central Core Matrix Terminal</h3>
+                        <h3 style="color:#6ee7b7; margin-top:0;">Central Core Hub</h3>
                         <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
                             <button class="os-btn" onclick="navigateBrowser('quiz')">🧬 Human Extension Core Matrix Parameters</button>
-                            <button class="os-btn" onclick="navigateBrowser('shop')">🛒 Application Core Compiler Market (FREE Access)</button>
+                            <button class="os-btn" onclick="navigateBrowser('shop')">🛒 Application Compiler Market (FREE Access)</button>
                         </div>
                     </div>
                 `;
@@ -390,7 +395,7 @@
                 body.innerHTML = `
                     <div style="padding: 10px;">
                         <h3 style="color:#6ee7b7; margin-top:0;">🛒 System Market Application Compiler</h3>
-                        <p style="color:#ffaa00; font-size:0.7rem; margin-bottom:12px;">Minstantly compile modules directly onto workspace environment frames.</p>
+                        <p style="color:#ffaa00; font-size:0.7rem; margin-bottom:12px;">Instantly compile modules directly onto workspace environment frames.</p>
                         <button class="os-btn" onclick="deployAppFromWeb('dressup', '🧍🏻‍♀️', 'Game 1: Dressup')">Compile Pro Dress-up</button><br><br>
                         <button class="os-btn" onclick="deployAppFromWeb('clicker', '⚡', 'Game 2: Clicker')">Compile Clicker Terminal</button><br><br>
                         <button class="os-btn" onclick="deployAppFromWeb('paint', '🎨', 'App 3: Pro Paint')">Compile Layers Paint Studio</button><br><br>
@@ -400,47 +405,6 @@
                 `;
             } else if (page === 'quiz') { addr.innerText = 'folder://arcade_hub/extension_test'; renderQuiz(); }
             else if (page === 'social') { addr.innerText = 'https://ex-net.social'; renderSocialHubLayoutFeed(); }
-        }
-        function renderSocialHubLayoutFeed() {
-            let body = document.getElementById('browserBody'); if(!body) return;
-            if (!socialUser.registered) {
-                body.innerHTML = `
-                    <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">🌐 Profile Identity Verification Node</h3>
-                        <input type="text" id="regName" placeholder="Profile tag handle name..." class="settings-input" style="margin-bottom:8px;"><br>
-                        <input type="text" id="regBio" placeholder="Status parameters..." class="settings-input" style="margin-bottom:8px;"><br>
-                        Select Stamp: <select id="regAv" class="settings-select" style="margin-bottom:12px;"><option>🥠</option><option>🏵️</option><option>🛼</option><option>🪭</option><option>💊</option><option>🎀</option><option>🛍️</option><option>🎐</option><option>🪩</option><option>🍒</option></select><br>
-                        <button class="os-btn" style="width:100%;" onclick="socialUser.username=document.getElementById('regName').value||'User_EX'; socialUser.bio=document.getElementById('regBio').value||'Active'; socialUser.avatar=document.getElementById('regAv').value; socialUser.registered=true; navigateBrowser('social');">Initialize Login Matrix</button>
-                    </div>
-                `;
-            } else {
-                let feedHtml = '';
-                customUploadedUserVideos.forEach(v => {
-                    feedHtml += `<div class="social-post" style="border-color:#ffaa00;"><div class="post-header"><span>${socialUser.avatar} ${socialUser.username} (You)</span></div><p style="margin:5px 0; color:#ffffff; font-weight:bold;">${v.caption}</p><div class="video-box" style="background:${v.bg}; border:1px solid #ffaa00;"><div style="font-size:2rem; margin-bottom:4px;">${v.emoji}</div><div style="font-size:0.85rem;">${v.text}</div><div style="font-size:0.65rem; border-top:1px dotted; margin-top:5px; padding-top:4px;">👍 Likes: <span id="l-${v.id}">${v.likes}</span> | 👥 Subs: <span id="s-${v.id}">${v.subs}</span></div></div></div>`;
-                });
-                let presetItems = [
-                    {type:'img', u:'Chef_Core', a:'🍥', t:'[RECIPE]: Master loop framework dango pudding process sequence configuration matrix view!', c:'https://unsplash.com', tag:'Recipe'},
-                    {type:'vid', u:'MatrixBug', a:'🪩', t:'[MEME]: When the legacy compression parameters loop back around into complete system blackout.', id:1},
-                    {type:'img', u:'ProLearner', a:'🪴', t:'[TUTORIAL]: Synchronizing the human consciousness extension maps step-by-step.', c:'https://unsplash.com', tag:'Tutorial'},
-                    {type:'vid', u:'VoidWalker', a:'🍄', t:'[VLOG]: Walking along the extreme peripheral edge boundary zones today.', id:2},
-                    {type:'img', u:'User404', a:'🐥', t:'[MEME]: Me waiting for the core telemetry cache to safely drop down to 5422 value parameters.', c:'https://unsplash.com', tag:'Meme'}
-                ];
-                presetItems.forEach(p => {
-                    let visual = p.type === 'img' ? `<div class="social-img-preview" style="background-image:url('${p.c}')"></div><button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="downloadImageToDesktop('${p.c}', '${p.tag}_Asset')">📥 Save Image to Desktop</button>` : `<div class="video-box" style="text-align:center; min-height:80px; font-weight:bold; background:#222; color:#34d399; justify-content:center;">🎥 [ACTIVE EX-NET VIDEO BROADCAST RUNNING NODE #${p.id}]</div>`;
-                    feedHtml += `<div class="social-post"><div class="post-header"><span>${p.a} ${p.u}</span></div><p style="margin:5px 0; color:#ffffff; font-weight:bold;">${p.t}</p>${visual}</div>`;
-                });
-                body.innerHTML = `<div style="padding: 10px;"><div style="background:#222; padding:8px; border-radius:6px; margin-bottom:12px;"><b>${socialUser.avatar} ${socialUser.username}</b> - <i>"${socialUser.bio}"</i></div><h4 style="color:#6ee7b7; margin:0 0 10px 0;">EX-Net Global Pipeline Matrix</h4><div class="social-feed">${feedHtml}</div></div>`;
-            }
-        }
-
-        function downloadImageToDesktop(imgUrl, fileName) {
-            photoCount++; let winId = 'win-photo-' + photoCount; let desktop = document.getElementById('desktop');
-            let photoWin = document.createElement('div'); photoWin.className = 'os-window'; photoWin.id = winId; photoWin.style.width = '300px'; photoWin.style.height = '260px'; photoWin.style.top = '120px'; photoWin.style.left = '200px';
-            photoWin.innerHTML = `<div class="window-header" onmousedown="initWindowDrag(event, '${winId}')"><span>🖼️ Image: ${fileName}.jpg</span><button class="window-close-btn" onclick="closeOSWindow('${winId}')">X</button></div><div class="window-body" style="background-image:url('${imgUrl}'); background-size:contain; background-repeat:no-repeat; background-position:center; background-color:#000;"></div>`;
-            desktop.appendChild(photoWin);
-            let appEl = document.createElement('div'); appEl.className = 'desktop-icon'; appEl.id = 'icon-' + winId; appEl.style.top = '100px'; appEl.style.left = (240 + (photoCount * 40)) + 'px';
-            appEl.setAttribute('onmousedown', 'initIconDrag(event, this)'); appEl.setAttribute('ondblclick', `openOSWindow('${winId}')`);
-            appEl.innerHTML = `<div class="emoji-icon">🖼️</div><div class="icon-label">${fileName}.jpg</div>`; desktop.appendChild(appEl);
         }
 
         function renderQuiz() {
@@ -461,7 +425,47 @@
             let optionsHtml = qData.a.map((ans, idx) => `<button class="os-btn" style="display:block; width:100%; margin-bottom:8px; text-align:left;" onclick="quizScores['${ans.k}']++; currentQuestion++; renderQuiz();">${idx + 1}. ${ans.t}</button>`).join('');
             container.innerHTML = `<div style="padding: 10px;"><h3 style="color:#6ee7b7; margin-top:0;">Human Extension Matrix Test</h3><p style="font-size:0.85rem;">Question ${currentQuestion + 1}/${quizQuestions.length}: ${qData.q}</p><div style="margin-top:15px;">${optionsHtml}</div></div>`;
         }
-    <script>
+        function renderSocialHubLayoutFeed() {
+            let body = document.getElementById('browserBody'); if(!body) return;
+            if (!socialUser.registered) {
+                body.innerHTML = `
+                    <div style="padding: 10px;">
+                        <h3 style="color:#6ee7b7; margin-top:0;">🌐 Profile Identity Verification Node</h3>
+                        <input type="text" id="regName" placeholder="Profile handle name..." class="settings-input" style="margin-bottom:8px;"><br>
+                        <input type="text" id="regBio" placeholder="Status parameters..." class="settings-input" style="margin-bottom:8px;"><br>
+                        Select Stamp: <select id="regAv" class="settings-select" style="margin-bottom:12px;"><option>🥠</option><option>🏵️</option><option>🛼</option><option>🪭</option><option>💊</option><option>🎀</option><option>🛍️</option><option>🎐</option><option>🪩</option><option>🍒</option></select><br>
+                        <button class="os-btn" style="width:100%;" onclick="socialUser.username=document.getElementById('regName').value||'User_EX'; socialUser.bio=document.getElementById('regBio').value||'Active'; socialUser.avatar=document.getElementById('regAv').value; socialUser.registered=true; navigateBrowser('social');">Initialize Login Matrix</button>
+                    </div>
+                `;
+            } else {
+                let feedHtml = '';
+                customUploadedUserVideos.forEach(v => {
+                    feedHtml += `<div class="social-post" style="border-color:#ffaa00;"><div class="post-header"><span>${socialUser.avatar} ${socialUser.username} (You)</span></div><p style="margin:5px 0; color:#ffffff; font-weight:bold;">${v.caption}</p><div class="video-box" style="background:${v.bg}; border:1px solid #ffaa00;"><div style="font-size:2rem; margin-bottom:4px;">${v.emoji}</div><div style="font-size:0.85rem;">${v.text}</div><div style="font-size:0.65rem; border-top:1px dotted; margin-top:5px; padding-top:4px;">👍 Likes: <span id="l-${v.id}">${v.likes}</span> | 👥 Subs: <span id="s-${v.id}">${v.subs}</span></div></div></div>`;
+                });
+                let presetItems = [
+                    {type:'img', u:'Chef_Core', a:'🍥', t:'[RECIPE]: Master loop framework dango pudding configuration matrix view!', c:'https://unsplash.com', tag:'Recipe'},
+                    {type:'vid', u:'MatrixBug', a:'🪩', t:'[MEME]: When legacy parameters loop back around into absolute system blackout.', id:1},
+                    {type:'img', u:'ProLearner', a:'🪴', t:'[TUTORIAL]: Synchronizing the human consciousness extension maps step-by-step.', c:'https://unsplash.com', tag:'Tutorial'},
+                    {type:'vid', u:'VoidWalker', a:'🍄', t:'[VLOG]: Walking along extreme peripheral edge zones today.', id:2},
+                    {type:'img', u:'User404', a:'🐥', t:'[MEME]: Me waiting for core cache parameters to drop to 5422 values.', c:'https://unsplash.com', tag:'Meme'}
+                ];
+                presetItems.forEach(p => {
+                    let visual = p.type === 'img' ? `<div class="social-img-preview" style="background-image:url('${p.c}')"></div><button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="downloadImageToDesktop('${p.c}', '${p.tag}_Asset')">📥 Save Image to Desktop</button>` : `<div class="video-box" style="text-align:center; min-height:80px; font-weight:bold; background:#222; color:#34d399; justify-content:center;">🎥 [ACTIVE EX-NET VIDEO BROADCAST RUNNING NODE #${p.id}]</div>`;
+                    feedHtml += `<div class="social-post"><div class="post-header"><span>${p.a} ${p.u}</span></div><p style="margin:5px 0; color:#ffffff; font-weight:bold;">${p.t}</p>${visual}</div>`;
+                });
+                body.innerHTML = `<div style="padding: 10px;"><div style="background:#222; padding:8px; border-radius:6px; margin-bottom:12px;"><b>${socialUser.avatar} ${socialUser.username}</b> - <i>"${socialUser.bio}"</i></div><h4 style="color:#6ee7b7; margin:0 0 10px 0;">EX-Net Global Pipeline Matrix</h4><div class="social-feed">${feedHtml}</div></div>`;
+            }
+        }
+
+        function downloadImageToDesktop(imgUrl, fileName) {
+            photoCount++; let winId = 'win-photo-' + photoCount; let desktop = document.getElementById('desktop');
+            let photoWin = document.createElement('div'); photoWin.className = 'os-window'; photoWin.id = winId; photoWin.style.width = '300px'; photoWin.style.height = '260px'; photoWin.style.top = '120px'; photoWin.style.left = '200px';
+            photoWin.innerHTML = `<div class="window-header" onmousedown="initWindowDrag(event, '${winId}')"><span>🖼️ Image: ${fileName}.jpg</span><button class="window-close-btn" onclick="closeOSWindow('${winId}')">X</button></div><div class="window-body" style="background-image:url('${imgUrl}'); background-size:contain; background-repeat:no-repeat; background-position:center; background-color:#000;"></div>`;
+            desktop.appendChild(photoWin);
+            let appEl = document.createElement('div'); appEl.className = 'desktop-icon'; appEl.id = 'icon-' + winId; appEl.style.top = '100px'; appEl.style.left = (240 + (photoCount * 40)) + 'px';
+            appEl.setAttribute('onmousedown', 'initIconDrag(event, this)'); appEl.setAttribute('ondblclick', `openOSWindow('${winId}')`);
+            appEl.innerHTML = `<div class="emoji-icon">🖼️</div><div class="icon-label">${fileName}.jpg</div>`; desktop.appendChild(appEl);
+        }
         let clkScore = 0, clkLevel = 1, clkPower = 1, clkCps = 0;
         function executeManualCorePulseClick() { clkScore += clkPower; refreshClickerMetricsDisplay(); }
         function buyClickUpgradePower() { if(clkScore >= 15) { clkScore -= 15; clkPower += 1; refreshClickerMetricsDisplay(); } }
@@ -474,23 +478,31 @@
         }
         setInterval(() => { if(clkCps > 0) { clkScore += clkCps; refreshClickerMetricsDisplay(); } }, 1000);
 
-        function setBaseDollModel(g) { document.getElementById('layer-body').innerText = g === 'm' ? '🧍' : '🧍‍♀️'; }
-        function setBaseDollSkin(s) { let text = document.getElementById('layer-body').innerText; document.getElementById('layer-body').innerText = text.substring(0,2) + s; }
+        let currentDollBase = '🧍';
+        let currentDollSkin = '🏻';
+        function setBaseDollModel(g) { currentDollBase = g === 'm' ? '🧍' : '🧍‍♀️'; updateDollSkinAndModel(); }
+        function setBaseDollSkin(s) { currentDollSkin = s; updateDollSkinAndModel(); }
+        function updateDollSkinAndModel() {
+            let bodyEl = document.getElementById('layer-body');
+            if(bodyEl) bodyEl.innerText = currentDollBase + currentDollSkin;
+            triggerOsBroadcastNotification("Doll Studio", "Character base parameters updated.");
+        }
         function addClothNodeLayer(emoji) { document.getElementById('layer-cloth').innerText = emoji; }
         function addShoesNodeLayer(emoji) { document.getElementById('layer-lshoe').innerText = emoji; document.getElementById('layer-rshoe').innerText = emoji; }
         function addHeadNodeLayer(emoji) { document.getElementById('layer-head').innerText = emoji; }
-        function addAccNodeLayer(dummy, emoji) { document.getElementById('layer-acc').innerText = emoji; }
+        function addAccNodeLayer(emoji) { document.getElementById('layer-acc').innerText = emoji; }
         function addHandNodeLayer(emoji) { document.getElementById('layer-hand').innerText = emoji; }
 
         let ccRotationDegrees = 0, ccIsMirrored = false;
         function addKeyframeToTimelineTrack(deg) { ccRotationDegrees = deg; triggerOsBroadcastNotification("CapCut", `Keyframe rotation coordinate mapped to ${deg}°`); }
         function mirrorTimelineTrackElement() { ccIsMirrored = !ccIsMirrored; triggerOsBroadcastNotification("CapCut", "Element transform layout inverted mirror-wise."); }
+        
         function compileAndBuildVideoFile() {
             generatedVideoCount++; let text = document.getElementById('vmText').value; let emoji = document.getElementById('vmEmoji').value; let bg = document.getElementById('vmBgColor').value;
             let vObj = { id: Date.now(), caption: "CapCut_" + generatedVideoCount, text: text, emoji: emoji, bg: bg, rot: ccRotationDegrees, mirror: ccIsMirrored, likes: 0, subs: 0 };
             let winId = 'win-video-' + vObj.id; let desktop = document.getElementById('desktop');
             let vWin = document.createElement('div'); vWin.className = 'os-window'; vWin.id = winId; vWin.style.width = '320px'; vWin.style.height = '280px'; vWin.style.top = '140px'; vWin.style.left = '220px';
-            vWin.innerHTML = `<div class="window-header" onmousedown="initWindowDrag(event, '${winId}')"><span>🎬 CapCut: ${vObj.caption}</span><button class="window-close-btn" onclick="closeOSWindow('${winId}')">X</button></div><div class="window-body" style="background:${vObj.bg}; text-align:center; padding-top:30px;"><div style="font-size:3.5rem; transition:transform 0.2s; transform: rotate(${vObj.rot}deg) ${vObj.mirror?'scaleX(-1)':'scaleX(1)'};">${vObj.emoji.split(' ')[1]}</div><p style="color:#fff; font-weight:bold;">${vObj.text}</p><button class="os-btn" style="border-color:#ffaa00; color:#ffaa00;" onclick="publishVideoTrackToSocialNetworkFeed(${JSON.stringify(vObj).replace(/"/g, '&quot;')})">🌐 Push to EX-Net</button></div>`;
+            vWin.innerHTML = `<div class="window-header" onmousedown="initWindowDrag(event, '${winId}')"><span>🎬 CapCut: ${vObj.caption}</span><button class="window-close-btn" onclick="closeOSWindow('${winId}')">X</button></div><div class="window-body" style="background:${vObj.bg}; color:${vObj.txtColor}; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px; font-weight:bold;"><div style="font-size:3.5rem; transition:transform 0.2s; transform: rotate(${vObj.rot}deg) ${vObj.mirror?'scaleX(-1)':'scaleX(1)'};">${vObj.emoji.split(' ')}</div><p style="color:#fff; font-weight:bold;">${vObj.text}</p><button class="os-btn" style="border-color:#ffaa00; color:#ffaa00;" onclick="publishVideoTrackToSocialNetworkFeed(${JSON.stringify(vObj).replace(/"/g, '&quot;')})">🌐 Push to EX-Net</button></div>`;
             desktop.appendChild(vWin);
             let appEl = document.createElement('div'); appEl.className = 'desktop-icon'; appEl.id = 'icon-' + winId; appEl.style.top = '220px'; appEl.style.left = (300 + (generatedVideoCount * 40)) + 'px';
             appEl.setAttribute('onmousedown', 'initIconDrag(event, this)'); appEl.setAttribute('ondblclick', `openOSWindow('${winId}')`);
@@ -510,20 +522,21 @@
                 if(l >= 50) clearInterval(iv);
             }, 3000);
         }
-
         let paintLayerIndexTracker = 0;
         function addNewPaintLayerDynamic() {
             let container = document.getElementById('canvasLayersContainer'); if(!container) return;
             let id = paintLayerIndexTracker; paintLayerIndexTracker++;
             let c = document.createElement('canvas'); c.width = 460; c.height = 280; c.id = 'pLayer-' + id;
             c.style.position = 'absolute'; c.style.left = '0'; c.style.top = '0'; c.style.cursor = 'crosshair';
-            if(id > 0) c.style.pointerEvents = 'none';
             container.appendChild(c); canvases.push(c); ctxs.push(c.getContext('2d'));
             
             let sel = document.getElementById('paintLayerSelect');
             let opt = document.createElement('option'); opt.value = id; opt.innerText = "Layer " + (id + 1); sel.appendChild(opt);
             sel.value = id; activeLayer = id;
-            
+            syncCanvasesMouseEvents();
+        }
+
+        function syncCanvasesMouseEvents() {
             canvases.forEach((cv, idx) => {
                 cv.style.pointerEvents = idx === activeLayer ? 'auto' : 'none';
                 cv.onmousedown = function(e) { if(activeLayer === idx) isDrawing = true; drawStart(e, idx); };
@@ -532,6 +545,7 @@
                 cv.onclick = function(e) { if(bucketFillActive && activeLayer === idx) { floodFill(e, idx); bucketFillActive = false; } };
             });
         }
+
         function toggleActiveLayerVisibility() { let c = canvases[activeLayer]; if(c) c.style.display = c.style.display === 'none' ? 'block' : 'none'; }
         function clearActivePaintLayerNode() { if(ctxs[activeLayer]) ctxs[activeLayer].clearRect(0,0,460,280); }
 
