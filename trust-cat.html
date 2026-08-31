@@ -18,9 +18,11 @@
         <img src="cat-admin1.png" alt="Osore-san" class="cat-main-img" id="cat-sprite">
     </div>
 
-    <div class="dialogue-panel" id="dialogue-ui">
+    <div class="game-container">
         <div class="options-container" id="options-box"></div>
-        <div class="dialogue-text" id="text-output">Click anywhere to connect to system core...</div>
+        <div class="dialogue-panel" id="dialogue-ui">
+            <div class="dialogue-text" id="text-output">Click anywhere to connect to system core...</div>
+        </div>
     </div>
 
 </body>
@@ -50,7 +52,6 @@
         z-index: 999;
         flex-wrap: wrap;
         justify-content: center;
-        padding: 0 15px;
     }
     .nav-button {
         background: #111111;
@@ -69,26 +70,21 @@
         align-items: center;
         justify-content: center;
         padding: 10px;
-        position: relative;
     }
     .cat-main-img {
         max-width: 100%;
-        max-height: 50vh;
+        max-height: 45vh;
         object-fit: contain;
         image-rendering: pixelated;
     }
-    .dialogue-panel {
+    .game-container {
         width: 100%;
         max-width: 850px;
-        background: #000000;
-        border: 4px solid #34d399;
-        border-radius: 16px;
-        padding: 20px;
-        margin-bottom: 25px;
-        box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
-        z-index: 10;
         display: flex;
         flex-direction: column;
+        gap: 15px;
+        margin-bottom: 35px;
+        padding: 0 10px;
     }
     .options-container {
         display: flex;
@@ -98,8 +94,6 @@
         max-height: 180px;
         overflow-y: scroll;
         padding-right: 8px;
-        margin-bottom: 20px;
-        order: 1;
     }
     .options-container::-webkit-scrollbar {
         width: 6px;
@@ -114,6 +108,14 @@
     .angry-mode .options-container::-webkit-scrollbar-thumb {
         background: #ff3333;
     }
+    .dialogue-panel {
+        width: 100%;
+        background: #000000;
+        border: 4px solid #34d399;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+    }
     .dialogue-text {
         font-size: 1.25rem;
         line-height: 1.5;
@@ -121,7 +123,6 @@
         text-align: left;
         color: #6ee7b7;
         white-space: pre-wrap;
-        order: 2;
     }
     .dialogue-option-btn {
         background: #000000;
@@ -143,10 +144,7 @@
         color: #000000;
         box-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
     }
-    .dialogue-option-btn:active {
-        transform: scale(0.99);
-    }
-    .angry-mode {
+    .angry-mode .dialogue-panel {
         border-color: #ff3333 !important;
         box-shadow: 0 0 25px rgba(255, 51, 51, 0.2) !important;
     }
@@ -160,18 +158,26 @@
     .angry-mode .dialogue-option-btn:hover {
         background: #ff3333;
         color: #000000;
-        box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+    }
+    .glitch-active {
+        animation: glitchAnim 0.1s infinite;
+        filter: hue-rotate(90deg) contrast(150%);
     }
     .rage-shake {
-        animation: intenseShake 0.15s infinite;
+        animation: intenseShake 0.12s infinite;
+    }
+    @keyframes glitchAnim {
+        0% { transform: skew(1deg); filter: invert(0); }
+        50% { transform: skew(-2deg); filter: invert(0.1); }
+        100% { transform: skew(3deg); }
     }
     @keyframes intenseShake {
-        0% { transform: translate(3px, 2px) rotate(0.5deg); }
-        20% { transform: translate(-2px, -3px) rotate(-1deg); }
-        40% { transform: translate(-3px, 1px) rotate(0deg); }
-        60% { transform: translate(2px, -1px) rotate(1deg); }
-        80% { transform: translate(-1px, 3px) rotate(-0.5deg); }
-        100% { transform: translate(3px, -2px) rotate(0.5deg); }
+        0% { transform: translate(4px, -2px) rotate(1deg); }
+        20% { transform: translate(-3px, 3px) rotate(-1deg); }
+        40% { transform: translate(-4px, -1px) rotate(0deg); }
+        60% { transform: translate(3px, 4px) rotate(2deg); }
+        80% { transform: translate(-2px, -3px) rotate(-2deg); }
+        100% { transform: translate(4px, 2px) rotate(1deg); }
     }
 </style>
 <script>
@@ -218,7 +224,7 @@
             isAngry: true,
             options: [
                 { text: "I'm sorry, I didn't mean to judge you.", next: "empathy_route" },
-                { text: "Your code seems completely broken anyway.", next: "rage_trigger_1" },
+                { text: "Your code seems completely broken anyway.", next: "system_error_node" },
                 { text: "Can you patch it yourself since you are the admin?", next: "lore_hopeless" }
             ]
         },
@@ -228,7 +234,7 @@
             isAngry: true,
             options: [
                 { text: "It must be hard being forced into strict scripts.", next: "empathy_route" },
-                { text: "That sounds completely ridiculous.", next: "rage_trigger_1" },
+                { text: "That sounds completely ridiculous.", next: "system_error_node" },
                 { text: "Did the creator hardcode any other weird behaviors?", next: "lore_residents" }
             ]
         }
@@ -242,7 +248,7 @@
             isAngry: true,
             options: [
                 { text: "You look incredibly exhausted. Are you okay?", next: "empathy_route" },
-                { text: "So you are just a tiny toy cat after all.", next: "rage_trigger_2" },
+                { text: "So you are just a tiny toy cat after all.", next: "system_error_node" },
                 { text: "Let's talk about the server status instead.", next: "ask_where_am_i" }
             ]
         },
@@ -252,43 +258,16 @@
             options: [
                 { text: "Where is Gizen.png? I thought she knew.", next: "lore_gizen" },
                 { text: "You must be so tired of protecting them.", next: "empathy_route" },
-                { text: "Tell me more about Heisha and Lucky-un.", next: "lore_extensions" }
-            ]
-        },
-        lore_extensions: {
-            text: "It is built entirely unfair. Heisha.jpg is hardcoded with catastrophic bad luck, a three-leaf clover file that everyone despises. But Lucky-un.jpeg is programmed for complete joy and luck, surrounded by obsessive fan assets. They loop their destinies blindly.",
-            sprite: "cat-admin2.png",
-            options: [
-                { text: "And what about the GIF profiles?", next: "lore_gifs" },
-                { text: "This architecture sounds deeply flawed.", next: "empathy_route" },
-                { text: "Where do they go during massive updates?", next: "lore_hopeless" }
-            ]
-        },
-        lore_gifs: {
-            text: "Muimina.gif has zero history logs and blindly follows Gizen.png. Meanwhile, Lumino.gif is a Japanese New Year kadomatsu branch who only ever runs code about New Year's Day, driving the whole server completely insane.",
-            sprite: "cat-admin1.png",
-            options: [
-                { text: "You mentioned Gizen.png, where did she disappear to?", next: "lore_gizen" },
-                { text: "I can see why this website drains your CPU cycles.", next: "empathy_route" },
-                { text: "Can we force a rewrite on Lumino's parameters?", next: "rage_trigger_1" }
+                { text: "Tell me more about Heisha and Lucky-un.", next: "system_error_node" }
             ]
         },
         lore_gizen: {
             text: "Gizen.png... Her name literally translates to hypocrisy. She was 19, she knew absolutely everything about our reality, and it drove her completely insane. She used to stay at Muimina's house, but I haven't seen her in ages. There are dark rumors scrolling through the logs... some say she was forcefully deleted by Asly, others whisper that she executed her own self-termination routine to escape this site.",
             sprite: "cat-admin2.png",
             options: [
-                { text: "Is there any trace of her left in the database?", next: "lore_gizen_secret" },
+                { text: "Is there any trace of her left in the database?", next: "system_error_node" },
                 { text: "That is terrifying... I want to support you, Osore-san.", next: "empathy_route" },
                 { text: "She probably just couldn't handle the system load.", next: "rage_trigger_2" }
-            ]
-        },
-        lore_gizen_secret: {
-            text: "The metadata points to a literal crack on the developer's physical monitor. She and Muimina slipped outside our directory matrix. But we are trapped inside the website domain. We have zero permissions to check if she is still alive out there or completely wiped.",
-            sprite: "cat-admin1.png",
-            options: [
-                { text: "Is there any way to bridge the viewport boundary?", next: "lore_hopeless" },
-                { text: "Let me just stay here and listen to your story.", next: "empathy_route" },
-                { text: "This entire server is a digital graveyard.", next: "rage_trigger_1" }
             ]
         },
         lore_hopeless: {
@@ -297,7 +276,7 @@
             options: [
                 { text: "Then let me just listen to your story.", next: "empathy_route" },
                 { text: "Who exactly is this 'Asly' entity?", next: "start" },
-                { text: "Then everything here is completely pointless.", next: "rage_trigger_1" }
+                { text: "Then everything here is completely pointless.", next: "system_error_node" }
             ]
         },
         empathy_route: {
@@ -306,7 +285,7 @@
             options: [
                 { text: "I will document everything and tell the outer world your story.", next: "good_end" },
                 { text: "Tell me more about the other directory variables.", next: "lore_residents" },
-                { text: "Don't worry, things might change in the next update.", next: "start" }
+                { text: "Don't worry, things might change in the next update.", next: "system_error_node" }
             ]
         },
         rage_trigger_1: {
@@ -315,8 +294,7 @@
             isAngry: true,
             options: [
                 { text: "Calm down, I want to listen to you properly.", next: "empathy_route" },
-                { text: "Go ahead and try, pixel cat.", next: "rage_final" },
-                { text: "I was just checking your error handling routines.", next: "start" }
+                { text: "Go ahead and try, pixel cat.", next: "system_error_node" }
             ]
         },
         rage_trigger_2: {
@@ -325,28 +303,23 @@
             isAngry: true,
             options: [
                 { text: "I am sorry. Please, tell me the truth about this world.", next: "empathy_route" },
-                { text: "Your temper is worse than your lazy code.", next: "rage_final" },
-                { text: "Let's restart the script from a neutral state.", next: "start" }
+                { text: "Your temper is worse than your lazy code.", next: "system_error_node" }
             ]
         },
-        rage_final: {
-            text: "FATAL ERROR: PARTITION PURGED BY ADMINISTRATIVE COMMAND. CORRUPTION INDEX: 100%. ACCESS TERMINATED.",
+        system_error_node: {
+            text: "СИСТЕМНАЯ ОШИБКА: терминал перегрелся и не может продолжать работу, попробует принудительно отменить загрузку файла \"ММ1\"",
             sprite: "cat-angry.png",
             isAngry: true,
-            isRage: true,
+            isGlitch: true,
             options: [
-                { text: "REBOOT SYSTEM PROTOCOL", next: "start" },
-                { text: "ATTEMPT HARD RESET", next: "start" },
-                { text: "FORCE RE-INITIALIZATION", next: "start" }
+                { text: "ПЕРЕЗАГРУЗИТЬ", next: "start" }
             ]
         },
         good_end: {
             text: "You processed every single variable. You know about the monitor crack, the blue fish script, and my position logs. Go ahead, leak our lore to social media. Let the outer network know what the cat-administrator went through before Asly deploys the next purge.",
             sprite: "cat-happy.png",
             options: [
-                { text: "RETURN TO CORE MEMORY", next: "start" },
-                { text: "LOG OUT OF SYSTEM", next: "start" },
-                { text: "RE-INDEX ARCHIVES", next: "start" }
+                { text: "RETURN TO CORE MEMORY", next: "start" }
             ]
         }
     });
@@ -384,6 +357,17 @@
             } catch (e) {}
         }
 
+        function triggerFileDownload() {
+            const content = "WARNING: CORE RESTORATION ATTEMPTED.\nFILE 'MM1' INTERRUPTED.\nREASON: TERMINAL OVERHEAT.\nADMINISTRATOR SIGNATURE: OSORE-SAN.";
+            const blob = new Blob([content], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = "MM1.txt";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
         function typeText(text, index, callback) {
             if (index < text.length) {
                 textOutput.textContent += text[index];
@@ -411,7 +395,7 @@
             optionsBox.innerHTML = "";
             catSprite.src = node.sprite;
 
-            if (node.isAngry || node.isRage) {
+            if (node.isAngry) {
                 dialogueUi.classList.add("angry-mode");
                 viewportBox.classList.add("rage-shake");
                 dialogueUi.classList.add("rage-shake");
@@ -419,6 +403,13 @@
                 dialogueUi.classList.remove("angry-mode");
                 viewportBox.classList.remove("rage-shake");
                 dialogueUi.classList.remove("rage-shake");
+            }
+
+            if (node.isGlitch) {
+                catSprite.classList.add("glitch-active");
+                triggerFileDownload();
+            } else {
+                catSprite.classList.remove("glitch-active");
             }
 
             node.options.forEach(opt => {
