@@ -6,7 +6,7 @@
     <title>FolderOS</title>
     <style id="customStyles">
         * {
-            cursor: url('cursor1.png') 16 16, auto !important;
+            cursor: auto !important;
             box-sizing: border-box;
         }
         body {
@@ -43,8 +43,7 @@
         .desktop-environment {
             flex-grow: 1;
             width: 100%;
-            background-size: cover;
-            background-position: center;
+            background: #0d0d0d;
             position: relative;
             padding: 20px;
         }
@@ -66,12 +65,10 @@
         .desktop-icon:hover {
             background: rgba(110, 231, 183, 0.15);
         }
-        .desktop-icon img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            image-rendering: pixelated;
-            margin-bottom: 4px;
+        .emoji-icon {
+            font-size: 44px;
+            margin-bottom: 6px;
+            display: block;
         }
         .icon-label {
             font-size: 0.75rem;
@@ -158,6 +155,7 @@
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
+            margin: 4px;
         }
         .os-btn:hover { background: #6ee7b7; color: #000000; }
         .browser-container {
@@ -187,28 +185,6 @@
             flex-grow: 1;
             padding: 10px 5px;
             overflow-y: auto;
-        }
-        .browser-link {
-            color: #6ee7b7;
-            text-decoration: underline;
-            cursor: pointer;
-            display: block;
-            margin-bottom: 8px;
-        }
-        .browser-link:hover {
-            color: #ffffff;
-        }
-        .quiz-option {
-            background: #111111;
-            border: 1px solid #34d399;
-            padding: 8px;
-            margin-bottom: 6px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        .quiz-option:hover {
-            background: #34d399;
-            color: #000000;
         }
         .settings-row {
             margin-bottom: 12px;
@@ -241,132 +217,120 @@
         <a href="other.html" class="nav-button">OTHER ZONE 🐛</a>
     </div>
 
-    <div class="desktop-environment" id="desktop" style="background-image: url('desktop-bg.jpg');">
+    <div class="desktop-environment" id="desktop">
         
         <div class="desktop-icon" style="top: 20px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-files')">
-            <img src="icon-folder.png" alt="Explorer">
+            <span class="emoji-icon">📁</span>
             <div class="icon-label">Explorer</div>
         </div>
 
         <div class="desktop-icon" style="top: 140px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-trash')">
-            <img src="icon-trash.png" alt="Trash">
+            <span class="emoji-icon">🗑️</span>
             <div class="icon-label">Trash</div>
         </div>
 
         <div class="desktop-icon" style="top: 260px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-paint')">
-            <img src="614037730490667851-Photoroom.png" alt="Paint">
+            <span class="emoji-icon">🎨</span>
             <div class="icon-label">Paint</div>
         </div>
 
         <div class="desktop-icon" style="top: 380px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-browser')">
-            <img src="icon-browser.png" alt="Web Navigator">
+            <span class="emoji-icon">🌐</span>
             <div class="icon-label">Web Navigator</div>
         </div>
 
         <div class="desktop-icon" style="top: 500px; left: 20px;" onmousedown="initIconDrag(event, this)" ondblclick="openOSWindow('win-settings')">
-            <img src="icon-settings.png" alt="Settings">
+            <span class="emoji-icon">⚙️</span>
             <div class="icon-label">Settings</div>
         </div>
-
-        <div class="os-window" id="win-files" style="width: 440px; height: 350px; top: 80px; left: 160px;">
+        <div id="win-files" class="os-window" style="width: 400px; height: 300px; top: 50px; left: 200px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-files')">
-                <span>📁 Folder_Contents.jpg</span>
-                <button class="window-close-btn" onclick="closeOSWindow('win-files')">X</button>
-            </div>
-            <div class="window-body" style="background-image: url('Note pad template.jpg'); background-size: cover; background-color: rgba(0,0,0,0.7); background-blend-mode: darken;">
-                <div class="file-grid">
-                    <div style="text-align:center; cursor:pointer; color: #6ee7b7; font-weight: bold;" onclick="readSecretLog('gizen')">📄 gizen_diary.txt</div>
-                    <div style="text-align:center; cursor:pointer; color: #6ee7b7; font-weight: bold;" onclick="readSecretLog('muimina')">📄 muimina_loop.sys</div>
-                    <div style="text-align:center; cursor:pointer; color: #6ee7b7; font-weight: bold;" onclick="readSecretLog('lumino')">📄 lumino_error.log</div>
-                </div>
-                <div id="file-content-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #34d399; min-height: 100px; display: none; white-space: pre-wrap;"></div>
-            </div>
-        </div>
-
-        <div class="os-window" id="win-trash" style="width: 440px; height: 350px; top: 120px; left: 200px;">
-            <div class="window-header" onmousedown="initWindowDrag(event, 'win-trash')">
-                <span>🗑️ Trash</span>
-                <button class="window-close-btn" onclick="closeOSWindow('win-trash')">X</button>
+                <span>📁 Explorer</span>
+                <div class="window-close-btn" onclick="closeOSWindow('win-files')">X</div>
             </div>
             <div class="window-body">
                 <div class="file-grid">
-                    <div style="text-align:center; cursor:pointer; color: #ff3333; font-weight: bold;" onclick="readTrashFile()">📄 giGI19.txt</div>
+                    <p>System Files</p>
                 </div>
-                <div id="trash-viewer" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.8); border: 1px solid #ff3333; min-height: 80px; display: none; white-space: pre-wrap; color: #ff8888;"></div>
             </div>
         </div>
 
-        <div class="os-window" id="win-paint" style="width: 440px; height: 380px; top: 60px; left: 280px;">
+        <div id="win-trash" class="os-window" style="width: 400px; height: 300px; top: 100px; left: 250px;">
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-trash')">
+                <span>🗑️ Trash</span>
+                <div class="window-close-btn" onclick="closeOSWindow('win-trash')">X</div>
+            </div>
+            <div class="window-body">
+                <p id="trash-status">Empty</p>
+                <div id="trash-content-list"></div>
+                <button class="os-btn" onclick="purgeTrash()">Purge</button>
+            </div>
+        </div>
+
+        <div id="win-paint" class="os-window" style="width: 450px; height: 400px; top: 150px; left: 300px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-paint')">
                 <span>🎨 Paint</span>
-                <button class="window-close-btn" onclick="closeOSWindow('win-paint')">X</button>
+                <div class="window-close-btn" onclick="closeOSWindow('win-paint')">X</div>
             </div>
             <div class="window-body">
                 <div class="paint-toolbar">
-                    <div class="paint-color-btn" style="background: #34d399;" onclick="setPaintColor('#34d399')"></div>
                     <div class="paint-color-btn" style="background: #ff3333;" onclick="setPaintColor('#ff3333')"></div>
-                    <div class="paint-color-btn" style="background: #ffaa00;" onclick="setPaintColor('#ffaa00')"></div>
+                    <div class="paint-color-btn" style="background: #34d399;" onclick="setPaintColor('#34d399')"></div>
                     <div class="paint-color-btn" style="background: #ffffff;" onclick="setPaintColor('#ffffff')"></div>
-                    <button class="os-btn" style="padding: 2px 8px; font-size: 0.7rem;" onclick="clearCanvas()">Clear</button>
+                    <div class="paint-color-btn" style="background: #000000;" onclick="setPaintColor('#000000')"></div>
                 </div>
-                <canvas id="paintCanvas" class="paint-canvas" width="395" height="250"></canvas>
+                <canvas class="paint-canvas" id="canvas" width="400" height="280"></canvas>
             </div>
         </div>
 
-        <div class="os-window" id="win-browser" style="width: 520px; height: 450px; top: 40px; left: 340px;">
+        <div id="win-browser" class="os-window" style="width: 500px; height: 400px; top: 80px; left: 350px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-browser')">
                 <span>🌐 Web Navigator</span>
-                <button class="window-close-btn" onclick="closeOSWindow('win-browser')">X</button>
+                <div class="window-close-btn" onclick="closeOSWindow('win-browser')">X</div>
             </div>
-            <div class="browser-container">
-                <div class="browser-bar">
-                    <button class="os-btn" style="padding: 2px 8px;" onclick="navigateBrowser('home')">Home</button>
-                    <div class="browser-display" id="browserAddress">folder://network_home</div>
-                </div>
-                <div class="window-body browser-content" id="browserBody">
+            <div class="window-body">
+                <div class="browser-container">
+                    <div class="browser-bar">
+                        <div class="browser-display">Mini-Game Web Arena</div>
+                    </div>
+                    <div class="browser-content">
+                        <div id="browser-game">
+                            <h3>Clicker Arena</h3>
+                            <p>Points Needed: 10 | Current Points: <span id="game-points">0</span></p>
+                            <button class="os-btn" onclick="clickGameTarget()">Target Hit</button>
+                            <button class="os-btn" id="dl-app-btn" style="display:none;" onclick="triggerAppDownload()">Download Reward App</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="os-window" id="win-settings" style="width: 400px; height: 400px; top: 160px; left: 400px;">
+        <div id="win-settings" class="os-window" style="width: 420px; height: 420px; top: 120px; left: 400px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-settings')">
                 <span>⚙️ Settings</span>
-                <button class="window-close-btn" onclick="closeOSWindow('win-settings')">X</button>
+                <div class="window-close-btn" onclick="closeOSWindow('win-settings')">X</div>
             </div>
             <div class="window-body">
                 <div class="settings-row">
-                    <label>Button Theme Color:</label>
-                    <select class="settings-select" id="btnColorSelect" onchange="applySettings()">
-                        <option value="#6ee7b7">Mint Green</option>
-                        <option value="#ff3333">Alert Red</option>
-                        <option value="#3b82f6">Link Blue</option>
-                        <option value="#ffffff">Pure White</option>
+                    <label>Wallpaper Pattern</label>
+                    <select class="settings-select" onchange="adjustWallpaper(this.value)">
+                        <option value="solid">Dark Void</option>
+                        <option value="matrix">Matrix Grid</option>
                     </select>
                 </div>
                 <div class="settings-row">
-                    <label>System Font Family:</label>
-                    <select class="settings-select" id="fontSelect" onchange="applySettings()">
-                        <option value="'Courier New', Courier, monospace">Courier Terminal</option>
-                        <option value="Arial, sans-serif">Arial Sans</option>
-                        <option value="'Times New Roman', serif">Times Serif</option>
-                    </select>
+                    <label>Audio Scaling</label>
+                    <input type="range" class="settings-input" min="0" max="100" value="75" onchange="adjustAudio(this.value)">
                 </div>
-                <hr style="border: 1px dashed #34d399; margin: 15px 0;">
                 <div class="settings-row">
-                    <label>Hidden Files Decryption Key:</label>
-                    <div style="display:flex; gap:5px;">
-                        <input type="password" class="settings-input" id="decryptionPassword" placeholder="Enter password...">
-                        <button class="os-btn" onclick="checkDecryptionKey()">Unlock</button>
-                    </div>
-                    <div id="passwordHint" style="color: #ffaa00; font-size: 0.75rem; margin-top: 4px; display: none;">Hint: Trash. file giGI19.txt</div>
+                    <label>System Focus Mode</label>
+                    <button class="os-btn" onclick="toggleSystemFocus()">Toggle Focus</button>
                 </div>
-                <div class="hidden-section" id="hiddenContent">
-                    <h4 style="color:#ff3333; margin:0 0 10px 0;">[DECRYPTED INTERNAL FEED]</h4>
-                    <p style="font-size:0.8rem; margin-bottom:10px;">File status: Deleted</p>
-                    <div style="border:1px solid #ff3333; background:#000; padding:10px; text-align:center;">
-                        <h5 style="color:#ff3333; margin:0 0 5px 0; text-transform:uppercase;">News Feed Analysis</h5>
-                        <img src="https://unsplash.com" style="width:100%; height:120px; object-fit:cover; border:1px solid #ff3333; background:#222;" alt="News Stream Frame">
-                        <p style="color:#fff; font-size:0.75rem; font-weight:bold; margin-top:5px; line-height:1.2;">Half of the residents of the "Mint Choco" page passed away due to the reconstruction of their page.</p>
+                <div class="settings-row">
+                    <button class="os-btn" onclick="revealHiddenConfig()">Advanced Framework</button>
+                    <div class="hidden-section" id="hidden-config">
+                        <p>Core Override Panel</p>
+                        <button class="os-btn" onclick="wipeLocalCache()">Purge OS Cache</button>
                     </div>
                 </div>
             </div>
@@ -374,455 +338,149 @@
 
     </div>
     <script>
-        let highestZ = 100;
-        let activeCanvas = document.getElementById('paintCanvas');
-        let ctx = activeCanvas.getContext('2d');
-        let isDrawing = false;
-        let paintColor = '#34d399';
-
-        let quizScores = { PNG: 0, JPG: 0, WEBP: 0, GIF: 0, JPEG: 0 };
-        let currentQuestion = 0;
-
-        const quizQuestions = [
-            {
-                q: "How do you react when a system error occurs?",
-                a: [
-                    { t: "Try to cheer up everyone around with a joke.", k: "GIF" },
-                    { t: "Analyze the core log calmly using logic.", k: "PNG" },
-                    { t: "Get irritated and blame the hardware layers.", k: "WEBP" },
-                    { t: "Use creative workaround paths immediately.", k: "JPG" }
-                ]
-            },
-            {
-                q: "What is your main operational priority?",
-                a: [
-                    { t: "Absolute perfect clarity and depth.", k: "PNG" },
-                    { t: "Fastest execution, ignoring others' status.", k: "WEBP" },
-                    { t: "Bringing positive dynamic loops to the grid.", k: "GIF" },
-                    { t: "Creating elegant gadgets and new scripts.", k: "JPG" }
-                ]
-            },
-            {
-                q: "Select your desired architectural status:",
-                a: [
-                    { t: "Highly intelligent but deeply unstable.", k: "PNG" },
-                    { t: "Global superstar entity with age restrictions.", k: "JPEG" },
-                    { t: "Closed micro-cluster supreme logic.", k: "WEBP" },
-                    { t: "Balanced technological adapter.", k: "JPG" }
-                ]
-            }
-        ];
+        let appPoints = 0;
+        let installedApps = 0;
+        let activeDragIcon = null;
+        let activeDragWindow = null;
+        let offsetX = 0;
+        let offsetY = 0;
 
         function openOSWindow(id) {
-            let win = document.getElementById(id);
-            highestZ++;
-            win.style.zIndex = highestZ;
-            win.style.display = 'flex';
-            if(id === 'win-paint') {
-                initPaint();
-            }
-            if(id === 'win-browser') {
-                navigateBrowser('home');
+            const win = document.getElementById(id);
+            if (win) {
+                win.style.display = 'flex';
+                win.style.zIndex = parseInt(new Date().getTime() / 1000);
             }
         }
 
         function closeOSWindow(id) {
-            document.getElementById(id).style.display = 'none';
+            const win = document.getElementById(id);
+            if (win) win.style.display = 'none';
+        }
+
+        function initIconDrag(e, element) {
+            activeDragIcon = element;
+            offsetX = e.clientX - element.offsetLeft;
+            offsetY = e.clientY - element.offsetTop;
+            document.addEventListener('mousemove', dragIcon);
+            document.addEventListener('mouseup', dropIcon);
+        }
+
+        function dragIcon(e) {
+            if (!activeDragIcon) return;
+            activeDragIcon.style.left = (e.clientX - offsetX) + 'px';
+            activeDragIcon.style.top = (e.clientY - offsetY) + 'px';
+        }
+
+        function dropIcon() {
+            activeDragIcon = null;
+            document.removeEventListener('mousemove', dragIcon);
+            document.removeEventListener('mouseup', dropIcon);
         }
 
         function initWindowDrag(e, id) {
-            if (e.target.tagName === 'BUTTON') return;
-            let win = document.getElementById(id);
-            highestZ++;
-            win.style.zIndex = highestZ;
-            
-            let posX = e.clientX;
-            let posY = e.clientY;
-            
-            document.onmousemove = function(e) {
-                let diffX = posX - e.clientX;
-                let diffY = posY - e.clientY;
-                posX = e.clientX;
-                posY = e.clientY;
-                win.style.top = (win.offsetTop - diffY) + "px";
-                win.style.left = (win.offsetLeft - diffX) + "px";
-            };
-            
-            document.onmouseup = function() {
-                document.onmousemove = null;
-                document.onmouseup = null;
-            };
+            activeDragWindow = document.getElementById(id);
+            offsetX = e.clientX - activeDragWindow.offsetLeft;
+            offsetY = e.clientY - activeDragWindow.offsetTop;
+            document.addEventListener('mousemove', dragWindow);
+            document.addEventListener('mouseup', dropWindow);
         }
 
-        function initIconDrag(e, icon) {
-            let posX = e.clientX;
-            let posY = e.clientY;
-            
-            document.onmousemove = function(e) {
-                let diffX = posX - e.clientX;
-                let diffY = posY - e.clientY;
-                posX = e.clientX;
-                posY = e.clientY;
-                icon.style.top = (icon.offsetTop - diffY) + "px";
-                icon.style.left = (icon.offsetLeft - diffX) + "px";
-            };
-            
-            document.onmouseup = function() {
-                document.onmousemove = null;
-                document.onmouseup = null;
-            };
-        }
-        function deployArticleToDesktop(title, content) {
-            let desktop = document.getElementById('desktop');
-            let artWin = document.createElement('div');
-            highestZ++;
-            artWin.className = 'os-window';
-            artWin.style.width = '300px';
-            artWin.style.height = '200px';
-            artWin.style.top = '100px';
-            artWin.style.left = '300px';
-            artWin.style.display = 'flex';
-            artWin.style.zIndex = highestZ;
-            
-            let uniqueId = 'art-' + Date.now();
-            artWin.id = uniqueId;
-            
-            artWin.innerHTML = `
-                <div class="window-header" onmousedown="initWindowDrag(event, '${uniqueId}')">
-                    <span>📄 ${title}</span>
-                    <button class="window-close-btn" onclick="document.getElementById('${uniqueId}').remove()">X</button>
-                </div>
-                <div class="window-body" style="background:#222; color:#fff; font-size:0.8rem; white-space:pre-wrap;">${content}</div>
-            `;
-            desktop.appendChild(artWin);
+        function dragWindow(e) {
+            if (!activeDragWindow) return;
+            activeDragWindow.style.left = (e.clientX - offsetX) + 'px';
+            activeDragWindow.style.top = (e.clientY - offsetY) + 'px';
         }
 
-        function readSecretLog(type) {
-            let viewer = document.getElementById('file-content-viewer');
-            viewer.style.display = 'block';
-            
-            let logs = {
-                gizen: "GIZEN_DIARY // Entry 404\n\nThey think I am hiding behind this facade. The distortion spreads faster every loop. Lumino noticed the discrepancy.",
-                muimina: "MUIMINA_LOOP // Execution Stack\n\n[0x00] GOTO 0x00\n[0x01] ERASE MEMORY\n[0x02] RESTART CORE\n[CRITICAL] Loop counter exceeded infinity.",
-                lumino: "LUMINO_ERROR_LOG // Core dump\n\nSYS_ERR: Light matrix fractional overflow.\nTraceback: os_core.js line 1092.\nStatus: Blinding."
-            };
-            
-            viewer.innerText = logs[type] || "Data corrupted.";
+        function dropWindow() {
+            activeDragWindow = null;
+            document.removeEventListener('mousemove', dragWindow);
+            document.removeEventListener('mouseup', dropWindow);
         }
 
-        function readTrashFile() {
-            let viewer = document.getElementById('trash-viewer');
-            viewer.style.display = 'block';
-            viewer.innerText = "5422 .\n\nIt came to my mind, though not surprisingly, it overheated...";
-        }
-
-        function checkDecryptionKey() {
-            let val = document.getElementById('decryptionPassword').value;
-            let target = document.getElementById('hiddenContent');
-            let hint = document.getElementById('passwordHint');
-            
-            if (val === '5422') {
-                target.style.display = 'block';
-                hint.style.display = 'none';
-            } else {
-                target.style.display = 'none';
-                hint.style.display = 'block';
+        function clickGameTarget() {
+            appPoints++;
+            document.getElementById('game-points').innerText = appPoints;
+            if (appPoints >= 10) {
+                document.getElementById('dl-app-btn').style.display = 'inline-block';
             }
         }
-        function applySettings() {
-            let color = document.getElementById('btnColorSelect').value;
-            let font = document.getElementById('fontSelect').value;
+
+        function triggerAppDownload() {
+            if (appPoints < 10) return;
+            appPoints -= 10;
+            document.getElementById('game-points').innerText = appPoints;
+            if (appPoints < 10) {
+                document.getElementById('dl-app-btn').style.display = 'none';
+            }
+            installedApps++;
             
-            let styleEl = document.getElementById('customStyles');
-            styleEl.innerHTML = `
-                * {
-                    cursor: url('cursor1.png') 16 16, auto !important;
-                    box-sizing: border-box;
-                }
-                body {
-                    background-color: #000000;
-                    color: ${color};
-                    font-family: ${font};
-                    margin: 0;
-                    padding: 0;
-                    width: 100vw;
-                    height: 100vh;
-                    overflow: hidden;
-                    display: flex;
-                    flex-direction: column;
-                }
-                .nav-links {
-                    background: #111111;
-                    padding: 8px;
-                    display: flex;
-                    justify-content: center;
-                    gap: 10px;
-                    border-bottom: 2px solid ${color};
-                    z-index: 9999;
-                }
-                .nav-button {
-                    background: #222222;
-                    color: ${color};
-                    border: 1px dashed ${color};
-                    padding: 4px 12px;
-                    font-size: 0.8rem;
-                    font-weight: bold;
-                    border-radius: 4px;
-                    text-decoration: none;
-                }
-                .desktop-environment {
-                    flex-grow: 1;
-                    width: 100%;
-                    background-size: cover;
-                    background-position: center;
-                    position: relative;
-                    padding: 20px;
-                }
-                .desktop-icon {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    text-align: center;
-                    cursor: pointer;
-                    padding: 5px;
-                    border-radius: 8px;
-                    transition: background 0.2s;
-                    position: absolute;
-                    width: 100px;
-                    height: 105px;
-                    user-select: none;
-                }
-                .desktop-icon:hover {
-                    background: rgba(110, 231, 183, 0.15);
-                }
-                .desktop-icon img {
-                    width: 50px;
-                    height: 50px;
-                    object-fit: contain;
-                    image-rendering: pixelated;
-                    margin-bottom: 4px;
-                }
-                .icon-label {
-                    font-size: 0.75rem;
-                    font-weight: bold;
-                    color: #ffffff;
-                    text-shadow: 1px 1px 3px #000000;
-                    word-break: break-word;
-                }
-                .os-window {
-                    position: absolute;
-                    background: #111111;
-                    border: 3px solid ${color};
-                    border-radius: 12px;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-                    display: none;
-                    flex-direction: column;
-                    z-index: 100;
-                    overflow: hidden;
-                }
-                .window-header {
-                    background: ${color};
-                    color: #000000;
-                    padding: 6px 12px;
-                    font-weight: bold;
-                    font-size: 0.85rem;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    cursor: move;
-                    user-select: none;
-                }
-                .window-close-btn {
-                    background: #ff3333;
-                    border: 1px solid #000000;
-                    color: #ffffff;
-                    font-size: 0.7rem;
-                    font-weight: bold;
-                    width: 18px;
-                    height: 18px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    border-radius: 4px;
-                }
-                .window-body {
-                    padding: 15px;
-                    flex-grow: 1;
-                    overflow-y: auto;
-                    color: #a7f3d0;
-                    font-size: 0.9rem;
-                }
-                .file-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                    gap: 15px;
-                }
-                .paint-canvas {
-                    background: #ffffff;
-                    border: 2px inset #333333;
-                    cursor: crosshair !important;
-                    display: block;
-                }
-                .paint-toolbar {
-                    display: flex;
-                    gap: 8px;
-                    margin-bottom: 10px;
-                    align-items: center;
-                }
-                .paint-color-btn {
-                    width: 20px;
-                    height: 20px;
-                    border: 1px solid #ffffff;
-                    cursor: pointer;
-                    border-radius: 4px;
-                }
-                .os-btn {
-                    background: #222222;
-                    color: ${color};
-                    border: 2px solid ${color};
-                    padding: 6px 12px;
-                    font-family: inherit;
-                    font-size: 0.8rem;
-                    font-weight: bold;
-                    border-radius: 6px;
-                    cursor: pointer;
-                }
-                .os-btn:hover { background: ${color}; color: #000000; }
-                .browser-container { display: flex; flex-direction: column; height: 100%; }
-                .browser-bar { background: #222222; padding: 6px; border-bottom: 1px solid ${color}; display: flex; gap: 8px; align-items: center; }
-                .browser-display { background: #000000; border: 1px solid ${color}; color: ${color}; padding: 4px 8px; font-size: 0.75rem; flex-grow: 1; border-radius: 4px; user-select: none; }
-                .browser-content { flex-grow: 1; padding: 10px 5px; overflow-y: auto; }
-                .browser-link { color: ${color}; text-decoration: underline; cursor: pointer; display: block; margin-bottom: 8px; }
-                .browser-link:hover { color: #ffffff; }
-                .quiz-option { background: #111111; border: 1px solid ${color}; padding: 8px; margin-bottom: 6px; cursor: pointer; border-radius: 4px; }
-                .quiz-option:hover { background: ${color}; color: #000000; }
-                .settings-row { margin-bottom: 12px; display: flex; flex-direction: column; gap: 5px; }
-                .settings-select, .settings-input { background: #222222; color: ${color}; border: 1px solid ${color}; padding: 4px; font-family: inherit; }
-                .hidden-section { border: 1px dashed #ff3333; padding: 10px; margin-top: 15px; display: none; }
+            const desktop = document.getElementById('desktop');
+            const newApp = document.createElement('div');
+            newApp.className = 'desktop-icon';
+            newApp.style.top = (40 + (installedApps * 20)) + 'px';
+            newApp.style.left = (200 + (installedApps * 20)) + 'px';
+            newApp.setAttribute('onmousedown', 'initIconDrag(event, this)');
+            
+            newApp.innerHTML = `
+                <span class="emoji-icon">🎮</span>
+                <div class="icon-label">App Pack ${installedApps}</div>
             `;
+            desktop.appendChild(newApp);
         }
-        function initPaint() {
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-            
-            activeCanvas.onmousedown = (e) => { 
-                isDrawing = true; 
+
+        function adjustWallpaper(type) {
+            const desk = document.getElementById('desktop');
+            if (type === 'solid') desk.style.background = '#0d0d0d';
+            if (type === 'matrix') desk.style.background = 'radial-gradient(circle, #111 0%, #000 100%)';
+        }
+
+        function adjustAudio(val) {
+            console.log('System Audio Track Set: ' + val + '%');
+        }
+
+        function toggleSystemFocus() {
+            alert('Focus Strategy Adjusted');
+        }
+
+        function revealHiddenConfig() {
+            const panel = document.getElementById('hidden-config');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function wipeLocalCache() {
+            alert('Cache Purged');
+        }
+
+        function purgeTrash() {
+            document.getElementById('trash-status').innerText = 'Empty';
+            document.getElementById('trash-content-list').innerHTML = '';
+        }
+
+        const canvas = document.getElementById('canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let painting = false;
+            let paintColor = '#000000';
+
+            canvas.addEventListener('mousedown', () => painting = true);
+            canvas.addEventListener('mouseup', () => { ctx.beginPath(); painting = false; });
+            canvas.addEventListener('mousemove', draw);
+
+            function setPaintColor(color) { paintColor = color; }
+            window.setPaintColor = setPaintColor;
+
+            function draw(e) {
+                if (!painting) return;
+                const rect = canvas.getBoundingClientRect();
+                ctx.lineWidth = 4;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = paintColor;
+                ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+                ctx.stroke();
                 ctx.beginPath();
-                ctx.moveTo(e.offsetX, e.offsetY);
-            };
-            activeCanvas.onmousemove = (e) => { 
-                if(isDrawing) {
-                    ctx.strokeStyle = paintColor;
-                    ctx.lineTo(e.offsetX, e.offsetY);
-                    ctx.stroke();
-                }
-            };
-            activeCanvas.onmouseup = () => { isDrawing = false; };
-            activeCanvas.onmouseleave = () => { isDrawing = false; };
-        }
-
-        function setPaintColor(color) {
-            paintColor = color;
-        }
-
-        function clearCanvas() {
-            ctx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
-        }
-
-        function navigateBrowser(page) {
-            let address = document.getElementById('browserAddress');
-            let body = document.getElementById('browserBody');
-            
-            if (page === 'home') {
-                address.innerText = "folder://network_home";
-                body.innerHTML = `
-                    <h3>Welcome to Folder Network</h3>
-                    <p>Select a verified protocol node below:</p>
-                    <hr style="border: 1px dashed #34d399;">
-                    <span class="browser-link" onclick="navigateBrowser('quiz')">🔗 DIAGNOSTIC: Extension Archetype Analysis</span>
-                    <span class="browser-link" onclick="navigateBrowser('article_psy')">🔗 ARTICLE: Psychotypes of Files</span>
-                    <span class="browser-link" onclick="navigateBrowser('article_age')">🔗 ARTICLE: Identification Age of Archetypes</span>
-                `;
-            } else if (page === 'article_psy') {
-                address.innerText = "folder://articles/file_psychotypes";
-                body.innerHTML = `
-                    <span class="browser-link" onclick="navigateBrowser('home')"><- Back to Home</span>
-                    <button class="os-btn" style="float:right; padding:2px 6px; font-size:0.7rem;" onclick="deployArticleToDesktop('File Psychotypes', 'GIF: Kind, raising mood, eerie cuties.\\nWEBP: Closed, aggressive, superior.\\nJPG: Creative, gadget lovers.\\nPNG: Intelligent, kind heart, unstable.\\nJPEG: Scarcely found celebrities.')">Pin to Desktop</button>
-                    <h3>File Psychotypes</h3>
-                    <p><b>• GIF:</b> Kind spirits who constantly try to raise the mood of the grid. They are adorable but carry an underlying eerie, spooky vibe.</p>
-                    <p><b>• WEBP:</b> Closed, aggressive, and highly defensive. They place themselves strictly above all other system structures.</p>
-                    <p><b>• JPG:</b> Creative minds. Deeply obsessed with gadgets, hardware setups, and emerging technologies.</p>
-                    <p><b>• PNG:</b> High-intellect entities with an exceptionally kind heart, though frequently prone to extreme psychological instability.</p>
-                    <p><b>• JPEG:</b> A highly restricted archetype. Natural stars. Discovered only after system age 18 upon success, though rare instances occur under 14.</p>
-                `;
-            } else if (page === 'article_age') {
-                address.innerText = "folder://articles/identification_age";
-                body.innerHTML = `
-                    <span class="browser-link" onclick="navigateBrowser('home')"><- Back to Home</span>
-                    Pin to Desktop</button>
-                    <h3>Psychotype Age Tracking</h3>
-                    <p>When can an archetype or psychotype be accurately calculated within the network layer?</p>
-                    <p>According to chronological framework logs, the core parameters and system behavioral traits of an extension become identifiable starting from <b>10 to 13 years of age</b>.</p>
-                    <p>Before reaching this tier, the data nodes remain highly volatile and blend into default system configurations.</p>
-                `;
-            } else if (page === 'quiz') {
-                currentQuestion = 0;
-                quizScores = { PNG: 0, JPG: 0, WEBP: 0, GIF: 0, JPEG: 0 };
-                renderQuizQuestion();
+                ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
             }
-        }
-        function renderQuizQuestion() {
-            let address = document.getElementById('browserAddress');
-            let body = document.getElementById('browserBody');
-            address.innerText = "folder://diagnostic_test/q" + (currentQuestion + 1);
-            
-            if (currentQuestion < quizQuestions.length) {
-                let data = quizQuestions[currentQuestion];
-                let optionsHtml = data.a.map((ans, idx) => `
-                    <div class="quiz-option" onclick="answerQuiz('${ans.k}')">${idx + 1}. ${ans.t}</div>
-                `).join('');
-                
-                body.innerHTML = `
-                    <span class="browser-link" onclick="navigateBrowser('home')">Quit Test</span>
-                    <h4>Question ${currentQuestion + 1} of ${quizQuestions.length}</h4>
-                    <p style="color:#ffffff;">${data.q}</p>
-                    ${optionsHtml}
-                `;
-            } else {
-                let maxKey = 'PNG';
-                let maxVal = -1;
-                for (let k in quizScores) {
-                    if (quizScores[k] > maxVal) {
-                        maxVal = quizScores[k];
-                        maxKey = k;
-                    }
-                }
-                
-                let desc = "";
-                if (maxKey === 'GIF') desc = "GIF - Kind, attempts to lift the mood, creepy cutie.";
-                if (maxKey === 'WEBP') desc = "WEBP - Closed off, aggressive, self-absorbed superior entity.";
-                if (maxKey === 'JPG') desc = "JPG - Creative mind, gadget lover, tech enthusiast.";
-                if (maxKey === 'PNG') desc = "PNG - Highly intelligent, kind-hearted, emotionally unstable.";
-                if (maxKey === 'JPEG') desc = "JPEG - Rare superstar archetype, high status celebrity profile.";
-
-                body.innerHTML = `
-                    <h3>Diagnostic Complete</h3>
-                    <p>Your core parameters align with the following extension profile:</p>
-                    <div style="border:2px solid #6ee7b7; padding:15px; background:#111111; text-align:center; font-weight:bold; font-size:1.1rem;">
-                        ${desc}
-                    </div>
-                    <br>
-                    <button class="os-btn" onclick="navigateBrowser('home')">Return to Home</button>
-                `;
-            }
-        }
-
-        function answerQuiz(key) {
-            quizScores[key]++;
-            currentQuestion++;
-            renderQuizQuestion();
         }
     </script>
 </body>
