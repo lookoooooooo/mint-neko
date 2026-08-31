@@ -428,6 +428,12 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            optionsBox.style.maxHeight = "140px";
+            optionsBox.style.overflowY = "scroll";
+            optionsBox.style.display = "flex";
+            optionsBox.style.flexDirection = "column";
+            optionsBox.style.gap = "10px";
+
             document.addEventListener('click', () => {
                 if (window.dialogueTree && window.dialogueTree.start && textOutput.textContent.includes("Click anywhere")) {
                     renderNode("start");
