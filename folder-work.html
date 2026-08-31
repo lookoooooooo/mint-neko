@@ -46,12 +46,6 @@
             border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
             display: none; flex-direction: column; z-index: 100; overflow: hidden;
         }
-        .sys-notification {
-            position: absolute; bottom: 20px; right: 20px; background: #111;
-            border: 2px solid #6ee7b7; border-radius: 8px; padding: 10px;
-            color: #fff; font-size: 0.8rem; z-index: 999999; display: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5); width: 240px;
-        }
         .window-header {
             background: #6ee7b7; color: #000000; padding: 6px 12px;
             font-weight: bold; font-size: 0.85rem; display: flex;
@@ -84,12 +78,12 @@
         .social-feed { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
         .social-post { background: #1a1a1a; border: 1px solid #34d399; border-radius: 6px; padding: 10px; }
         .post-header { display: flex; gap: 8px; align-items: center; font-weight: bold; color: #fff; margin-bottom: 6px; }
-        .video-mock { width: 100%; height: 130px; background: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-weight: bold; border-radius: 4px; margin-top: 5px; position: relative; overflow: hidden; padding: 10px; text-align: center; }
-        .video-bar { position: absolute; bottom: 0; left: 0; height: 4px; background: #ff3333; width: 0%; }
-        .social-img-preview { width: 100%; height: 140px; background-size: cover; background-position: center; border: 1px solid #34d399; border-radius: 4px; margin-bottom: 6px; }
+        .video-box { width: 100%; min-height: 120px; border: 1px dashed #34d399; border-radius: 6px; margin-top: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; background: #222; }
+        .sys-notification { position: absolute; bottom: 20px; right: 20px; background: #111; border: 2px solid #6ee7b7; border-radius: 8px; padding: 10px; width: 220px; z-index: 999999; box-shadow: 0 5px 15px rgba(0,0,0,0.5); display: none; color: #fff; }
         .settings-row { margin-bottom: 12px; display: flex; flex-direction: column; gap: 5px; }
         .settings-select, .settings-input { background: #222222; color: #6ee7b7; border: 1px solid #34d399; padding: 6px; font-family: inherit; border-radius: 4px; width: 100%; }
         .folder-window-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; padding: 5px; }
+        .social-img-preview { width: 100%; height: 140px; background-size: cover; background-position: center; border: 1px solid #34d399; border-radius: 4px; margin-bottom: 6px; }
     </style>
 </head>
 <body>
@@ -151,90 +145,105 @@
                 <div class="window-body browser-content" id="browserBody"></div>
             </div>
         </div>
-        <div class="os-window" id="win-settings" style="width: 400px; height: 490px; top: 160px; left: 420px;">
+        <div class="os-window" id="win-settings" style="width: 400px; height: 460px; top: 160px; left: 420px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-settings')"><span>⚙️ Settings</span><button class="window-close-btn" onclick="closeOSWindow('win-settings')">X</button></div>
             <div class="window-body">
                 <div class="settings-row">
-                    <label>Wallpaper Color/Tint Overcast:</label>
-                    <select class="settings-select" id="settWallColor" onchange="applyCustomSettings()">
-                        <option value="transparent">Transparent Default</option>
-                        <option value="rgba(0,0,0,0.85)">Solid Void Black</option>
-                        <option value="rgba(0,50,0,0.4)">Matrix Tint Green</option>
-                        <option value="rgba(50,0,0,0.4)">Alert Tint Red</option>
+                    <label>Wallpaper Color Overlay/Tint:</label>
+                    <input type="color" id="setBgColorInput" value="#050b14" onchange="applySettingsUI()" style="width:100%; height:30px; background:#222; border:1px solid #34d399; margin-top:4px;">
+                </div>
+                <div class="settings-row">
+                    <label>System Font Family Profile:</label>
+                    <select id="setFontInput" onchange="applySettingsUI()" style="width:100%; background:#222; color:#34d399; border:1px solid #34d399; padding:6px; margin-top:4px;">
+                        <option value="'Courier New', Courier, monospace">Terminal Courier</option>
+                        <option value="Arial, sans-serif">Sans-Serif Arial</option>
+                        <option value="Georgia, serif">Serif Georgia</option>
                     </select>
                 </div>
                 <div class="settings-row">
-                    <label>System UI Font Family:</label>
-                    <select class="settings-select" id="settFont" onchange="applyCustomSettings()">
-                        <option value="'Courier New', monospace">Courier Terminal</option>
-                        <option value="Arial, sans-serif">Arial Clean</option>
-                        <option value="Georgia, serif">Georgia Editorial</option>
+                    <label>UI Theme Accent Color:</label>
+                    <select id="setThemeInput" onchange="applySettingsUI()" style="width:100%; background:#222; color:#34d399; border:1px solid #34d399; padding:6px; margin-top:4px;">
+                        <option value="#34d399">Mint Green</option>
+                        <option value="#ff3333">Alert Crimson</option>
+                        <option value="#3b82f6">Circuit Blue</option>
                     </select>
                 </div>
                 <div class="settings-row">
-                    <label>Accent UI Buttons Color:</label>
-                    <select class="settings-select" id="settAccent" onchange="applyCustomSettings()">
-                        <option value="#6ee7b7">Mint Green</option>
-                        <option value="#ff3333">Alert Red</option>
-                        <option value="#3b82f6">Cyber Blue</option>
-                    </select>
-                </div>
-                <div class="settings-row">
-                    <label>Decryption Password Overlay:</label>
-                    <div style="display:flex; gap:5px; margin-top:5px;">
-                        <input type="password" class="settings-input" id="decryptionPassword" placeholder="Enter key...">
+                    <label>Decryption Password Node:</label>
+                    <div style="display:flex; gap:5px; margin-top:4px;">
+                        <input type="password" class="settings-input" id="decryptionPassword" placeholder="Passphrase key..." style="background:#222; color:#fff; border:1px solid #34d399; padding:4px; flex-grow:1;">
                         <button class="os-btn" onclick="checkDecryptionKey()">Unlock</button>
                     </div>
                 </div>
-                <div id="hiddenContent" style="display:none; color:#ff3333; margin-top:10px;">[OVERWRITE MATRIX PROTOCOL ENGAGED]</div>
+                <div id="hiddenContent" style="display:none; color:#ff3333; margin-top:10px; font-weight:bold;">[OVERWRITE MATRIX PROTOCOL ENGAGED]</div>
             </div>
         </div>
 
-        <div class="os-window" id="win-videomaker" style="width: 440px; height: 460px; top: 80px; left: 100px;">
-            <div class="window-header" onmousedown="initWindowDrag(event, 'win-videomaker')"><span>🎬 Video Maker Engine</span><button class="window-close-btn" onclick="closeOSWindow('win-videomaker')">X</button></div>
-            <div class="window-body">
-                <div class="settings-row"><label>Video Title Description:</label><input type="text" id="vmTitle" class="settings-input" value="My Epic Creation 🔥"></div>
-                <div class="settings-row"><label>Video Overlay Emoji Overlay:</label><select class="settings-select" id="vmEmoji"><option>😎</option><option>🐱</option><option>🍕</option><option>👾</option><option>🌍</option></select></div>
-                <div class="settings-row"><label>Video Canvas Background:</label><select class="settings-select" id="vmBg"><option value="#ff3333">Alert Red</option><option value="#3b82f6">Cyber Blue</option><option value="#9b5de5">Neon Purple</option></select></div>
-                <button class="os-btn" style="width:100%; margin-top:10px; padding:10px;" onclick="compileVideoApp()">Compile Video Segment</button>
-            </div>
-        </div>
-
-        <!-- Окна-заглушки для других игр, открываемые динамически -->
         <div class="os-window" id="win-dressup" style="width: 440px; height: 500px; top: 60px; left: 100px;">
             <div class="window-header" onmousedown="initWindowDrag(event, 'win-dressup')"><span>👗 Game 1: Emoji Dress-up</span><button class="window-close-btn" onclick="closeOSWindow('win-dressup')">X</button></div>
             <div class="window-body" style="text-align:center;">
                 <div style="font-size: 5rem; margin-bottom: 10px;" id="fullBodyAvatar">🧍🏻</div>
                 <div style="display:flex; gap:4px; justify-content:center; margin-bottom:8px; flex-wrap:wrap;">
                     <button class="os-btn" onclick="setAvatarGender('m')">🧍🏻</button><button class="os-btn" onclick="setAvatarGender('f')">🧍🏻‍♀️</button>
-                    <button class="os-btn" onclick="setSkinTone('🏻')">🏻</button><button class="os-btn" onclick="setSkinTone('🏽')">🏽</button>
+                    <button class="os-btn" onclick="setSkinTone('🏻')">🏻</button><button class="os-btn" onclick="setSkinTone('🏽')">🏽</button><button class="os-btn" onclick="setSkinTone('🏿')">🏿</button>
                 </div>
                 <div style="font-size:0.75rem; text-align:left; border-top:1px dashed #34d399; padding-top:6px; line-height:1.7;">
-                    Clothes: <span onclick="setCloth('👚')" style="cursor:pointer">👚</span> <span onclick="setCloth('👕')" style="cursor:pointer">👕</span> <span onclick="setCloth('👗')" style="cursor:pointer">👗</span><br>
-                    Shoes: <span onclick="setShoes('👟')" style="cursor:pointer">👟</span> <span onclick="setShoes('👠')" style="cursor:pointer">👠</span><br>
-                    Head: <span onclick="setHead('👑')" style="cursor:pointer">👑</span> <span onclick="setHead('🎩')" style="cursor:pointer">🎩</span>
+                    Clothes: <span onclick="setCloth('👚')" style="cursor:pointer">👚</span> <span onclick="setCloth('👕')" style="cursor:pointer">👕</span> <span onclick="setCloth('👖')" style="cursor:pointer">👖</span> <span onclick="setCloth('🩳')" style="cursor:pointer">🩳</span> <span onclick="setCloth('👗')" style="cursor:pointer">👗</span> <span onclick="setCloth('👘')" style="cursor:pointer">👘</span><br>
+                    Shoes: <span onclick="setShoes('👟')" style="cursor:pointer">👟</span> <span onclick="setShoes('👠')" style="cursor:pointer">👠</span> <span onclick="setShoes('🥾')" style="cursor:pointer">🥾</span> <span onclick="setShoes('🛼')" style="cursor:pointer">🛼</span><br>
+                    Head: <span onclick="setHead('👑')" style="cursor:pointer">👑</span> <span onclick="setHead('🎩')" style="cursor:pointer">🎩</span> <span onclick="setHead('🧢')" style="cursor:pointer">🧢</span> <span onclick="setHead('👒')" style="cursor:pointer">👒</span><br>
+                    Accs: <span onclick="setAcc('👓')" style="cursor:pointer">👓</span> <span onclick="setAcc('🕶️')" style="cursor:pointer">🕶️</span> <span onclick="setAcc('⌚️')" style="cursor:pointer">⌚️</span><br>
+                    Hand: <span onclick="setHand('👜')" style="cursor:pointer">👜</span> <span onclick="setHand('💼')" style="cursor:pointer">💼</span> <span onclick="setHand('🌂')" style="cursor:pointer">🌂</span> <span onclick="setHand('🪭')" style="cursor:pointer">🪭</span>
                 </div>
             </div>
         </div>
 
-        <div class="os-window" id="win-clicker" style="width: 340px; height: 260px; top: 100px; left: 140px;">
-            <div class="window-header" onmousedown="initWindowDrag(event, 'win-clicker')"><span>⚡ Game 2: Core Clicker</span><button class="window-close-btn" onclick="closeOSWindow('win-clicker')">X</button></div>
-            <div class="window-body" style="text-align:center;">
-                <p>Pulses: <span id="clicker-score-local" style="font-size:1.2rem; font-weight:bold;">0</span></p>
-                <button class="os-btn" style="padding:10px 20px;" onclick="registerNetPulse()">PRODUCE NET PULSE</button>
+        <div class="os-window" id="win-paint" style="width: 500px; height: 440px; top: 50px; left: 220px;">
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-paint')"><span>🎨 App 2: Pro Paint Studio</span><button class="window-close-btn" onclick="closeOSWindow('win-paint')">X</button></div>
+            <div class="window-body">
+                <div style="display:flex; gap:5px; margin-bottom:5px; align-items:center; flex-wrap:wrap; font-size:0.7rem;">
+                    <input type="color" id="proColor" value="#34d399" onchange="paintColor=this.value; isEraser=false;" style="height:22px; width:28px;">
+                    Sz:<input type="range" min="1" max="25" value="3" onchange="brushSize=this.value" style="width:35px;">
+                    Blur:<input type="range" min="0" max="10" value="0" onchange="blurAmount=this.value" style="width:35px;">
+                    <select id="layerSelect" onchange="activeLayer=parseInt(this.value)" style="background:#222; color:#6ee7b7; border:1px solid #6ee7b7;">
+                        <option value="0">Layer 1</option>
+                        <option value="1">Layer 2</option>
+                    </select>
+                    <button class="os-btn" style="padding:1px 4px;" onclick="isEraser=true">Eraser</button>
+                    <button class="os-btn" style="padding:1px 4px;" onclick="bucketFillActive=true">Fill</button>
+                    <button class="os-btn" style="padding:1px 4px;" onclick="clearActiveLayer()">Clear</button>
+                </div>
+                <div style="position:relative; width:460px; height:280px; background:#fff; border:1px inset #333;">
+                    <canvas id="paintLayer0" width="460" height="280" style="position:absolute; left:0; top:0; cursor:crosshair;"></canvas>
+                    <canvas id="paintLayer1" width="460" height="280" style="position:absolute; left:0; top:0; cursor:crosshair; pointer-events:none;"></canvas>
+                </div>
             </div>
         </div>
+
+        <div class="os-window" id="win-videomaker" style="width: 460px; height: 480px; top: 80px; left: 240px;">
+            <div class="window-header" onmousedown="initWindowDrag(event, 'win-videomaker')"><span>🎬 App 3: Video Maker Studio</span><button class="window-close-btn" onclick="closeOSWindow('win-videomaker')">X</button></div>
+            <div class="window-body">
+                <div class="settings-row"><label>Overlay Caption Text:</label><input type="text" id="vmText" value="My Awesome Video!" style="width:100%; background:#222; color:#fff; border:1px solid #34d399; padding:4px;"></div>
+                <div class="settings-row"><label>Text Color Hex:</label><input type="color" id="vmTextColor" value="#ffffff" style="width:100%; height:25px; background:#222; border:1px solid #34d399;"></div>
+                <div class="settings-row"><label>Visual Icon Stamp:</label><select id="vmEmoji" style="width:100%; background:#222; color:#34d399; border:1px solid #34d399; padding:4px;"><option>🍕 RECIPE</option><option>📚 TUTORIAL</option><option>🍔 MEME</option><option>🌍 GEOGRAPHY</option><option>🎥 VLOG</option></select></div>
+                <button class="os-btn" style="width:100%; margin-top:10px;" onclick="compileAndBuildVideoFile()">Compile & Build Video Node</button>
+            </div>
+        </div>
+
     </div>
 
     <div class="context-menu" id="desktopContextMenu">
-        <div class="context-item" onclick="createDesktopFolder()">Create Storage Folder</div>
+        <div class="context-item" onclick="createDesktopFolder()">Create Folder</div>
+        <div class="context-item" onclick="resetToOriginalWallpaperMatrix()">Restore 'desktop-bg.jpg'</div>
     </div>
-    <div class="sys-notification" id="sysNotify"><b id="notifyTitle">System</b><p id="notifyText" style="margin:5px 0 0 0;"></p></div>
+
+    <div class="sys-notification" id="osNotification"><b id="notifTitle">Notification Matrix</b><p id="notifText" style="margin:5px 0 0 0; font-size:0.75rem; color:#a7f3d0;"></p></div>
     <script>
-        let highestZ = 100, netPulses = 0, extAppsInstalled = 0, folderCount = 0, photoCount = 0, videoCount = 0;
+        let highestZ = 100, extAppsInstalled = 0, folderCount = 0, photoCount = 0, generatedVideoCount = 0;
         let gender = 'm', skin = '🏻', cloth = '👕', shoes = 'sn', head = '', acc = '', hand = '';
-        let paintColor = '#34d399', canvases = [], ctxs = [];
+        let paintColor = '#34d399', brushSize = 3, isEraser = false, activeLayer = 0, blurAmount = 0;
+        let isDrawing = false, bucketFillActive = false, canvases = [], ctxs = [];
         let socialUser = { registered: false, username: '', bio: '', avatar: '👤' };
+        let customUploadedUserVideos = [];
         let activeOpenFolders = {};
 
         function openOSWindow(id) {
@@ -243,17 +252,10 @@
             win.style.zIndex = ++highestZ;
             win.style.display = 'flex';
             if(id === 'win-browser') navigateBrowser('home');
+            if(id === 'win-paint') initPaintLayers();
         }
 
         function closeOSWindow(id) { document.getElementById(id).style.display = 'none'; }
-
-        function triggerUINotification(title, msg) {
-            let box = document.getElementById('sysNotify');
-            document.getElementById('notifyTitle').innerText = title;
-            document.getElementById('notifyText').innerText = msg;
-            box.style.display = 'block';
-            setTimeout(() => { box.style.display = 'none'; }, 4000);
-        }
 
         function initWindowDrag(e, id) {
             if (e.target.tagName === 'BUTTON' || e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
@@ -279,18 +281,19 @@
             document.onmouseup = function(e) {
                 document.onmousemove = null;
                 document.onmouseup = null;
-                
-                let tr = trashBin.getBoundingClientRect();
                 if (icon.id !== 'icon-win-settings' && icon.id !== 'icon-win-browser' && icon.id !== 'icon-win-trash' && icon.id !== 'icon-win-files') {
+                    let tr = trashBin.getBoundingClientRect();
                     if (e.clientX >= tr.left && e.clientX <= tr.right && e.clientY >= tr.top && e.clientY <= tr.bottom) {
                         let grid = document.getElementById('trashGrid');
                         let fileNode = document.createElement('div');
-                        fileNode.style.textAlign = 'center'; fileNode.innerText = "🗑️ " + icon.querySelector('.icon-label').innerText;
-                        grid.appendChild(fileNode); icon.remove();
-                        triggerUINotification('Trash Storage', 'Element purged from environment loop.');
+                        fileNode.style.textAlign = 'center';
+                        fileNode.innerText = "🗑️ " + icon.querySelector('.icon-label').innerText;
+                        grid.appendChild(fileNode);
+                        icon.remove();
+                        triggerOsBroadcastNotification("Trash Bin", "File moved to trash.");
                         return;
                     }
-                    
+
                     let folders = document.querySelectorAll('.desktop-environment > .desktop-icon[id^="folder-"]');
                     folders.forEach(f => {
                         let fr = f.getBoundingClientRect();
@@ -299,7 +302,7 @@
                             activeOpenFolders[fId].push({html: icon.innerHTML, dblClick: icon.getAttribute('ondblclick')});
                             icon.remove();
                             refreshFolderWindowBody(fId);
-                            triggerUINotification('Storage Core', 'Object integrated into directory tree nodes.');
+                            triggerOsBroadcastNotification("Storage Node", "Item placed into folder.");
                         }
                     });
                 }
@@ -307,33 +310,41 @@
         }
 
         function showContextMenu(e) {
-            if(e.target.className !== 'desktop-environment') return;
+            if (e.target.className !== 'desktop-environment') return;
             e.preventDefault();
             let menu = document.getElementById('desktopContextMenu');
-            menu.style.display = 'flex'; menu.style.top = e.clientY + 'px'; menu.style.left = e.clientX + 'px';
+            menu.style.display = 'flex';
+            menu.style.top = e.clientY + 'px';
+            menu.style.left = e.clientX + 'px';
             document.onclick = () => menu.style.display = 'none';
+        }
+
+        function resetToOriginalWallpaperMatrix() {
+            let d = document.getElementById('desktop');
+            d.style.backgroundColor = 'transparent';
+            d.style.backgroundImage = "url('desktop-bg.jpg')";
+            d.style.backgroundSize = "cover";
         }
 
         function createDesktopFolder() {
             folderCount++;
-            let name = prompt("Enter directory framework title:", "Folder Node " + folderCount);
+            let name = prompt("Enter folder title:", "Folder Layer " + folderCount);
             if (!name) return;
             let fId = 'folder-' + Date.now();
             activeOpenFolders[fId] = [];
-            
             let desktop = document.getElementById('desktop');
             let folder = document.createElement('div');
             folder.className = 'desktop-icon'; folder.id = fId;
-            folder.style.top = '220px'; folder.style.left = (140 + (folderCount * 30)) + 'px';
+            folder.style.top = '220px'; folder.style.left = '220px';
             folder.setAttribute('onmousedown', 'initIconDrag(event, this)');
             folder.setAttribute('ondblclick', `openFolderWindowLayer('${fId}', '${name}')`);
             folder.innerHTML = `<div class="emoji-icon">📁</div><div class="icon-label">${name}</div>`;
             desktop.appendChild(folder);
         }
+
         function openFolderWindowLayer(fId, title) {
             let winId = 'win-' + fId;
             if(document.getElementById(winId)) { openOSWindow(winId); return; }
-            
             let desktop = document.getElementById('desktop');
             let fWin = document.createElement('div');
             fWin.className = 'os-window'; fWin.id = winId;
@@ -342,25 +353,23 @@
                 <div class="window-header" onmousedown="initWindowDrag(event, '${winId}')"><span>📁 Node: ${title}</span><button class="window-close-btn" onclick="closeOSWindow('${winId}')">X</button></div>
                 <div class="window-body"><div class="folder-window-grid" id="grid-${fId}"></div></div>
             `;
-            desktop.appendChild(fWin);
-            openOSWindow(winId);
-            refreshFolderWindowBody(fId);
+            desktop.appendChild(fWin); openOSWindow(winId); refreshFolderWindowBody(fId);
         }
 
         function refreshFolderWindowBody(fId) {
-            let grid = document.getElementById('grid-' + fId);
-            if(!grid) return;
-            grid.innerHTML = '';
+            let grid = document.getElementById('grid-' + fId); if(!grid) return; grid.innerHTML = '';
             activeOpenFolders[fId].forEach(item => {
-                let node = document.createElement('div');
-                node.style.textAlign = 'center'; node.style.cursor = 'pointer';
-                node.innerHTML = item.html;
-                node.setAttribute('ondblclick', item.dblClick);
-                grid.appendChild(node);
+                let node = document.createElement('div'); node.className = 'desktop-icon'; node.style.position = 'static';
+                node.innerHTML = item.html; node.setAttribute('ondblclick', item.dblClick); grid.appendChild(node);
             });
         }
-
-        let uploadedVideosArray = [];
+        function triggerOsBroadcastNotification(title, message) {
+            let notif = document.getElementById('osNotification');
+            document.getElementById('notifTitle').innerText = title;
+            document.getElementById('notifText').innerText = message;
+            notif.style.display = 'block';
+            setTimeout(() => { notif.style.display = 'none'; }, 4000);
+        }
 
         function navigateBrowser(page) {
             let addr = document.getElementById('browserAddress');
@@ -371,9 +380,9 @@
                 addr.innerText = 'folder://network_home';
                 body.innerHTML = `
                     <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">🕹️ Central Hub Matrix</h3>
+                        <h3 style="color:#6ee7b7; margin-top:0;">🕹️ Central Core Matrix</h3>
                         <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-                            <button class="os-btn" onclick="navigateBrowser('social')">🌐 Connect to EX-Net Social Hub</button>
+                            <button class="os-btn" onclick="navigateBrowser('social')">🌐 EX-Net Social Hub Network</button>
                             <button class="os-btn" onclick="navigateBrowser('shop')">🛒 Application Core Compiler Market</button>
                         </div>
                     </div>
@@ -382,11 +391,12 @@
                 addr.innerText = 'folder://network_hub/compiler';
                 body.innerHTML = `
                     <div style="padding: 10px;">
-                        <h3 style="color:#6ee7b7; margin-top:0;">🛒 App Market store</h3>
-                        <p>Pulses Available: <span style="color:#fff; font-weight:bold;">${netPulses}</span></p>
-                        <button class="os-btn" onclick="deployAppFromWeb('dressup', '🧍🏻‍♀️', 'Game 1: Dressup', 5)">Compile Dress-up (5)</button><br><br>
-                        <button class="os-btn" onclick="deployAppFromWeb('clicker', '⚡', 'Game 2: Clicker', 5)">Compile Clicker (5)</button><br><br>
-                        <button class="os-btn" onclick="deployAppFromWeb('videomaker', '🎬', 'App: VideoMaker', 5)">Compile VideoMaker Engine (5)</button>
+                        <h3 style="color:#6ee7b7; margin-top:0;">🛒 System Market Compiler (FREE INSTANT ACCESS)</h3>
+                        <p style="color:#ffaa00; font-size:0.75rem; margin-bottom:12px;">All applications compile instantly with zero resource costs.</p>
+                        <button class="os-btn" onclick="deployAppFromWeb('dressup', '🧍🏻‍♀️', 'Game 1: Dressup')">Compile Dress-up</button><br><br>
+                        <button class="os-btn" onclick="deployAppFromWeb('clicker', '⚡', 'Game 2: Clicker')">Compile Clicker</button><br><br>
+                        <button class="os-btn" onclick="deployAppFromWeb('paint', '🎨', 'App 3: Pro Paint')">Compile Paint Studio</button><br><br>
+                        <button class="os-btn" onclick="deployAppFromWeb('videomaker', '🎬', 'App 4: Video Maker')">Compile Video Maker</button>
                     </div>
                 `;
             } else if (page === 'social') {
@@ -394,38 +404,51 @@
                 if (!socialUser.registered) {
                     body.innerHTML = `
                         <div style="padding: 10px;">
-                            <h3 style="color:#6ee7b7; margin-top:0;">🌐 Register Matrix Profile</h3>
-                            <input type="text" id="regName" placeholder="Enter username..." class="settings-input" style="margin-bottom:8px;"><br>
-                            <input type="text" id="regBio" placeholder="Enter status bio..." class="settings-input" style="margin-bottom:8px;"><br>
-                            Avatar Link: <select id="regAv" class="settings-select" style="margin-bottom:12px;"><option>🥷</option><option>🤖</option><option>🧙‍♂️</option></select><br>
-                            <button class="os-btn" onclick="socialUser.username=document.getElementById('regName').value||'EX_User'; socialUser.bio=document.getElementById('regBio').value||'Online'; socialUser.avatar=document.getElementById('regAv').value; socialUser.registered=true; navigateBrowser('social');">Initialize Login</button>
+                            <h3 style="color:#6ee7b7; margin-top:0;">🌐 Profile Overwrite Identity Grid</h3>
+                            <input type="text" id="regName" placeholder="Profile name..." class="settings-input" style="background:#000; color:#fff; border:1px solid #34d399; padding:4px; margin-bottom:8px; width:100%;"><br>
+                            <input type="text" id="regBio" placeholder="Status description..." class="settings-input" style="background:#000; color:#fff; border:1px solid #34d399; padding:4px; margin-bottom:8px; width:100%;"><br>
+                            Avatar Node: <select id="regAv" style="background:#222; color:#34d399; border:1px solid #34d399; padding:4px; margin-bottom:12px; width:100%;"><option>🥷</option><option>🤖</option><option>🧙‍♂️</option></select><br>
+                            <button class="os-btn" style="width:100%;" onclick="submitSocialRegistration()">Initialize Login Matrix</button>
                         </div>
                     `;
                 } else {
                     let feedHtml = '';
-                    uploadedVideosArray.forEach(v => {
-                        feedHtml += `<div class="social-post" style="border-color:#ff3333;"><div class="post-header"><span>${socialUser.avatar} ${socialUser.username} (You)</span></div><p style="margin:5px 0; color:#fff; font-weight:bold;">${v.title}</p><div class="video-mock" style="background:${v.bg};">🎥 Running Upload Stream<br><span style="font-size:2rem;">${v.emoji}</span><div class="video-bar"></div></div><p style="font-size:0.7rem; color:#ffaa00; margin-top:5px;">❤️ Likes: ${v.likes} | 👥 Subscribers: ${v.subs}</p></div>`;
+                    customUploadedUserVideos.forEach(v => {
+                        feedHtml += `<div class="social-post" style="border-color:#6ee7b7;"><div class="post-header"><span>${socialUser.avatar} ${socialUser.username} [LOCAL_USER]</span></div><p style="margin:5px 0; color:#ffffff; font-weight:bold;">${v.caption}</p><div class="video-box" style="background:${v.bg}; color:${v.txtColor}; border:1px solid #34d399;"><div style="font-size:1.8rem; margin-bottom:4px;">${v.emoji}</div><div style="font-size:0.85rem;">${v.text}</div><div style="font-size:0.65rem; border-top:1px dotted; margin-top:5px; padding-top:4px;">👍 Likes: <span id="l-${v.id}">${v.likes}</span> | 👥 Subs: <span id="s-${v.id}">${v.subs}</span></div></div></div>`;
                     });
-                    
-                    let items = [
-                        {t:'MEME 🐸: Me waiting for the data packet compiler loop to hit infinity structures.', u:'MatrixBug', a:'🥷', c:'😂 Absolute logic error.'},
-                        {t:'TUTORIAL 🛠️: How to sync human extensions mapping blocks within five minutes.', u:'Lumin_EX', a:'🤖', c:'📝 Follow trace instructions.'},
-                        {t:'RECIPE 🍕: Coding Fuel Pizza - 100% matrix carbs for processing speed optimization.', u:'CoreCoder', a:'🧙‍♂️', c:'🍕 Best block deployment.'},
-                        {t:'COUNTRY VLOG 🌍: Checking node architecture arrays in beautiful Japan grid nodes.', u:'NetSurfer', a:'🧙‍♂️', c:'🌸 Fractional resolution grid.'},
-                        {t:'HUMAN EXTENSION REPORT 🧬: Processing subject synchronization parameters data view.', u:'EX_Conscious', a:'🤖', c:'🔎 View matrix parameters.'},
-                        {t:'MEME 🐱: Programmers when the code runs fine but memory usage sets to 5422.', u:'User404', a:'🥷', c:'💀 Run framework wipe.'},
-                        {t:'TUTORIAL 📈: Adjusting system priority values inside custom registry panels.', u:'Alpha_Zero', a:'🤖', c:'⚙️ Level updated.'},
-                        {t:'VLOG 🎒: A productive cycle inside an empty void simulation chamber.', u:'VoidWalker', a:'🦊', c:'🌫️ Deep quiet parameters.'},
-                        {t:'RECIPE 🧋: Mint-Choco interface drink setup guide parameters.', u:'Gizen_Fan', a:'🤖', c:'🍫 Fresh update.'},
-                        {t:'FINAL SEQUENCE VLOG 🎬: Last active loop record output stream view.', u:'LastHuman', a:'🥷', c:'🏁 Complete.'}
+                    let presetItems = [
+                        {type:'img', u:'Chef_EX', a:'🤖', t:'[RECIPE] 🍕 Coding Fuel Pasta - 100% matrix carbs for processing speed optimization.', c:'https://unsplash.com', tag:'Recipe'},
+                        {type:'vid', u:'MatrixBug', a:'🥷', t:'[MEME] 🐸 Me waiting for the data packet compiler loop to hit infinity structures.', id:1},
+                        {type:'img', u:'ProLearner', a:'🧙‍♂️', t:'[TUTORIAL] 📚 How to sync human extensions mapping blocks within five minutes.', c:'https://unsplash.com', tag:'Tutorial'},
+                        {type:'vid', u:'VoidWalker', a:'🦊', t:'[VLOG] 🎒 A productive cycle inside an empty void simulation chamber.', id:2},
+                        {type:'img', u:'User404', a:'🥷', t:'[MEME] 🐱 Programmers when the code runs fine but memory usage sets to 5422.', c:'https://unsplash.com', tag:'Meme'},
+                        {type:'vid', u:'GeoEX', a:'🤖', t:'[COUNTRIES] 🌍 Visual landscape logs from grid cluster sectors.', id:3},
+                        {type:'img', u:'Alpha_Zero', a:'🤖', t:'[TUTORIAL] ⚙️ Adjusting system priority values inside custom registry panels.', c:'https://unsplash.com', tag:'Tutorial'},
+                        {type:'vid', u:'Gizen_Fan', a:'🤖', t:'[VLOG] 🎥 Mint-Choco interface drink processing loop vlog.', id:4},
+                        {type:'img', u:'EX_Conscious', a:'🦊', t:'[REPORT] 🧬 Human extension logs are fully optimized inside the matrix archive.', c:'https://unsplash.com', tag:'Report'},
+                        {type:'vid', u:'LastHuman', a:'🥷', t:'[VLOG] 🎬 Final processing loop log stack trace capture sequence.', id:5}
                     ];
-                    items.forEach((i, idx) => {
-                        let visual = idx % 2 === 0 ? `<div class="social-img-preview" style="background-image:url('https://unsplash.com')"></div><button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="downloadImageToDesktop('https://unsplash.com', 'FeedPic_${idx}')">📥 Save Image File</button>` : `<div class="video-mock" onclick="playMockVideo(this)">▶️ Play Video Stream Loop<div class="video-bar"></div></div>`;
-                        feedHtml += `<div class="social-post"><div class="post-header"><span>${i.a} ${i.u}</span></div><p style="margin:5px 0; color:#ffffff;">${i.t}</p>${visual}</div>`;
+                    presetItems.forEach(p => {
+                        let visual = p.type === 'img' ? `<div class="social-img-preview" style="background-image:url('${p.c}')"></div><button class="os-btn" style="padding:2px 6px; font-size:0.7rem;" onclick="downloadImageToDesktop('${p.c}', '${p.tag}_Artifact')">📥 Download Image</button>` : `<div class="video-box" style="text-align:center; min-height:80px; font-weight:bold; background:#222; color:#34d399; justify-content:center;">🎥 [ACTIVE VIDEO TRANS-STREAM #${p.id}]</div>`;
+                        feedHtml += `<div class="social-post"><div class="post-header"><span>${p.a} ${p.u}</span></div><p style="margin:5px 0; color:#ffffff; font-weight:bold;">${p.t}</p>${visual}</div>`;
                     });
-                    body.innerHTML = `<div style="padding: 10px;"><div style="background:#222; padding:8px; border-radius:6px; margin-bottom:12px;"><b>${socialUser.avatar} ${socialUser.username}</b> - <i>"${socialUser.bio}"</i></div><h4 style="color:#6ee7b7; margin:0 0 10px 0;">Transmission Feed Matrix</h4><div class="social-feed">${feedHtml}</div></div>`;
+                    body.innerHTML = `
+                        <div style="padding: 10px;">
+                            <div style="background:#222; padding:8px; border-radius:6px; margin-bottom:12px;"><b>${socialUser.avatar} ${socialUser.username}</b> - <i>"${socialUser.bio}"</i></div>
+                            <h4 style="color:#6ee7b7; margin:0 0 10px 0;">EX-Net Transmission Feed Matrix</h4>
+                            <div class="social-feed">${feedHtml}</div>
+                        </div>
+                    `;
                 }
             }
+        }
+
+        function submitSocialRegistration() {
+            socialUser.username = document.getElementById('regName').value || 'EX_User';
+            socialUser.bio = document.getElementById('regBio').value || 'Core Node';
+            socialUser.avatar = document.getElementById('regAv').value;
+            socialUser.registered = true;
+            navigateBrowser('social');
         }
         function playMockVideo(el) {
             let bar = el.querySelector('.video-bar'); let w = 0;
@@ -440,54 +463,79 @@
             let appEl = document.createElement('div'); appEl.className = 'desktop-icon'; appEl.id = 'icon-' + winId; appEl.style.top = '100px'; appEl.style.left = (240 + (photoCount * 40)) + 'px';
             appEl.setAttribute('onmousedown', 'initIconDrag(event, this)'); appEl.setAttribute('ondblclick', `openOSWindow('${winId}')`);
             appEl.innerHTML = `<div class="emoji-icon">🖼️</div><div class="icon-label">${fileName}.jpg</div>`; desktop.appendChild(appEl);
+            triggerOsBroadcastNotification("Downloader", "Image file compiled to desktop.");
         }
 
-        function compileVideoApp() {
-            videoCount++; let title = document.getElementById('vmTitle').value || 'My Video';
-            let emoji = document.getElementById('vmEmoji').value; let bg = document.getElementById('vmBg').value;
-            let winId = 'win-compiled-vid-' + videoCount; let desktop = document.getElementById('desktop');
-            let vWin = document.createElement('div'); vWin.className = 'os-window'; vWin.id = winId; vWin.style.width = '320px'; vWin.style.height = '240px'; vWin.style.top = '140px'; vWin.style.left = '220px';
-            vWin.innerHTML = `<div class="window-header" onmousedown="initWindowDrag(event, '${winId}')"><span>🎬 Stream: ${title}</span><button class="window-close-btn" onclick="closeOSWindow('${winId}')">X</button></div><div class="window-body" style="background:${bg}; text-align:center; padding-top:40px;"><span style="font-size:3.5rem;">${emoji}</span><p style="color:#fff; font-weight:bold;">${title}</p><button class="os-btn" style="background:#000; color:#fff;" onclick="publishVideoToSocialMedia('${title}', '${emoji}', '${bg}', '${winId}')">Publish to EX-Net</button></div>`;
-            desktop.appendChild(vWin);
-            let appEl = document.createElement('div'); appEl.className = 'desktop-icon'; appEl.id = 'icon-' + winId; appEl.style.top = '220px'; appEl.style.left = (300 + (videoCount * 40)) + 'px';
+        function compileAndBuildVideoFile() {
+            generatedVideoCount++; let vText = document.getElementById('vmText').value; let vColor = document.getElementById('vmTextColor').value; let vEmoji = document.getElementById('vmEmoji').value; let finalBg = document.getElementById('vmBg').value;
+            let videoDataNode = { id: Date.now(), caption: "User Stream #" + generatedVideoCount, text: vText, txtColor: vColor, emoji: vEmoji, bg: finalBg, likes: 0, subs: 0 };
+            let winId = 'win-video-' + videoDataNode.id; let desktop = document.getElementById('desktop');
+            let videoWin = document.createElement('div'); videoWin.className = 'os-window'; videoWin.id = winId; videoWin.style.width = '320px'; videoWin.style.height = '280px'; videoWin.style.top = '140px'; videoWin.style.left = '220px';
+            videoWin.innerHTML = `<div class="window-header" onmousedown="initWindowDrag(event, '${winId}')"><span>🎬 Playback: ${videoDataNode.caption}</span><button class="window-close-btn" onclick="closeOSWindow('${winId}')">X</button></div><div class="window-body" style="background:${videoDataNode.bg}; color:${videoDataNode.txtColor}; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px; font-weight:bold;"><div style="font-size:3rem; margin-bottom:10px;">${videoDataNode.emoji}</div><div>${videoDataNode.text}</div><button class="os-btn" style="margin-top:20px; border-color:#34d399; color:#34d399;" onclick="uploadCompiledVideoToSocialFeed(${JSON.stringify(videoDataNode).replace(/"/g, '&quot;')})">🌐 Upload to EX-Net</button></div>`;
+            desktop.appendChild(videoWin);
+            let appEl = document.createElement('div'); appEl.className = 'desktop-icon'; appEl.id = 'icon-' + winId; appEl.style.top = '120px'; appEl.style.left = (260 + (generatedVideoCount * 45)) + 'px';
             appEl.setAttribute('onmousedown', 'initIconDrag(event, this)'); appEl.setAttribute('ondblclick', `openOSWindow('${winId}')`);
-            appEl.innerHTML = `<div class="emoji-icon">🎬</div><div class="icon-label">${title}</div>`; desktop.appendChild(appEl);
+            appEl.innerHTML = `<div class="emoji-icon">🎬</div><div class="icon-label">Video_${generatedVideoCount}.mp4</div>`; desktop.appendChild(appEl);
         }
 
-        function publishVideoToSocialMedia(title, emoji, bg, vWinId) {
-            if(!socialUser.registered) { triggerUINotification('EX-Net Network', 'Error: Register profile matrix tab first.'); return; }
-            closeOSWindow(vWinId);
-            let videoObj = { title: title, emoji: emoji, bg: bg, likes: 0, subs: 0 };
-            uploadedVideosArray.push(videoObj);
-            triggerUINotification('EX-Net Network', 'Video transmission loop uploaded successfully!');
-            setTimeout(() => {
-                videoObj.likes += Math.floor(Math.random() * 50) + 10; videoObj.subs += Math.floor(Math.random() * 5) + 1;
-                triggerUINotification('EX-Net Alert', `Your video "${title}" received new tracking activity pulses!`);
-                let addr = document.getElementById('browserAddress'); if(addr && addr.innerText.includes('ex-net.social')) navigateBrowser('social');
-            }, 5000);
+        function uploadCompiledVideoToSocialFeed(videoObj) {
+            if(!socialUser.registered) { return; }
+            if(customUploadedUserVideos.find(x => x.text === videoObj.text)) { return; }
+            customUploadedUserVideos.unshift(videoObj);
+            triggerOsBroadcastNotification("EX-Net", "Video packet deployed to network.");
+            let lCount = 0, sCount = 0;
+            let timerInterval = setInterval(() => {
+                lCount += Math.floor(Math.random() * 4) + 1; sCount += Math.floor(Math.random() * 2);
+                let targetV = customUploadedUserVideos.find(x => x.id === videoObj.id);
+                if(targetV) { targetV.likes = lCount; targetV.subs = sCount; }
+                let lEl = document.getElementById('l-' + videoObj.id); if(lEl) lEl.innerText = lCount;
+                let sEl = document.getElementById('s-' + videoObj.id); if(sEl) sEl.innerText = sCount;
+                if(lCount % 6 === 0) { triggerOsBroadcastNotification("Social Activity", `Your video received live metric updates!`); }
+                if(lCount >= 40) clearInterval(timerInterval);
+            }, 3000);
         }
 
-        function deployAppFromWeb(winId, emoji, label, cost) {
-            if (netPulses < cost) { return; }
+        function deployAppFromWeb(winId, emoji, label) {
             if (document.getElementById('icon-spawned-' + winId)) { return; }
-            netPulses -= cost; extAppsInstalled++; navigateBrowser('shop');
+            extAppsInstalled++; navigateBrowser('shop');
             let desktop = document.getElementById('desktop'); let appEl = document.createElement('div'); appEl.className = 'desktop-icon'; appEl.id = 'icon-spawned-' + winId;
             appEl.style.top = (40 + (extAppsInstalled * 105)) + 'px'; appEl.style.left = '140px'; appEl.setAttribute('onmousedown', 'initIconDrag(event, this)'); appEl.setAttribute('ondblclick', `openOSWindow('win-${winId}')`);
             appEl.innerHTML = `<div class="emoji-icon">${emoji}</div><div class="icon-label">${label}</div>`; desktop.appendChild(appEl); openOSWindow('win-' + winId);
         }
-
         function registerNetPulse() { netPulses++; let local = document.getElementById('clicker-score-local'); if(local) local.innerText = netPulses; }
         function setAvatarGender(g) { gender = g; updateAvatar(); } function setSkinTone(s) { skin = s; updateAvatar(); } function setCloth(c) { cloth = c; updateAvatar(); } function setShoes(s) { shoes = s; updateAvatar(); } function setHead(h) { head = head === h ? '' : h; updateAvatar(); }
         function updateAvatar() { let base = gender === 'm' ? '🧍' : '🧍‍♀️'; document.getElementById('fullBodyAvatar').innerText = base + skin + " " + cloth + shoes + head + acc + hand; }
 
-        function applyCustomSettings() {
-            let color = document.getElementById('settWallColor').value; let font = document.getElementById('settFont').value; let accent = document.getElementById('settAccent').value;
-            let desktop = document.getElementById('desktop');
-            if(color === 'transparent') { desktop.style.backgroundOverlay = 'none'; } else { desktop.style.backgroundColor = color; desktop.style.backgroundImage = 'none'; }
-            document.body.style.fontFamily = font;
-            document.querySelectorAll('.os-btn').forEach(b => { b.style.borderColor = accent; b.style.color = accent; });
-            document.querySelectorAll('.os-window').forEach(w => w.style.borderColor = accent);
-            document.querySelectorAll('.window-header').forEach(h => h.style.background = accent);
+        function initPaintLayers() {
+            canvases = [document.getElementById('paintLayer0'), document.getElementById('paintLayer1')]; if (!canvases) return; ctxs = canvases.map(c => c.getContext('2d'));
+            canvases.forEach((c, idx) => {
+                c.onmousedown = function(e) { if(activeLayer === idx) isDrawing = true; drawStart(e, idx); };
+                c.onmouseup = function() { isDrawing = false; ctxs[idx].beginPath(); };
+                c.onmousemove = function(e) { if(isDrawing && activeLayer === idx) drawMove(e, idx); };
+                c.onclick = function(e) { if(bucketFillActive && activeLayer === idx) { floodFill(e, idx); bucketFillActive = false; } };
+            });
+        }
+        function drawStart(e, idx) { let r = canvases[idx].getBoundingClientRect(); ctxs[idx].filter = blurAmount > 0 ? `blur(${blurAmount}px)` : 'none'; ctxs[idx].lineWidth = brushSize; ctxs[idx].lineCap = 'round'; ctxs[idx].strokeStyle = isEraser ? '#ffffff' : paintColor; ctxs[idx].beginPath(); ctxs[idx].moveTo(e.clientX - r.left, e.clientY - r.top); }
+        function drawMove(e, idx) { if (!isDrawing) return; let r = canvases[idx].getBoundingClientRect(); ctxs[idx].lineTo(e.clientX - r.left, e.clientY - r.top); ctxs[idx].stroke(); }
+        function clearActiveLayer() { ctxs[activeLayer].clearRect(0, 0, 460, 280); }
+
+        function floodFill(e, idx) {
+            let c = canvases[idx], ctx = ctxs[idx], r = c.getBoundingClientRect(); let startX = Math.floor(e.clientX - r.left), startY = Math.floor(e.clientY - r.top);
+            let imgData = ctx.getImageData(0, 0, c.width, c.height); let data = imgData.data; let targetIdx = (startY * c.width + startX) * 4;
+            let tr = data[targetIdx], tg = data[targetIdx+1], tb = data[targetIdx+2], ta = data[targetIdx+3]; let hex = paintColor.replace('#','');
+            let fr = parseInt(hex.substring(0,2),16), fg = parseInt(hex.substring(2,4),16), fb = parseInt(hex.substring(4,6),16); if (tr === fr && tg === fg && tb === fb) return;
+            let queue = [[startX, startY]], visited = new Uint8Array(c.width * c.height);
+            while(queue.length > 0) {
+                let [x, y] = queue.pop(); if(x < 0 || x >= c.width || y < 0 || y >= c.height) continue;
+                let idxP = (y * c.width + x); if(visited[idxP]) continue; visited[idxP] = 1; let pi = idxP * 4;
+                if(data[pi] === tr && data[pi+1] === tg && data[pi+2] === tb && data[pi+3] === ta) { data[pi] = fr; data[pi+1] = fg; data[pi+2] = fb; data[pi+3] = 255; queue.push([x+1, y], [x-1, y], [x, y+1], [x, y-1]); }
+            } ctx.putImageData(imgData, 0, 0);
+        }
+
+        function applySettingsUI() {
+            let col = document.getElementById('setBgColorInput').value; let font = document.getElementById('setFontInput').value; let accent = document.getElementById('setThemeInput').value;
+            let d = document.getElementById('desktop'); d.style.backgroundImage = 'none'; d.style.backgroundColor = col; document.body.style.fontFamily = font;
+            document.querySelectorAll('.os-window').forEach(w => w.style.borderColor = accent); document.querySelectorAll('.window-header').forEach(h => h.style.background = accent);
         }
 
         function readSecretLog(type) {
@@ -497,6 +545,7 @@
         }
         function readTrashFile() { let viewer = document.getElementById('trash-viewer'); viewer.style.display = 'block'; viewer.innerText = "I can't keep this number in my head, I will delete myself soon...\n\n[MEM_NOTE]: 5422"; }
         function checkDecryptionKey() { let val = document.getElementById('decryptionPassword').value; if (val === '5422') { document.getElementById('hiddenContent').style.display = 'block'; } }
+        window.onload = function() { navigateBrowser('home'); }
     </script>
 </body>
 </html>
