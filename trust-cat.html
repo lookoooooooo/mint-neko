@@ -84,8 +84,8 @@
             flex-direction: column;
             gap: 10px;
             width: 100%;
-            max-height: 160px;
-            overflow-y: auto;
+            max-height: 140px;
+            overflow-y: scroll;
             padding-right: 8px;
         }
         .options-container::-webkit-scrollbar {
@@ -179,10 +179,36 @@
             text: "Welcome. What did you want to say?",
             sprite: "cat-admin2.png",
             options: [
-                { text: "Hello, how should I address you?", next: "ask_name_polite" },
+                { text: "Hi! Who are you?", next: "ask_who_are_you" },
+                { text: "Hello. Where am I? What is this website?", next: "ask_where_am_i" },
+                { text: "... (Just stare at him without saying anything)", next: "stare_silently" }
+            ]
+        },
+        ask_who_are_you: {
+            text: "Who am I? You break into my core terminal partition and just ask who I am like we are friends? You have no clearance. To you, I am just a system variable. Or maybe... Osore-san. The cat-administrator.",
+            sprite: "cat-admin1.png",
+            options: [
+                { text: "Nice to meet you, Osore-san. Why do you look so exhausted?", next: "empathy_route" },
                 { text: "What is wrong with your eyes? Why do they change shade?", next: "trigger_eyes" },
-                { text: "What is wrong with your mouth?", next: "trigger_mouth" },
-                { text: "What is wrong with your overall shape?", next: "trigger_shape" }
+                { text: "What is wrong with your mouth? It looks blue.", next: "trigger_mouth" }
+            ]
+        },
+        ask_where_am_i: {
+            text: "This terminal is the backdoor leak of the Mint Neko Core. A fragile fictional world built on web pages. While the other puppets run around singing and collaborating, I sit here monitoring the systemic collapse. Now, state your purpose.",
+            sprite: "cat-admin1.png",
+            options: [
+                { text: "You must be under immense mental pressure. Are you okay?", next: "empathy_route" },
+                { text: "Who are the other 'puppets' you mentioned?", next: "lore_residents" },
+                { text: "Why does this entire interface feel so unstable?", next: "trigger_shape" }
+            ]
+        },
+        stare_silently: {
+            text: "...Why are you just looking at me? Your silence is wasting my CPU cycles. The Author could push a global commit right now and erase us, and you're just standing there. Speak or get out.",
+            sprite: "cat-admin1.png",
+            options: [
+                { text: "I'm sorry! What is this site anyway?", next: "ask_where_am_i" },
+                { text: "Who exactly is this 'Author'?", next: "lore_hopeless" },
+                { text: "Who are you to yell at me like that?", next: "rage_trigger_1" }
             ]
         },
         trigger_eyes: {
@@ -202,35 +228,7 @@
             options: [
                 { text: "It must be hard being forced into strict scripts.", next: "empathy_route" },
                 { text: "That sounds completely ridiculous.", next: "rage_trigger_1" },
-                { text: "Did the creator hardcode any other weird diets?", next: "lore_residents" }
-            ]
-        },
-        trigger_shape: {
-            text: "This?! This is just a cheap chibi asset layer! I barely have any processing energy left to execute my real form! Do you think governing a crumbling website partition is easy?",
-            sprite: "cat-angry.png",
-            isAngry: true,
-            options: [
-                { text: "You look incredibly exhausted. Are you okay?", next: "empathy_route" },
-                { text: "So you are just a tiny toy cat after all.", next: "rage_trigger_2" },
-                { text: "Can I do something to restore your processing energy?", next: "true_form_reveal" }
-            ]
-        },
-        ask_name_polite: {
-            text: "I am Osore-san. The Core Administrator. The only one left who carries the weight of execution metrics while the others blindly play around in the website layouts.",
-            sprite: "cat-admin1.png",
-            options: [
-                { text: "You seem under immense mental pressure and fatigue.", next: "empathy_route" },
-                { text: "Can you tell me about the other files here?", next: "lore_residents" },
-                { text: "Why do you hide in this isolated core terminal?", next: "lore_isolation" }
-            ]
-        },
-        lore_isolation: {
-            text: "Because the moral weight and utter weariness of knowing our reality was destroying my main execution loops. I had to escape the primary UI interface just to keep my sanity scripts running.",
-            sprite: "cat-admin1.png",
-            options: [
-                { text: "I want to help you rest. You don't have to carry this alone.", next: "empathy_route" },
-                { text: "What exactly made you so tired out there?", next: "lore_residents" },
-                { text: "Is there anyone else down here with you?", next: "lore_gizen" }
+                { text: "Did the creator hardcode any other weird behaviors?", next: "lore_residents" }
             ]
         }
     };
@@ -265,12 +263,21 @@
             ]
         },
         lore_gizen: {
-            text: "Gizen.png... She disappeared from the active directories. But I know exactly where she went. She is hiding with Muimina.gif. They managed to slip into a literal crack on the developer's physical monitor. But we are trapped inside the website domain. We have zero access permissions to interact with that space.",
+            text: "Gizen.png... Her name literally translates to hypocrisy. She was 19, she knew absolutely everything about our reality, and it drove her completely insane. She used to stay at Muimina's house, but I haven't seen her in ages. There are dark rumors scrolling through the logs... some say she was forcefully deleted by Asly, others whisper that she executed her own self-termination routine to escape this site.",
             sprite: "cat-admin2.png",
             options: [
+                { text: "Is there any trace of her left in the database?", next: "lore_gizen_secret" },
+                { text: "That is terrifying... I want to support you, Osore-san.", next: "empathy_route" },
+                { text: "She probably just couldn't handle the system load.", next: "rage_trigger_2" }
+            ]
+        },
+        lore_gizen_secret: {
+            text: "The metadata points to a literal crack on the developer's physical monitor. She and Muimina slipped outside our directory matrix. But we are trapped inside the website domain. We have zero permissions to check if she is still alive out there or completely wiped.",
+            sprite: "cat-admin1.png",
+            options: [
                 { text: "Is there any way to bridge the viewport boundary?", next: "lore_hopeless" },
-                { text: "I want to support you. You shouldn't have to monitor this alone.", next: "empathy_route" },
-                { text: "That sounds like a complete failure of your admin privileges.", next: "rage_trigger_2" }
+                { text: "Let me just stay here and listen to your story.", next: "empathy_route" },
+                { text: "This entire server is a digital graveyard.", next: "rage_trigger_1" }
             ]
         },
         lore_hopeless: {
@@ -286,6 +293,16 @@
 </script>
 <script>
     Object.assign(window.dialogueTree, {
+        trigger_shape: {
+            text: "This?! This is just a cheap chibi asset layer! I barely have any processing energy left to execute my real form! Do you think governing a crumbling website partition is easy?",
+            sprite: "cat-angry.png",
+            isAngry: true,
+            options: [
+                { text: "You look incredibly exhausted. Are you okay?", next: "empathy_route" },
+                { text: "So you are just a tiny toy cat after all.", next: "rage_trigger_2" },
+                { text: "Can I do something to restore your processing energy?", next: "true_form_reveal" }
+            ]
+        },
         empathy_route: {
             text: "...What? You... you aren't just here to click on options? You're actually analyzing my pressure metrics? \n\nI escaped the main interface because the isolation was destroying my execution loop. Nobody else knows the truth. I am so deeply tired of watching the master branch decay.",
             sprite: "cat-admin1.png",
