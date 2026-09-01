@@ -613,3 +613,165 @@
         saveRenderedAssetToDesktop("dressup_render.png", savedDollSnapshot);
     }
 </script>
+<script>
+    let paintLayers = [];
+    let activeLayerIdx = 0;
+    let currentPaintTool = "brush";
+
+    function initPaintStudio() {
+        const root = document.getElementById("paint-canvas-root");
+        if (!root) return;
+        root.innerHTML = ""; paintLayers = [];
+        addNewPaintLayer("Background");
+        addNewPaintLayer("Lineart");
+        selectPaintLayer(1);
+    }
+
+    function addNewPaintLayer(name = null) {
+        const root = document.getElementById("paint-canvas-root");
+        if (!root) return;
+        const idx = paintLayers.length;
+        const canvas = document.createElement("canvas");
+        canvas.className = "paint-canvas-layer"; canvas.width = 300; canvas.height = 260;
+        root.appendChild(canvas);
+        const layerName = name || `Layer ${idx + 1}`;
+        paintLayers.push({ id: idx, canvas: canvas, ctx: canvas.getContext("2d"), visible: true, name: layerName });
+        bindPaintEvents(canvas, idx); refreshLayersUI();
+    }
+
+    function refreshLayersUI() {
+        const box = document.getElementById("paint-layers-container"); if (!box) return; box.innerHTML = "";
+        paintLayers.slice().reverse().forEach(l => {
+            const row = document.createElement("div"); row.className = "layer-row" + (l.id === activeLayerIdx ? " active-layer" : "");
+            row.innerHTML = `<span onclick="selectPaintLayer(${l.id})">${l.name}</span><button style="background:none; border:none; color:#6ee7b7; cursor:pointer;" onclick="toggleLayerVisibility(${l.id})">${l.visible?'👁️':'❌'}</button>`;
+            box.appendChild(row);
+        });
+    }
+
+    function selectPaintLayer(idx) { activeLayerIdx = idx; refreshLayersUI(); }
+    function toggleLayerVisibility(idx) { paintLayers[idx].visible = !paintLayers[idx].visible; paintLayers[idx].canvas.style.display = paintLayers[idx].visible ? "block" : "none"; refreshLayersUI(); }
+    function setPaintTool(t) { currentPaintTool = t; }
+
+    function bindPaintEvents(canvas, idx) {
+        let drawing = false;
+        canvas.onmousedown = (e) => { if(idx !== activeLayerIdx) return; drawing = true; draw(e, canvas); };
+        canvas.onmousemove = (e) => { if(drawing && idx === activeLayerIdx) draw(e, canvas); };
+        window.addEventListener("mouseup", () => drawing = false);
+    }
+
+    function draw(e, canvas) {
+        const rect = canvas.getBoundingClientRect(); const x = e.clientX - rect.left; const y = e.clientY - rect.top; const l = paintLayers[activeLayerIdx];
+        if (currentPaintTool === "brush") { l.ctx.fillStyle = document.getElementById("paint-color").value; l.ctx.beginPath(); l.ctx.arc(x, y, 5, 0, Math.PI*2); l.ctx.fill(); }
+        else if (currentPaintTool === "eraser") { l.ctx.clearRect(x - 8, y - 8, 16, 16); }
+        else if (currentPaintTool === "bucket") { l.ctx.fillStyle = document.getElementById("paint-color").value; l.ctx.fillRect(0, 0, canvas.width, canvas.height); }
+    }
+
+    function exportPaintAsset() { saveRenderedAssetToDesktop("paint_render.png", "🎨"); }
+
+    let videoTracks = { visual: "🎬", text: "" };
+    function initVismaker() {
+        const tv = document.getElementById("track-visual"); const tt = document.getElementById("track-text");
+        if(!tv || !tt) return; tv.innerHTML = ""; tt.innerHTML = "";
+        const emojis = ["🎬", "✨", "🔥", "🐱", "🌌", "💥"];
+        emojis.forEach((em, idx) => {
+            const clip = document.createElement("div"); clip.className = "vismaker-clip"; clip.textContent = em; clip.style.left = (idx * 60) + "px";
+            clip.onclick = () => { videoTracks.visual = em; document.getElementById("v-elem-bg").textContent = em; }; tv.appendChild(clip);
+        });
+        const subClip = document.createElement("div"); subClip.className = "vismaker-clip"; subClip.textContent = "[Text Track Overlay]"; subClip.style.width = "200px";
+        subClip.onclick = () => {
+            videoTracks.text = document.getElementById("v-text-input").value || "Hello World";
+            const block = document.getElementById("v-elem-text"); block.textContent = videoTracks.text; block.style.color = document.getElementById("v-color-input").value;
+        };
+        tt.appendChild(subClip);
+    }
+    function simulateVideoSequence() { const sc = document.getElementById("video-screen"); if(sc) { sc.style.transform = "scale(1.05)"; setTimeout(() => sc.style.transform = "scale(1)", 200); } }
+    function exportVideoAsset() { saveRenderedAssetToDesktop("capcut_render.mp4", videoTracks.visual + " Sub: " + videoTracks.text); }
+</script>
+<script>
+    const shopEmojis = ["🎑","🏞️","🌅","🌄","🌠","🎇","🎆","🌇","🌆","🏙️","🌌","🌉","🌁","🐱","👧","🦊","🧸","🌈","💖","⭐"];
+    const shopBgs = ["#111111", "#1a0033", "#001a33", "#1a3300", "#330000"];
+    let shopActiveElem = null;
+
+    function initShopStudio() {
+        const eBox = document.getElementById("shop-emoji-selectors"); const bBox = document.getElementById("shop-bg-selectors");
+        if(!eBox || !bBox) return; eBox.innerHTML = ""; bBox.innerHTML = "";
+        shopEmojis.forEach(em => {
+            const btn = document.createElement("button"); btn.className = "os-btn"; btn.style.padding = "2px 4px"; btn.textContent = em;
+            btn.onclick = () => addShopElement('emoji', em); eBox.appendChild(btn);
+        });
+        shopBgs.forEach(bg => {
+            const btn = document.createElement("div"); btn.style.cssText = `width:20px; height:20px; background:${bg}; border:1px solid #34d399; cursor:pointer; display:inline-block; margin-right:4px;`;
+            btn.onclick = () => { document.getElementById("shop-pane").style.backgroundColor = bg; }; bBox.appendChild(btn);
+        });
+    }
+
+    function addShopElement(type, val = "") {
+        const pane = document.getElementById("shop-pane"); if(!pane) return; const el = document.createElement("div"); el.className = "shop-element";
+        el.style.top = "50%"; el.style.left = "50%";
+        if (type === 'text') { el.textContent = document.getElementById("shop-text-string").value || "Text"; el.style.fontSize = "1rem"; el.style.color = "#fff"; }
+        else { el.textContent = val; el.style.fontSize = "2.5rem"; }
+        el.onmousedown = (e) => {
+            e.stopPropagation(); shopActiveElem = el;
+            let oX = e.clientX - el.offsetLeft; let oY = e.clientY - el.offsetTop;
+            document.onmousemove = (ev) => { el.style.left = (ev.clientX - oX) + "px"; el.style.top = (ev.clientY - oY) + "px"; };
+            document.onmouseup = () => { document.onmousemove = null; document.onmouseup = null; };
+        };
+        pane.appendChild(el);
+    }
+    function exportShopAsset() { saveRenderedAssetToDesktop("nekoshop_composition.png", "🖼️"); }
+
+    let coins = 0, clickPower = 1, autoPower = 0;
+    function executeYummyClick() { coins += clickPower; document.getElementById("click-coins").textContent = coins; const tgt = document.getElementById("click-target-btn"); if(tgt) { tgt.style.transform = "scale(0.85)"; setTimeout(()=>tgt.style.transform="scale(1)", 50); } }
+    function buyClickUpgrade() { let cost = 15 * clickPower; if(coins >= cost) { coins -= cost; clickPower++; document.getElementById("click-coins").textContent = coins; document.getElementById("upgrade-click-btn").textContent = `Upgrade Tap | Cost: ${15 * clickPower} 🍫`; } else { showNotification("Bank Alert", "Insufficient currency."); } }
+    function buyAutoUpgrade() { if(coins >= 50) { coins -= 50; autoPower += 2; document.getElementById("click-coins").textContent = coins; document.getElementById("upgrade-auto-btn").style.display = "none"; } }
+    setInterval(() => { if(autoPower > 0) { coins += autoPower; const node = document.getElementById("click-coins"); if(node) node.textContent = coins; } }, 1000);
+
+    const botPosts = [
+        { name: "Dev_Core_Node", av: "⚙️", txt: "Testing system layout frameworks...", media: "💻" },
+        { name: "Lucky_Matrix_JPEG", av: "🍀", txt: "Today random compiled vector is 99%!", media: "✨" }
+    ];
+    function renderSocialFeed() {
+        const box = document.getElementById("social-feed-box"); if(!box) return; box.innerHTML = "";
+        botPosts.forEach(p => {
+            const post = document.createElement("div"); post.className = "feed-post";
+            post.innerHTML = `<div class="post-header"><div class="post-avatar">${p.av}</div><span>@${p.name}</span></div><div>${p.txt}</div><div class="post-media">${p.media}</div>`;
+            box.appendChild(post);
+        });
+    }
+    function publishStagedAssetToFeed() {
+        const key = document.getElementById("social-upload-selector").value; if(!key || !stagedGalleryMemory[key]) return;
+        const name = document.getElementById("user-name-input").value || "User_Alpha";
+        const av = document.getElementById("user-avatar-input").value || "🐱";
+        const bio = document.getElementById("user-bio-input").value;
+        botPosts.unshift({ name: name, av: av, txt: bio || "Compiled local asset published.", media: stagedGalleryMemory[key].emoji });
+        renderSocialFeed(); showNotification("NekoNet Gate", "Content published globally!");
+    }
+
+    stagedGalleryMemory = {}; muteNotifications = false;
+    function saveRenderedAssetToDesktop(label, emoji) {
+        const id = "asset-" + Date.now(); stagedGalleryMemory[id] = { label: label, emoji: emoji };
+        const d = document.getElementById("desktop"); const icon = document.createElement("div");
+        icon.className = "desktop-icon"; icon.style.top = "240px"; icon.style.left = "400px"; icon.id = id;
+        icon.innerHTML = `<div class="emoji-icon">${emoji}</div><div class="icon-label">${label}</div>`;
+        icon.onmousedown = (e) => initIconDrag(e, icon); d.appendChild(icon);
+        rebuildSelectorOptions(); showNotification("Staging System", `Asset file compiled: ${label}`);
+    }
+    function rebuildSelectorOptions() {
+        const sel = document.getElementById("social-upload-selector"); if(!sel) return; sel.innerHTML = "";
+        Object.keys(stagedGalleryMemory).forEach(k => {
+            const opt = document.createElement("option"); opt.value = k; opt.textContent = stagedGalleryMemory[k].label; sel.appendChild(opt);
+        });
+    }
+    function applyOSFont() { document.body.style.fontFamily = document.getElementById("setting-font-select").value; }
+    function applyOSBgColor() { const d = document.getElementById("desktop"); d.style.backgroundImage = "none"; d.style.backgroundColor = document.getElementById("setting-bg-color").value; }
+    function applyOSWallpaper() { const d = document.getElementById("desktop"); const val = document.getElementById("setting-wall-select").value; if(val === 'none') { applyOSBgColor(); } else if(val === 'desktop-bg.jpg') { d.style.backgroundImage = "url('desktop-bg.jpg')"; } else { d.style.backgroundImage = `url('${val}')`; } }
+    function toggleOSNotifications() { muteNotifications = document.getElementById("setting-mute-toggle").checked; }
+
+    window.addEventListener("DOMContentLoaded", () => {
+        resetCoreMatrixGame(); initDressupStudio(); initVismaker(); initPaintStudio(); initShopStudio(); renderSocialFeed(); applyOSFont();
+        const wins = document.querySelectorAll(".os-window");
+        wins.forEach(w => { w.addEventListener("mousedown", () => { w.style.zIndex = Math.floor(Date.now() / 1000) % 10000 + 40; }); });
+    });
+</script>
+</body>
+</html>
